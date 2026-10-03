@@ -1,0 +1,921 @@
+﻿@model NEXUS_eProject.Models.RetailDashboardViewModel
+
+@{
+    ViewData["Title"] = "Retail Dashboard";
+    ViewData["PageTitle"] = "Dashboard";
+    ViewData["PageSubtitle"] = "Welcome back, Retail Employee";
+    Layout = "~/Views/Shared/_RetailLayout.cshtml";
+}
+
+<div class="retail-dashboard">
+
+    <!-- =====================================================
+         DASHBOARD HEADER
+         ===================================================== -->
+
+    <div class="dashboard-header">
+
+        <div>
+            <h2>Good morning, Retail Team </h2>
+
+            <p>
+                Here's what's happening with your retail operations today.
+            </p>
+        </div>
+
+        <div>
+            <a asp-controller="RetailOrder"
+               asp-action="Index"
+               class="dashboard-action">
+
+                <i class="bi bi-file-earmark-text"></i>
+
+                Applications
+
+            </a>
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         PRIMARY STATISTICS
+         ===================================================== -->
+
+    <div class="stats-grid">
+
+
+        <!-- CUSTOMERS -->
+
+        <div class="stat-card">
+
+            <div class="stat-card-top">
+
+                <div class="stat-icon purple">
+                    <i class="bi bi-people-fill"></i>
+                </div>
+
+                <span class="stat-label">
+                    Customers
+                </span>
+
+            </div>
+
+            <div class="stat-number">
+                @Model.TotalCustomers
+            </div>
+
+            <div class="stat-footer">
+
+                <span class="stat-positive">
+                    <i class="bi bi-person-check"></i>
+                    Registered
+                </span>
+
+                <span>
+                    customers
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- APPLICATIONS -->
+
+        <div class="stat-card">
+
+            <div class="stat-card-top">
+
+                <div class="stat-icon blue">
+                    <i class="bi bi-file-earmark-text-fill"></i>
+                </div>
+
+                <span class="stat-label">
+                    Applications
+                </span>
+
+            </div>
+
+            <div class="stat-number">
+                @Model.TotalOrders
+            </div>
+
+            <div class="stat-footer">
+
+                <span class="stat-neutral">
+                    <i class="bi bi-files"></i>
+                    Submitted
+                </span>
+
+                <span>
+                    applications
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- CONNECTIONS -->
+
+        <div class="stat-card">
+
+            <div class="stat-card-top">
+
+                <div class="stat-icon green">
+                    <i class="bi bi-wifi"></i>
+                </div>
+
+                <span class="stat-label">
+                    Connections
+                </span>
+
+            </div>
+
+            <div class="stat-number">
+                @Model.ActiveConnections
+            </div>
+
+            <div class="stat-footer">
+
+                <span class="stat-positive">
+                    <i class="bi bi-check-circle"></i>
+                    Active
+                </span>
+
+                <span>
+                    connections
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- PRODUCTS -->
+
+        <div class="stat-card">
+
+            <div class="stat-card-top">
+
+                <div class="stat-icon orange">
+                    <i class="bi bi-box-seam-fill"></i>
+                </div>
+
+                <span class="stat-label">
+                    Products
+                </span>
+
+            </div>
+
+            <div class="stat-number">
+                @Model.ActiveProducts
+            </div>
+
+            <div class="stat-footer">
+
+                <span class="stat-positive">
+                    <i class="bi bi-check-circle"></i>
+                    Active
+                </span>
+
+                <span>
+                    products
+                </span>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =====================================================
+         MAIN DASHBOARD GRID
+         ===================================================== -->
+
+    <div class="dashboard-grid">
+
+
+        <!-- SYSTEM OVERVIEW -->
+
+        <div class="dashboard-card overview-card">
+
+            <div class="card-header">
+
+                <div>
+
+                    <h5>
+                        Retail Overview
+                    </h5>
+
+                    <span>
+                        Current retail statistics
+                    </span>
+
+                </div>
+
+                <button class="card-menu"
+                        type="button">
+
+                    <i class="bi bi-three-dots"></i>
+
+                </button>
+
+            </div>
+
+
+            <div class="overview-content">
+
+
+                <!-- CUSTOMERS -->
+
+                <div class="overview-item">
+
+                    <div class="overview-icon purple">
+                        <i class="bi bi-people"></i>
+                    </div>
+
+                    <div class="overview-info">
+
+                        <strong>
+                            @Model.TotalCustomers
+                        </strong>
+
+                        <span>
+                            Customers
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- APPLICATIONS -->
+
+                <div class="overview-item">
+
+                    <div class="overview-icon blue">
+                        <i class="bi bi-file-earmark-text"></i>
+                    </div>
+
+                    <div class="overview-info">
+
+                        <strong>
+                            @Model.TotalOrders
+                        </strong>
+
+                        <span>
+                            Applications
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ACTIVE CONNECTIONS -->
+
+                <div class="overview-item">
+
+                    <div class="overview-icon green">
+                        <i class="bi bi-wifi"></i>
+                    </div>
+
+                    <div class="overview-info">
+
+                        <strong>
+                            @Model.ActiveConnections
+                        </strong>
+
+                        <span>
+                            Active Connections
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PENDING APPLICATIONS -->
+
+                <div class="overview-item">
+
+                    <div class="overview-icon orange">
+                        <i class="bi bi-hourglass-split"></i>
+                    </div>
+
+                    <div class="overview-info">
+
+                        <strong>
+                            @Model.PendingOrders
+                        </strong>
+
+                        <span>
+                            Pending Applications
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PENDING BILLS -->
+
+                <div class="overview-item">
+
+                    <div class="overview-icon pink">
+                        <i class="bi bi-receipt"></i>
+                    </div>
+
+                    <div class="overview-info">
+
+                        <strong>
+                            @Model.PendingBills
+                        </strong>
+
+                        <span>
+                            Pending Bills
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <!-- QUICK ACTIONS -->
+
+        <div class="dashboard-card quick-card">
+
+            <div class="card-header">
+
+                <div>
+
+                    <h5>
+                        Quick Actions
+                    </h5>
+
+                    <span>
+                        Manage retail operations
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="quick-actions">
+
+
+                <!-- APPLICATIONS -->
+
+                <a asp-controller="RetailOrder"
+                   asp-action="Index"
+                   class="quick-action">
+
+                    <div class="quick-action-icon purple">
+                        <i class="bi bi-file-earmark-text"></i>
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Applications
+                        </strong>
+
+                        <span>
+                            Review customer applications
+                        </span>
+
+                    </div>
+
+                    <i class="bi bi-chevron-right"></i>
+
+                </a>
+
+
+                <!-- PENDING REVIEW -->
+
+                <a asp-controller="RetailOrder"
+                   asp-action="Pending"
+                   class="quick-action">
+
+                    <div class="quick-action-icon orange">
+                        <i class="bi bi-hourglass-split"></i>
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Pending Review
+                        </strong>
+
+                        <span>
+                            Applications awaiting action
+                        </span>
+
+                    </div>
+
+                    <i class="bi bi-chevron-right"></i>
+
+                </a>
+
+
+                <!-- ACCEPTED -->
+
+                <a asp-controller="RetailOrder"
+                   asp-action="AcceptedOrders"
+                   class="quick-action">
+
+                    <div class="quick-action-icon green">
+                        <i class="bi bi-check-circle"></i>
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Accepted Applications
+                        </strong>
+
+                        <span>
+                            Track accepted applications
+                        </span>
+
+                    </div>
+
+                    <i class="bi bi-chevron-right"></i>
+
+                </a>
+
+
+                <!-- CUSTOMERS -->
+
+                <a asp-controller="RetailCustomer"
+                   asp-action="Index"
+                   class="quick-action">
+
+                    <div class="quick-action-icon blue">
+                        <i class="bi bi-people"></i>
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Customers
+                        </strong>
+
+                        <span>
+                            Manage customer records
+                        </span>
+
+                    </div>
+
+                    <i class="bi bi-chevron-right"></i>
+
+                </a>
+
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =====================================================
+         DAILY OPERATIONS
+         ===================================================== -->
+
+    <div class="dashboard-card plans-card">
+
+        <div class="card-header">
+
+            <div>
+
+                <h5>
+                    Daily Operations
+                </h5>
+
+                <span>
+                    Today's retail activity
+                </span>
+
+            </div>
+
+            <a asp-controller="RetailOrder"
+               asp-action="Index"
+               class="view-all">
+
+                View applications
+
+                <i class="bi bi-arrow-right"></i>
+
+            </a>
+
+        </div>
+
+
+        <div class="plans-summary">
+
+
+            <!-- TODAY'S ORDERS -->
+
+            <div class="plan-summary-icon">
+
+                <i class="bi bi-calendar-check"></i>
+
+            </div>
+
+            <div class="plan-summary-text">
+
+                <strong>
+                    @Model.TodayOrders
+                </strong>
+
+                <span>
+                    Applications received today
+                </span>
+
+            </div>
+
+
+            <!-- TODAY'S PAYMENTS -->
+
+            <div class="plan-active">
+
+                <span>
+                    @Model.TodayPayments
+                </span>
+
+                Payments Today
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         RECENT APPLICATIONS
+         ===================================================== -->
+
+    <div class="dashboard-card plans-card">
+
+        <div class="card-header">
+
+            <div>
+
+                <h5>
+                    Recent Applications
+                </h5>
+
+                <span>
+                    Latest customer applications
+                </span>
+
+            </div>
+
+            <a asp-controller="RetailOrder"
+               asp-action="Index"
+               class="view-all">
+
+                View all
+
+                <i class="bi bi-arrow-right"></i>
+
+            </a>
+
+        </div>
+
+
+        @if (Model.RecentOrders != null &&
+             Model.RecentOrders.Any())
+        {
+
+            <div class="table-responsive">
+
+                <table class="table retail-dashboard-table mb-0">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Application
+                            </th>
+
+                            <th>
+                                Customer
+                            </th>
+
+                            <th>
+                                Connection
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Date
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        @foreach (var order in Model.RecentOrders)
+                        {
+
+                            <tr>
+
+
+                                <!-- APPLICATION -->
+
+                                <td>
+
+                                    <a asp-controller="RetailOrder"
+                                       asp-action="Details"
+                                       asp-route-id="@order.OrderId"
+                                       class="retail-order-link">
+
+                                        #@order.OrderNumber
+
+                                    </a>
+
+                                </td>
+
+
+                                <!-- CUSTOMER -->
+
+                                <td>
+
+                                    <div class="retail-table-customer">
+
+                                        <div class="retail-table-avatar">
+
+                                            @(string.IsNullOrWhiteSpace(order.Customer?.FullName)
+                                                ? "?"
+                                                : order.Customer.FullName.Substring(0, 1).ToUpper())
+
+                                        </div>
+
+                                        <span>
+
+                                            @(order.Customer?.FullName ?? "Unknown")
+
+                                        </span>
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- CONNECTION -->
+
+                                <td>
+
+                                    @order.ConnectionType
+
+                                </td>
+
+
+                                <!-- STATUS -->
+
+                                <td>
+
+                                    @{
+                                        var statusClass = order.Status switch
+                                        {
+                                            "Submitted" => "pending",
+                                            "Retail Accepted" => "approved",
+                                            "Retail Rejected" => "rejected",
+                                            "Feasible" => "approved",
+                                            "Not Feasible" => "rejected",
+                                            "Payment Verified" => "approved",
+                                            "Active" => "active",
+                                            _ => "neutral"
+                                        };
+                                    }
+
+                                    <span class="retail-table-status @statusClass">
+
+                                        @order.Status
+
+                                    </span>
+
+                                </td>
+
+
+                                <!-- DATE -->
+
+                                <td>
+
+                                    @order.CreatedAt.ToString("dd MMM yyyy")
+
+                                </td>
+
+
+                            </tr>
+
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        }
+        else
+        {
+
+            <div class="retail-dashboard-empty">
+
+                <i class="bi bi-inbox"></i>
+
+                <h4>
+                    No Applications Yet
+                </h4>
+
+                <p>
+                    Customer applications will appear here.
+                </p>
+
+            </div>
+
+        }
+
+    </div>
+
+
+    <!-- =====================================================
+         FINANCIAL SUMMARY
+         ===================================================== -->
+
+    <div class="dashboard-grid">
+
+
+        <!-- TODAY COLLECTION -->
+
+        <div class="dashboard-card overview-card">
+
+            <div class="card-header">
+
+                <div>
+
+                    <h5>
+                        Today's Collection
+                    </h5>
+
+                    <span>
+                        Payments recorded today
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="overview-content">
+
+                <div class="overview-item">
+
+                    <div class="overview-icon green">
+                        <i class="bi bi-cash-stack"></i>
+                    </div>
+
+                    <div class="overview-info">
+
+                        <strong>
+                            Rs. @Model.TodayPaymentAmount.ToString("N2")
+                        </strong>
+
+                        <span>
+                            Today's payment amount
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="overview-item">
+
+                    <div class="overview-icon blue">
+                        <i class="bi bi-credit-card"></i>
+                    </div>
+
+                    <div class="overview-info">
+
+                        <strong>
+                            @Model.TodayPayments
+                        </strong>
+
+                        <span>
+                            Payments recorded
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- OUTSTANDING -->
+
+        <div class="dashboard-card quick-card">
+
+            <div class="card-header">
+
+                <div>
+
+                    <h5>
+                        Outstanding Amount
+                    </h5>
+
+                    <span>
+                        Current customer balance
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="quick-actions">
+
+                <div class="quick-action">
+
+                    <div class="quick-action-icon orange">
+
+                        <i class="bi bi-exclamation-triangle"></i>
+
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Rs. @Model.OutstandingAmount.ToString("N2")
+                        </strong>
+
+                        <span>
+                            Total outstanding balance
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <a asp-controller="RetailOrder"
+                   asp-action="Index"
+                   asp-route-status="Payment Pending"
+                   class="quick-action">
+
+                    <div class="quick-action-icon purple">
+
+                        <i class="bi bi-receipt"></i>
+
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            @Model.PendingBills
+                        </strong>
+
+                        <span>
+                            Pending bills requiring attention
+                        </span>
+
+                    </div>
+
+                    <i class="bi bi-chevron-right"></i>
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>

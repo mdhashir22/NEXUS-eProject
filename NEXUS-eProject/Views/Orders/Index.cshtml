@@ -1,0 +1,219 @@
+﻿@model IEnumerable<NEXUS_eProject.Models.Order>
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    ViewData["Title"] = "Orders";
+    ViewData["PageTitle"] = "Orders";
+    ViewData["PageSubtitle"] = "Monitor customer connection orders";
+}
+
+<div class="page-heading">
+
+    <div>
+        <h2>Orders</h2>
+        <p>View and monitor all customer connection orders.</p>
+    </div>
+
+</div>
+
+
+<div class="dashboard-card">
+
+    <div class="card-header">
+
+        <div>
+            <h5>Order List</h5>
+            <span>All customer connection applications</span>
+        </div>
+
+        <span class="table-count">
+            @Model.Count() Orders
+        </span>
+
+    </div>
+
+
+    <div class="table-responsive">
+
+        <table class="table nexus-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>Order</th>
+
+                    <th>Customer</th>
+
+                    <th>Connection</th>
+
+                    <th>Plan</th>
+
+                    <th>Status</th>
+
+                    <th>Date</th>
+
+                    <th class="text-end">Actions</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                @if (Model.Any())
+                {
+                    foreach (var order in Model)
+                    {
+                        <tr>
+
+                            <td>
+
+                                <span class="customer-id">
+                                    @order.OrderNumber
+                                </span>
+
+                            </td>
+
+
+                            <td>
+
+                                <div class="customer-info">
+
+                                    <div class="customer-avatar">
+                                        <i class="bi bi-person"></i>
+                                    </div>
+
+                                    <div>
+
+                                        <strong>
+                                            @order.Customer.FullName
+                                        </strong>
+
+                                        <small>
+                                            @order.Customer.Phone
+                                        </small>
+
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+
+                            <td>
+
+                                <span>
+                                    @order.ConnectionType
+                                </span>
+
+                            </td>
+
+
+                            <td>
+
+                                <div>
+
+                                    <strong>
+                                        @order.Plan.PlanName
+                                    </strong>
+
+                                    @if (!string.IsNullOrWhiteSpace(order.Plan.Speed))
+                                    {
+                                        <small class="d-block text-muted">
+                                            @order.Plan.Speed
+                                        </small>
+                                    }
+
+                                </div>
+
+                            </td>
+
+
+                            <td>
+
+                                @if (order.Status == "Approved")
+                                {
+                                    <span class="status-badge active">
+                                        Approved
+                                    </span>
+                                }
+                                else if (order.Status == "Rejected")
+                                {
+                                    <span class="status-badge inactive">
+                                        Rejected
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="status-badge pending">
+                                        @order.Status
+                                    </span>
+                                }
+
+                            </td>
+
+
+                            <td>
+
+                                <span>
+                                    @order.CreatedAt.ToString("dd MMM yyyy")
+                                </span>
+
+                            </td>
+
+
+                            <td class="text-end">
+
+                                <div class="action-buttons">
+
+                                    <a asp-action="Details"
+                                       asp-route-id="@order.OrderId"
+                                       class="btn btn-sm btn-outline-info"
+                                       title="View Order Details">
+
+                                        <i class="bi bi-eye"></i>
+
+                                    </a>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+
+                        <td colspan="7">
+
+                            <div class="empty-state">
+
+                                <div class="empty-state-icon">
+                                    <i class="bi bi-receipt"></i>
+                                </div>
+
+                                <h5>No Orders Found</h5>
+
+                                <p>
+                                    No customer orders have been submitted yet.
+                                </p>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>

@@ -1,0 +1,161 @@
+﻿@model IEnumerable<NEXUS_eProject.Models.Customer>
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    ViewData["Title"] = "Customers";
+    ViewData["PageTitle"] = "Customers";
+    ViewData["PageSubtitle"] = "View registered Nexus customers";
+}
+
+<div class="page-heading">
+    <div>
+        <h2>Customers</h2>
+        <p>View registered customer information and accounts.</p>
+    </div>
+</div>
+
+<div class="dashboard-card">
+
+    <div class="card-header">
+        <div>
+            <h5>Customer List</h5>
+            <span>All registered Nexus customers</span>
+        </div>
+
+        <span class="table-count">
+            @Model.Count() Customers
+        </span>
+    </div>
+
+    <div class="table-responsive">
+
+        <table class="table nexus-table">
+
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Customer</th>
+                    <th>Father Name</th>
+                    <th>Phone</th>
+                    <th>City</th>
+                    <th>Status</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                @if (Model.Any())
+                {
+                    foreach (var customer in Model)
+                    {
+                        <tr>
+
+                            <td>
+                                <span class="customer-id">
+                                    #@customer.CustomerId
+                                </span>
+                            </td>
+
+                            <td>
+                                <div class="customer-info">
+
+                                    <div class="customer-avatar">
+                                        <i class="bi bi-person"></i>
+                                    </div>
+
+                                    <div>
+                                        <strong>
+                                            @customer.FullName
+                                        </strong>
+
+                                        <small>
+                                            @(string.IsNullOrWhiteSpace(customer.Email)
+                                                ? "No email provided"
+                                                : customer.Email)
+                                        </small>
+                                    </div>
+
+                                </div>
+                            </td>
+
+                            <td>
+                                @customer.FatherName
+                            </td>
+
+                            <td>
+                                @customer.Phone
+                            </td>
+
+                            <td>
+                                @customer.City
+                            </td>
+
+                            <td>
+
+                                @if (customer.IsActive)
+                                {
+                                    <span class="status-badge active">
+                                        Active
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="status-badge inactive">
+                                        Inactive
+                                    </span>
+                                }
+
+                            </td>
+
+                            <td class="text-end">
+
+                                <div class="action-buttons">
+
+                                    <a asp-action="Details"
+                                       asp-route-id="@customer.CustomerId"
+                                       class="btn btn-sm btn-outline-info"
+                                       title="View Customer Details">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+
+                        <td colspan="7">
+
+                            <div class="empty-state">
+
+                                <div class="empty-state-icon">
+                                    <i class="bi bi-people"></i>
+                                </div>
+
+                                <h5>No Customers Found</h5>
+
+                                <p>
+                                    No customers have registered yet.
+                                </p>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>

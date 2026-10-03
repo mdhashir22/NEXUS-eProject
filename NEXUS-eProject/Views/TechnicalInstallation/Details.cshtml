@@ -1,0 +1,247 @@
+﻿@model NEXUS_eProject.Models.TechnicalInstallationViewModel
+
+@{
+    ViewData["Title"] = "Installation Details";
+    ViewData["PageTitle"] = "Installation Details";
+    Layout = "~/Views/Shared/_TechnicalLayout.cshtml";
+
+    var canStart =
+        Model.OrderStatus == "Payment Verified";
+
+    var canComplete =
+        Model.OrderStatus == "Installation Pending";
+}
+
+<div class="tid-page">
+
+    <div class="tid-header">
+
+        <div>
+            <a asp-controller="TechnicalInstallation"
+               asp-action="Index"
+               class="tid-back">
+
+                <i class="bi bi-arrow-left"></i>
+
+            </a>
+
+            <div>
+                <span>INSTALLATION JOB</span>
+                <h2>@Model.AccountId</h2>
+
+                <p>
+                    @Model.OrderNumber · @Model.CustomerName
+                </p>
+            </div>
+        </div>
+
+        <span class="tid-status">
+            @Model.OrderStatus
+        </span>
+
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="tid-success">
+            <i class="bi bi-check-circle"></i>
+            @TempData["Success"]
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="tid-error">
+            <i class="bi bi-exclamation-triangle"></i>
+            @TempData["Error"]
+        </div>
+    }
+
+    <div class="tid-grid">
+
+        <div class="tid-main">
+
+            <div class="tid-card">
+
+                <div class="tid-card-title">
+                    <i class="bi bi-person"></i>
+                    Customer & Location
+                </div>
+
+                <div class="tid-info-grid">
+
+                    <div>
+                        <span>Customer</span>
+                        <strong>@Model.CustomerName</strong>
+                    </div>
+
+                    <div>
+                        <span>Phone</span>
+                        <strong>@Model.Phone</strong>
+                    </div>
+
+                    <div>
+                        <span>City</span>
+                        <strong>@Model.City</strong>
+                    </div>
+
+                    <div class="full">
+                        <span>Installation Address</span>
+                        <strong>@Model.Address</strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="tid-card">
+
+                <div class="tid-card-title">
+                    <i class="bi bi-router"></i>
+                    Service Information
+                </div>
+
+                <div class="tid-info-grid">
+
+                    <div>
+                        <span>Account ID</span>
+                        <strong class="highlight">
+                            @Model.AccountId
+                        </strong>
+                    </div>
+
+                    <div>
+                        <span>Connection</span>
+                        <strong>@Model.ConnectionType</strong>
+                    </div>
+
+                    <div>
+                        <span>Plan</span>
+                        <strong>@Model.PlanName</strong>
+                    </div>
+
+                    <div>
+                        <span>Speed</span>
+                        <strong>@Model.Speed</strong>
+                    </div>
+
+                    <div>
+                        <span>Equipment</span>
+                        <strong>
+                            @(string.IsNullOrWhiteSpace(Model.Equipment)
+                                ? "-"
+                                : Model.Equipment)
+                        </strong>
+                    </div>
+
+                    <div>
+                        <span>Router Serial</span>
+                        <strong>
+                            @(string.IsNullOrWhiteSpace(Model.RouterSerial)
+                                ? "-"
+                                : Model.RouterSerial)
+                        </strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="tid-side">
+
+            <div class="tid-card">
+
+                <div class="tid-card-title">
+                    <i class="bi bi-tools"></i>
+                    Installation Action
+                </div>
+
+                @if (canStart)
+                {
+                    <div class="tid-action-icon">
+                        <i class="bi bi-play-circle"></i>
+                    </div>
+
+                    <h5>Ready for Installation</h5>
+
+                    <p>
+                        Payment has been verified. Start the
+                        physical installation process.
+                    </p>
+
+                    <form asp-controller="TechnicalInstallation"
+                          asp-action="StartInstallation"
+                          method="post">
+
+                        @Html.AntiForgeryToken()
+
+                        <input type="hidden"
+                               name="id"
+                               value="@Model.ConnectionId" />
+
+                        <button type="submit"
+                                class="tid-primary">
+
+                            <i class="bi bi-tools"></i>
+                            Start Installation
+
+                        </button>
+
+                    </form>
+                }
+                else if (canComplete)
+                {
+                    <div class="tid-action-icon active">
+                        <i class="bi bi-router"></i>
+                    </div>
+
+                    <h5>Installation In Progress</h5>
+
+                    <p>
+                        Complete the installation and activate
+                        the customer's connection.
+                    </p>
+
+                    <form asp-controller="TechnicalInstallation"
+                          asp-action="CompleteInstallation"
+                          method="post">
+
+                        @Html.AntiForgeryToken()
+
+                        <input type="hidden"
+                               name="id"
+                               value="@Model.ConnectionId" />
+
+                        <div class="tid-form-group">
+
+                            <label>
+                                Router / Equipment Serial
+                            </label>
+
+                            <input type="text"
+                                   name="routerSerial"
+                                   value="@Model.RouterSerial"
+                                   placeholder="Enter serial number" />
+
+                        </div>
+
+                        <button type="submit"
+                                class="tid-primary">
+
+                            <i class="bi bi-check-circle"></i>
+                            Complete & Activate
+
+                        </button>
+
+                    </form>
+                }
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

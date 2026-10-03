@@ -1,0 +1,180 @@
+﻿@model IEnumerable<NEXUS_eProject.Models.Shop>
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    ViewData["Title"] = "Shops";
+    ViewData["PageTitle"] = "Shops";
+    ViewData["PageSubtitle"] = "Manage Nexus shops";
+}
+
+<div class="page-heading">
+
+    <div>
+        <h2>Shops</h2>
+        <p>Manage all Nexus shops and locations.</p>
+    </div>
+
+    <a asp-action="Create" class="btn nexus-btn">
+        <i class="bi bi-plus-lg"></i>
+        Add Shop
+    </a>
+
+</div>
+
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert success-alert">
+        <i class="bi bi-check-circle-fill"></i>
+
+        <span>
+            @TempData["SuccessMessage"]
+        </span>
+    </div>
+}
+
+
+<div class="form-card">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h5 class="mb-1">Shop List</h5>
+
+            <small class="text-secondary">
+                @Model.Count() shops registered
+            </small>
+        </div>
+
+    </div>
+
+
+    @if (Model.Any())
+    {
+        <div class="table-responsive">
+
+            <table class="nexus-table">
+
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>SHOP</th>
+                        <th>CITY</th>
+                        <th>CONTACT</th>
+                        <th>ADDRESS</th>
+                        <th>STATUS</th>
+                        <th>ACTIONS</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @foreach (var shop in Model)
+                    {
+                        <tr>
+
+                            <td>
+                                #@shop.ShopId
+                            </td>
+
+                            <td>
+                                <div class="employee-cell">
+
+                                    <div class="employee-avatar">
+                                        @shop.ShopName.Substring(0, 1).ToUpper()
+                                    </div>
+
+                                    <div>
+                                        <strong>
+                                            @shop.ShopName
+                                        </strong>
+
+                                        <small>
+                                            @shop.CreatedAt.ToString("dd MMM yyyy")
+                                        </small>
+                                    </div>
+
+                                </div>
+                            </td>
+
+                            <td>
+                                @shop.City
+                            </td>
+
+                            <td>
+                                @(shop.ContactNumber ?? "N/A")
+                            </td>
+
+                            <td>
+                                @shop.Address
+                            </td>
+
+                            <td>
+
+                                @if (shop.IsActive)
+                                {
+                                    <span class="status-badge active">
+                                        Active
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="status-badge inactive">
+                                        Inactive
+                                    </span>
+                                }
+
+                            </td>
+
+                            <td>
+
+                                <div class="table-actions">
+
+    <a asp-action="Edit"
+       asp-route-id="@shop.ShopId"
+       class="table-action edit"
+       title="Edit">
+
+        <i class="bi bi-pencil"></i>
+
+    </a>
+
+    <a asp-action="Delete"
+       asp-route-id="@shop.ShopId"
+       class="table-action delete"
+       title="Delete">
+
+        <i class="bi bi-trash3"></i>
+
+    </a>
+
+</div>
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+    }
+    else
+    {
+        <div class="empty-state">
+
+            <i class="bi bi-shop"></i>
+
+            <h6>No shops found.</h6>
+
+            <a asp-action="Create">
+                Add your first shop
+            </a>
+
+        </div>
+    }
+
+</div>

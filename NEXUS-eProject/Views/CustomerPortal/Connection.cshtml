@@ -1,0 +1,392 @@
+﻿@model NEXUS_eProject.Models.Connection
+
+@{
+    Layout = "_PublicLayout";
+    ViewData["Title"] = "Connection Information";
+}
+
+<div class="customer-connection-page">
+
+    <div class="container">
+
+        <!-- PAGE HEADER -->
+        <div class="customer-page-header">
+
+            <div>
+                <span class="portal-eyebrow">
+                    <i class="bi bi-router"></i>
+                    CUSTOMER PORTAL
+                </span>
+
+                <h1>Connection Information</h1>
+
+                <p>
+                    View your NEXUS connection, account and installation
+                    information in one place.
+                </p>
+            </div>
+
+            <a asp-controller="CustomerPortal"
+               asp-action="Apply"
+               class="btn-nexus-primary">
+
+                <i class="bi bi-plus-lg"></i>
+                New Connection
+
+            </a>
+
+        </div>
+
+
+        <!-- BACK -->
+        <div class="application-back-wrapper">
+
+            <a asp-controller="CustomerPortal"
+               asp-action="Index"
+               class="portal-back-link">
+
+                <i class="bi bi-arrow-left"></i>
+                Back to My Account
+
+            </a>
+
+        </div>
+
+
+        @if (Model != null)
+        {
+            <!-- CONNECTION STATUS -->
+            <div class="connection-status-card">
+
+                <div class="connection-status-icon">
+                    <i class="bi bi-wifi"></i>
+                </div>
+
+                <div class="connection-status-content">
+
+                    <span>CONNECTION STATUS</span>
+
+                    <h2>
+                        @(string.IsNullOrWhiteSpace(Model.Status)
+                            ? "Pending"
+                            : Model.Status)
+                    </h2>
+
+                    <p>
+                        Your NEXUS connection information is shown below.
+                    </p>
+
+                </div>
+
+                <div class="connection-status-badge
+                    @(Model.Status?.ToLowerInvariant() == "active"
+                        ? "active"
+                        : "pending")">
+
+                    <span></span>
+
+                    @Model.Status
+
+                </div>
+
+            </div>
+
+
+            <!-- ACCOUNT ID -->
+            <div class="connection-account-card">
+
+                <div class="connection-account-icon">
+                    <i class="bi bi-person-vcard"></i>
+                </div>
+
+                <div>
+
+                    <span>ACCOUNT ID</span>
+
+                    <strong>
+                        @Model.AccountId
+                    </strong>
+
+                    <small>
+                        Your unique NEXUS customer account identifier
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <!-- CONNECTION DETAILS -->
+            <div class="connection-section">
+
+                <div class="connection-section-heading">
+
+                    <div>
+                        <span class="portal-eyebrow">
+                            <i class="bi bi-info-circle"></i>
+                            CONNECTION DETAILS
+                        </span>
+
+                        <h2>Service Information</h2>
+                    </div>
+
+                </div>
+
+
+                <div class="connection-details-grid">
+
+                    <!-- CONNECTION TYPE -->
+                    <div class="connection-detail-card">
+
+                        <div class="connection-detail-icon">
+                            <i class="bi bi-hdd-network"></i>
+                        </div>
+
+                        <div>
+                            <span>CONNECTION TYPE</span>
+
+                            <strong>
+                                @Model.ConnectionType
+                            </strong>
+                        </div>
+
+                    </div>
+
+
+                    <!-- PLAN -->
+                    <div class="connection-detail-card">
+
+                        <div class="connection-detail-icon">
+                            <i class="bi bi-speedometer2"></i>
+                        </div>
+
+                        <div>
+                            <span>PLAN</span>
+
+                            <strong>
+                                @(Model.Plan?.PlanName ?? "N/A")
+                            </strong>
+
+                            @if (Model.Plan != null &&
+                                 !string.IsNullOrWhiteSpace(Model.Plan.Speed))
+                            {
+                                <small>
+                                    @Model.Plan.Speed
+                                </small>
+                            }
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- EQUIPMENT -->
+                    <div class="connection-detail-card">
+
+                        <div class="connection-detail-icon">
+                            <i class="bi bi-router"></i>
+                        </div>
+
+                        <div>
+                            <span>EQUIPMENT</span>
+
+                            <strong>
+                                @(string.IsNullOrWhiteSpace(Model.Equipment)
+                                    ? "Not Assigned"
+                                    : Model.Equipment)
+                            </strong>
+                        </div>
+
+                    </div>
+
+
+                    <!-- ROUTER SERIAL -->
+                    <div class="connection-detail-card">
+
+                        <div class="connection-detail-icon">
+                            <i class="bi bi-upc-scan"></i>
+                        </div>
+
+                        <div>
+                            <span>ROUTER SERIAL</span>
+
+                            <strong>
+                                @(string.IsNullOrWhiteSpace(Model.RouterSerial)
+                                    ? "Not Assigned"
+                                    : Model.RouterSerial)
+                            </strong>
+                        </div>
+
+                    </div>
+
+
+                    <!-- INSTALLATION DATE -->
+                    <div class="connection-detail-card">
+
+                        <div class="connection-detail-icon">
+                            <i class="bi bi-calendar-check"></i>
+                        </div>
+
+                        <div>
+                            <span>INSTALLATION DATE</span>
+
+                            <strong>
+                                @(Model.InstallationDate.HasValue
+                                    ? Model.InstallationDate.Value.ToString("dd MMM yyyy")
+                                    : "Not Scheduled")
+                            </strong>
+                        </div>
+
+                    </div>
+
+
+                    <!-- ACTIVATED DATE -->
+                    <div class="connection-detail-card">
+
+                        <div class="connection-detail-icon">
+                            <i class="bi bi-lightning-charge"></i>
+                        </div>
+
+                        <div>
+                            <span>ACTIVATED DATE</span>
+
+                            <strong>
+                                @(Model.ActivatedAt.HasValue
+                                    ? Model.ActivatedAt.Value.ToString("dd MMM yyyy")
+                                    : "Not Activated")
+                            </strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ORDER INFORMATION -->
+            <div class="connection-section">
+
+                <div class="connection-section-heading">
+
+                    <div>
+                        <span class="portal-eyebrow">
+                            <i class="bi bi-file-earmark-text"></i>
+                            APPLICATION
+                        </span>
+
+                        <h2>Order Information</h2>
+                    </div>
+
+                    <a asp-controller="CustomerPortal"
+                       asp-action="ApplicationDetails"
+                       asp-route-id="@Model.OrderId"
+                       class="application-view-btn">
+
+                        View Application
+
+                        <i class="bi bi-arrow-right"></i>
+
+                    </a>
+
+                </div>
+
+
+                <div class="connection-order-card">
+
+                    <div>
+                        <span>ORDER NUMBER</span>
+
+                        <strong>
+                            @(Model.Order?.OrderNumber ?? "N/A")
+                        </strong>
+                    </div>
+
+
+                    <div>
+                        <span>ORDER DATE</span>
+
+                        <strong>
+                            @(Model.Order != null
+                                ? Model.Order.CreatedAt.ToString("dd MMM yyyy")
+                                : "N/A")
+                        </strong>
+                    </div>
+
+
+                    <div>
+                        <span>ORDER STATUS</span>
+
+                        <strong>
+                            @(Model.Order?.Status ?? "N/A")
+                        </strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- SUPPORT NOTICE -->
+            <div class="connection-support-card">
+
+                <div class="connection-support-icon">
+                    <i class="bi bi-headset"></i>
+                </div>
+
+                <div>
+
+                    <h3>Need help with your connection?</h3>
+
+                    <p>
+                        If you have any issue with your connection,
+                        equipment or installation, please contact
+                        NEXUS support.
+                    </p>
+
+                </div>
+
+                <a asp-controller="Home"
+                   asp-action="Contact"
+                   class="application-view-btn">
+
+                    Contact Support
+
+                    <i class="bi bi-arrow-right"></i>
+
+                </a>
+
+            </div>
+
+        }
+        else
+        {
+            <!-- NO CONNECTION -->
+            <div class="connection-empty">
+
+                <div class="connection-empty-icon">
+                    <i class="bi bi-router"></i>
+                </div>
+
+                <h2>No Connection Found</h2>
+
+                <p>
+                    You don't have a connection registered with NEXUS yet.
+                    Apply for a new connection to get started.
+                </p>
+
+                <a asp-controller="CustomerPortal"
+                   asp-action="Apply"
+                   class="btn-nexus-primary">
+
+                    <i class="bi bi-plus-lg"></i>
+                    Apply for New Connection
+
+                </a>
+
+            </div>
+        }
+
+    </div>
+
+</div>

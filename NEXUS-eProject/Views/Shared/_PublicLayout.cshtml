@@ -1,0 +1,529 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewData["Title"] - NEXUS</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin="anonymous" />
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet" />
+
+    <!-- NEXUS Public CSS -->
+    <link rel="stylesheet"
+          href="~/css/public.css"
+          asp-append-version="true" />
+
+    <!-- NEXUS AI Chatbot CSS -->
+    <link rel="stylesheet"
+          href="~/css/nexus-chatbot.css"
+          asp-append-version="true" />
+
+    @await RenderSectionAsync("Styles", required: false)
+
+</head>
+
+<body>
+
+    <!-- Background Effects -->
+
+    <div class="network-bg">
+
+        <div class="network-glow glow-one"></div>
+        <div class="network-glow glow-two"></div>
+        <div class="network-glow glow-three"></div>
+
+    </div>
+
+
+    <!-- NAVBAR -->
+
+    <header class="public-header">
+
+        <nav class="navbar navbar-expand-lg nexus-navbar">
+
+            <div class="container">
+
+                <!-- Logo -->
+
+                <a class="navbar-brand nexus-logo"
+                   asp-controller="Home"
+                   asp-action="Index">
+
+                    <span class="logo-mark">
+                        <i class="bi bi-globe2"></i>
+                    </span>
+
+                    <span class="logo-text">
+
+                        <strong>NEXUS</strong>
+
+                        <small>
+                            CONNECTING YOUR WORLD
+                        </small>
+
+                    </span>
+
+                </a>
+
+
+                <!-- Mobile Toggle -->
+
+                <button class="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#nexusNavbar"
+                        aria-controls="nexusNavbar"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation">
+
+                    <i class="bi bi-list"></i>
+
+                </button>
+
+
+                <!-- Navigation -->
+
+                <div class="collapse navbar-collapse"
+                     id="nexusNavbar">
+
+                    <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+
+                        <li class="nav-item">
+
+                            <a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "Index" ? "active" : "")"
+                               asp-controller="Home"
+                               asp-action="Index">
+
+                                Home
+
+                            </a>
+
+                        </li>
+
+
+                        <li class="nav-item">
+
+                            <a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "About" ? "active" : "")"
+                               asp-controller="Home"
+                               asp-action="About">
+
+                                About
+
+                            </a>
+
+                        </li>
+
+
+                        <li class="nav-item dropdown">
+
+                            <a class="nav-link dropdown-toggle"
+                               href="#"
+                               role="button"
+                               data-bs-toggle="dropdown">
+
+                                Services
+
+                            </a>
+
+                            <ul class="dropdown-menu nexus-dropdown">
+
+                                <li>
+
+                                    <a class="dropdown-item"
+                                       asp-controller="Home"
+                                       asp-action="Services">
+
+                                        <i class="bi bi-wifi"></i>
+                                        All Services
+
+                                    </a>
+
+                                </li>
+
+                                <li>
+                                    <hr class="dropdown-divider" />
+                                </li>
+
+                                <li>
+
+                                    <a class="dropdown-item"
+                                       asp-controller="Home"
+                                       asp-action="Services">
+
+                                        <i class="bi bi-globe2"></i>
+                                        Broadband Internet
+
+                                    </a>
+
+                                </li>
+
+                                <li>
+
+                                    <a class="dropdown-item"
+                                       asp-controller="Home"
+                                       asp-action="Services">
+
+                                        <i class="bi bi-router"></i>
+                                        Dial-Up Internet
+
+                                    </a>
+
+                                </li>
+
+                                <li>
+
+                                    <a class="dropdown-item"
+                                       asp-controller="Home"
+                                       asp-action="Services">
+
+                                        <i class="bi bi-telephone"></i>
+                                        Telephone / Landline
+
+                                    </a>
+
+                                </li>
+
+                            </ul>
+
+                        </li>
+
+
+                        <li class="nav-item">
+
+                            <a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "Plans" ? "active" : "")"
+                               asp-controller="Home"
+                               asp-action="Plans">
+
+                                Plans
+
+                            </a>
+
+                        </li>
+
+
+                        <li class="nav-item">
+
+                            <a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "Contact" ? "active" : "")"
+                               asp-controller="Home"
+                               asp-action="Contact">
+
+                                Contact
+
+                            </a>
+
+                        </li>
+
+                        @{
+                            var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+                            var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+                        }
+
+                        <li class="nav-item">
+
+                            <a class="nav-link @(currentController == "Home" && currentAction == "Faq" ? "active" : "")"
+                               asp-controller="Home"
+                               asp-action="Faq">
+
+                                FAQs & Reviews
+
+                            </a>
+
+                        </li>
+
+                    </ul>
+
+
+                    <!-- Right Actions -->
+
+                    <div class="navbar-actions">
+
+                        <button type="button"
+                                class="nav-search-btn"
+                                aria-label="Search">
+
+                            <i class="bi bi-search"></i>
+
+                        </button>
+
+
+                        @if (User.Identity?.IsAuthenticated == true &&
+                             User.IsInRole("Customer"))
+                        {
+                            <div class="d-flex align-items-center gap-2">
+
+                                <a asp-controller="CustomerPortal"
+                                   asp-action="Index"
+                                   class="btn-nexus-outline">
+
+                                    My Account
+
+                                </a>
+
+                                <form asp-controller="Account"
+                                      asp-action="Logout"
+                                      method="post"
+                                      class="m-0">
+
+                                    @Html.AntiForgeryToken()
+
+                                    <button type="submit"
+                                            class="btn-nexus-primary">
+
+                                        Logout
+
+                                    </button>
+
+                                </form>
+
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="d-flex align-items-center gap-2">
+
+                                <a asp-controller="Account"
+                                   asp-action="Login"
+                                   class="btn-nexus-outline">
+
+                                    Sign In
+
+                                </a>
+
+                                <a asp-controller="Account"
+                                   asp-action="Register"
+                                   class="btn-nexus-primary">
+
+                                    Register
+
+                                </a>
+
+                            </div>
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </nav>
+
+    </header>
+
+
+    <!-- PAGE CONTENT -->
+
+    <main>
+
+        @RenderBody()
+
+    </main>
+
+
+    <!-- FOOTER -->
+
+    <footer class="nexus-footer">
+
+        <div class="container">
+
+            <div class="footer-main">
+
+                <!-- Brand -->
+
+                <div class="footer-brand">
+
+                    <a class="nexus-logo"
+                       asp-controller="Home"
+                       asp-action="Index">
+
+                        <span class="logo-mark">
+                            <i class="bi bi-globe2"></i>
+                        </span>
+
+                        <span class="logo-text">
+
+                            <strong>NEXUS</strong>
+
+                            <small>
+                                CONNECTING YOUR WORLD
+                            </small>
+
+                        </span>
+
+                    </a>
+
+                    <p>
+                        Reliable connectivity solutions designed to
+                        keep homes, businesses and communities connected.
+                    </p>
+
+                </div>
+
+
+                <!-- Quick Links -->
+
+                <div class="footer-column">
+
+                    <h5>Quick Links</h5>
+
+                    <a asp-controller="Home"
+                       asp-action="Index">
+                        Home
+                    </a>
+
+                    <a asp-controller="Home"
+                       asp-action="About">
+                        About
+                    </a>
+
+                    <a asp-controller="Home"
+                       asp-action="Services">
+                        Services
+                    </a>
+
+                    <a asp-controller="Home"
+                       asp-action="Plans">
+                        Plans
+                    </a>
+
+                    <a asp-controller="Home"
+                       asp-action="Contact">
+                        Contact
+                    </a>
+
+                </div>
+
+
+                <!-- Services -->
+
+                <div class="footer-column">
+
+                    <h5>Services</h5>
+
+                    <a asp-controller="Home"
+                       asp-action="Services">
+                        Broadband Internet
+                    </a>
+
+                    <a asp-controller="Home"
+                       asp-action="Services">
+                        Dial-Up Internet
+                    </a>
+
+                    <a asp-controller="Home"
+                       asp-action="Services">
+                        Telephone / Landline
+                    </a>
+
+                </div>
+
+
+                <!-- Contact -->
+
+                <div class="footer-column">
+
+                    <h5>Contact</h5>
+
+                    <span>
+                        <i class="bi bi-telephone"></i>
+                        +92 300 1234567
+                    </span>
+
+                    <span>
+                        <i class="bi bi-envelope"></i>
+                        info@nexus.com
+                    </span>
+
+                    <span>
+                        <i class="bi bi-geo-alt"></i>
+                        Karachi, Pakistan
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- Footer Bottom -->
+
+            <div class="footer-bottom">
+
+                <span>
+                    © @DateTime.Now.Year NEXUS. All rights reserved.
+                </span>
+
+                <div class="footer-social">
+
+                    <a href="#"
+                       aria-label="Facebook">
+                        <i class="bi bi-facebook"></i>
+                    </a>
+
+                    <a href="#"
+                       aria-label="Twitter">
+                        <i class="bi bi-twitter-x"></i>
+                    </a>
+
+                    <a href="#"
+                       aria-label="LinkedIn">
+                        <i class="bi bi-linkedin"></i>
+                    </a>
+
+                    <a href="#"
+                       aria-label="Instagram">
+                        <i class="bi bi-instagram"></i>
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+
+    <!-- =================================================
+         NEXUS AI ASSISTANT
+    ================================================== -->
+
+    <partial name="_NexusChatbot" />
+
+
+    <!-- Bootstrap JS -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
+    <!-- NEXUS Public JS -->
+
+    <script src="~/js/public.js"
+            asp-append-version="true"></script>
+
+
+    <!-- NEXUS AI Chatbot JS -->
+
+    <script src="~/js/nexus-chatbot.js"
+            asp-append-version="true"></script>
+
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>

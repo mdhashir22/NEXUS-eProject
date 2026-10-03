@@ -1,0 +1,194 @@
+﻿@model IEnumerable<NEXUS_eProject.Models.Connection>
+
+@{
+    ViewData["Title"] = "Billing Pending";
+    ViewData["PageTitle"] = "Billing Pending";
+    Layout = "~/Views/Shared/_AccountsLayout.cshtml";
+}
+
+<div class="ab-page">
+
+    <div class="ab-header">
+
+        <div>
+            <span class="ab-eyebrow">
+                <i class="bi bi-hourglass-split"></i>
+                BILLING QUEUE
+            </span>
+
+            <h2>Billing Pending</h2>
+
+            <p>
+                Connections received from Technical Department
+                and waiting for bill generation.
+            </p>
+        </div>
+
+        <div class="ab-count">
+            <i class="bi bi-receipt"></i>
+
+            <div>
+                <span>WAITING</span>
+                <strong>@Model.Count()</strong>
+            </div>
+        </div>
+
+    </div>
+
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="ab-alert success">
+            <i class="bi bi-check-circle-fill"></i>
+            @TempData["Success"]
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="ab-alert error">
+            <i class="bi bi-exclamation-circle-fill"></i>
+            @TempData["Error"]
+        </div>
+    }
+
+
+    <div class="ab-card">
+
+        <div class="ab-toolbar">
+
+            <form method="get"
+                  asp-action="Pending"
+                  class="ab-search">
+
+                <i class="bi bi-search"></i>
+
+                <input type="text"
+                       name="search"
+                       value="@ViewBag.Search"
+                       placeholder="Search account, customer, phone or order..." />
+
+                <button type="submit">
+                    Search
+                </button>
+
+                @if (!string.IsNullOrWhiteSpace(ViewBag.Search))
+                {
+                    <a asp-action="Pending">
+                        Clear
+                    </a>
+                }
+
+            </form>
+
+        </div>
+
+
+        @if (Model.Any())
+        {
+            <div class="ab-table-wrap">
+
+                <table class="ab-table">
+
+                    <thead>
+                        <tr>
+                            <th>ACCOUNT ID</th>
+                            <th>ORDER</th>
+                            <th>CUSTOMER</th>
+                            <th>CONNECTION</th>
+                            <th>PLAN</th>
+                            <th>STATUS</th>
+                            <th>ACTION</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <td>
+                                <strong class="ab-purple">
+                                    @item.AccountId
+                                </strong>
+                            </td>
+
+                            <td>
+                                @(item.Order?.OrderNumber ?? "-")
+                            </td>
+
+                            <td>
+                                <div class="ab-person">
+                                    <strong>
+                                        @(item.Customer?.FullName ?? "-")
+                                    </strong>
+
+                                    <span>
+                                        @(item.Customer?.Phone ?? "-")
+                                    </span>
+                                </div>
+                            </td>
+
+                            <td>
+                                @item.ConnectionType
+                            </td>
+
+                            <td>
+                                <div class="ab-person">
+                                    <strong>
+                                        @(item.Plan?.PlanName ?? "-")
+                                    </strong>
+
+                                    <span>
+                                        @(item.Plan?.Speed ?? "-")
+                                    </span>
+                                </div>
+                            </td>
+
+                            <td>
+                                <span class="ab-badge pending">
+                                    <i class="bi bi-circle-fill"></i>
+                                    @(item.Order?.Status ?? "-")
+                                </span>
+                            </td>
+
+                            <td>
+                                <a asp-action="Create"
+                                   asp-route-connectionId="@item.ConnectionId"
+                                   class="ab-btn primary">
+
+                                    <i class="bi bi-receipt-cutoff"></i>
+                                    Generate Bill
+
+                                </a>
+                            </td>
+
+                        </tr>
+                    }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+        else
+        {
+            <div class="ab-empty">
+
+                <i class="bi bi-check2-circle"></i>
+
+                <h4>Billing Queue Clear</h4>
+
+                <p>
+                    No connections are currently waiting
+                    for bill generation.
+                </p>
+
+            </div>
+        }
+
+    </div>
+
+</div>

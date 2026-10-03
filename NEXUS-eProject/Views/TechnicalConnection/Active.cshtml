@@ -1,0 +1,213 @@
+﻿@model IEnumerable<NEXUS_eProject.Models.Connection>
+
+@{
+    ViewData["Title"] = "Active Connections";
+    ViewData["PageTitle"] = "Active Connections";
+    Layout = "~/Views/Shared/_TechnicalLayout.cshtml";
+
+    var search = ViewBag.Search as string;
+    var connectionType = ViewBag.ConnectionType as string;
+}
+
+<div class="ta-page">
+
+    <div class="ta-header">
+
+        <div>
+            <span>
+                <i class="bi bi-wifi"></i>
+                LIVE SERVICES
+            </span>
+
+            <h2>Active Connections</h2>
+
+            <p>
+                Customer connections currently active on NEXUS.
+            </p>
+        </div>
+
+        <div class="ta-total">
+            <i class="bi bi-broadcast-pin"></i>
+
+            <div>
+                <span>ACTIVE</span>
+                <strong>@Model.Count()</strong>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="tp-filter-card">
+
+        <form method="get"
+              asp-controller="TechnicalConnection"
+              asp-action="Active"
+              class="tp-filter-form">
+
+            <div class="tp-search">
+                <i class="bi bi-search"></i>
+
+                <input type="text"
+                       name="search"
+                       value="@search"
+                       placeholder="Search account, customer or phone..." />
+            </div>
+
+            <select name="connectionType"
+                    class="tp-select">
+
+                <option value="">All Connection Types</option>
+
+                <option value="Broadband"
+                        selected="@(connectionType == "Broadband")">
+                    Broadband
+                </option>
+
+                <option value="Dial-Up"
+                        selected="@(connectionType == "Dial-Up")">
+                    Dial-Up
+                </option>
+
+                <option value="Telephone/Landline"
+                        selected="@(connectionType == "Telephone/Landline")">
+                    Telephone / Landline
+                </option>
+
+            </select>
+
+            <button type="submit"
+                    class="tp-filter-btn">
+                Filter
+            </button>
+
+        </form>
+
+    </div>
+
+    <div class="tp-card">
+
+        <div class="tp-card-header">
+            <div>
+                <h5>
+                    <i class="bi bi-router"></i>
+                    Active Network Connections
+                </h5>
+
+                <span>@Model.Count() active connection(s)</span>
+            </div>
+        </div>
+
+        @if (Model.Any())
+        {
+            <div class="tp-table-wrap">
+
+                <table class="tp-table">
+
+                    <thead>
+                        <tr>
+                            <th>ACCOUNT ID</th>
+                            <th>CUSTOMER</th>
+                            <th>TYPE</th>
+                            <th>PLAN</th>
+                            <th>ROUTER</th>
+                            <th>ACTIVATED</th>
+                            <th>STATUS</th>
+                            <th>ACTION</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var connection in Model)
+                        {
+                            <tr>
+
+                                <td>
+                                    <strong class="tp-order">
+                                        @connection.AccountId
+                                    </strong>
+                                </td>
+
+                                <td>
+                                    <div class="tp-customer">
+                                        <strong>
+                                            @(connection.Customer?.FullName ?? "-")
+                                        </strong>
+
+                                        <span>
+                                            @(connection.Customer?.Phone ?? "-")
+                                        </span>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    @connection.ConnectionType
+                                </td>
+
+                                <td>
+                                    <div class="tp-customer">
+                                        <strong>
+                                            @(connection.Plan?.PlanName ?? "-")
+                                        </strong>
+
+                                        <span>
+                                            @(connection.Plan?.Speed ?? "-")
+                                        </span>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    @(connection.RouterSerial ?? "-")
+                                </td>
+
+                                <td>
+                                    @(connection.ActivatedAt?
+                                        .ToString("dd MMM yyyy")
+                                        ?? "-")
+                                </td>
+
+                                <td>
+                                    <span class="ta-status">
+                                        <i class="bi bi-circle-fill"></i>
+                                        Active
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <a asp-controller="TechnicalConnection"
+                                       asp-action="Details"
+                                       asp-route-id="@connection.ConnectionId"
+                                       class="tp-icon-btn">
+
+                                        <i class="bi bi-eye"></i>
+
+                                    </a>
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+        else
+        {
+            <div class="tp-empty">
+
+                <i class="bi bi-wifi-off"></i>
+
+                <h5>No Active Connections</h5>
+
+                <p>
+                    No active customer connections were found.
+                </p>
+
+            </div>
+        }
+
+    </div>
+
+</div>

@@ -1,0 +1,623 @@
+﻿@model NEXUS_eProject.Models.ContactFormViewModel
+
+@{
+    ViewData["Title"] = "Contact";
+    Layout = "_PublicLayout";
+}
+
+
+<!-- =========================================================
+     CONTACT HERO
+========================================================= -->
+
+<section class="contact-hero">
+
+    <div class="contact-hero-grid"></div>
+
+    <div class="container">
+
+        <div class="contact-hero-content">
+
+            <span class="contact-eyebrow">
+                <i class="bi bi-chat-dots"></i>
+                CONTACT NEXUS
+            </span>
+
+            <h1>
+                Let's Start a
+                <span>Conversation.</span>
+            </h1>
+
+            <p>
+                Have a question about our services, plans or
+                connection process? Get in touch with NEXUS.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     CONTACT SECTION
+========================================================= -->
+
+<section class="contact-section nexus-section">
+
+    <div class="container">
+
+        <div class="row g-5">
+
+            <!-- CONTACT INFORMATION -->
+
+            <div class="col-lg-5">
+
+                <div class="contact-info">
+
+                    <span class="section-eyebrow">
+                        GET IN TOUCH
+                    </span>
+
+                    <h2>
+                        We're here to
+                        <span>help.</span>
+                    </h2>
+
+                    <p class="contact-intro">
+                        Whether you want to know more about a service,
+                        discuss a plan or ask about the connection
+                        process, reach out to the NEXUS team.
+                    </p>
+
+
+                    <div class="contact-info-list">
+
+                        <div class="contact-info-item">
+
+                            <div class="contact-info-icon">
+                                <i class="bi bi-telephone"></i>
+                            </div>
+
+                            <div>
+                                <span>Phone</span>
+                                <strong>+92 300 1234567</strong>
+                            </div>
+
+                        </div>
+
+
+                        <div class="contact-info-item">
+
+                            <div class="contact-info-icon">
+                                <i class="bi bi-envelope"></i>
+                            </div>
+
+                            <div>
+                                <span>Email</span>
+                                <strong>info@nexus.com</strong>
+                            </div>
+
+                        </div>
+
+
+                        <div class="contact-info-item">
+
+                            <div class="contact-info-icon">
+                                <i class="bi bi-geo-alt"></i>
+                            </div>
+
+                            <div>
+                                <span>Location</span>
+                                <strong>Karachi, Pakistan</strong>
+                            </div>
+
+                        </div>
+
+
+                        <div class="contact-info-item">
+
+                            <div class="contact-info-icon">
+                                <i class="bi bi-clock"></i>
+                            </div>
+
+                            <div>
+                                <span>Service</span>
+                                <strong>Customer Support</strong>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="contact-social">
+
+                        <span>Follow NEXUS</span>
+
+                        <div>
+
+                            <a href="#" aria-label="Facebook">
+                                <i class="bi bi-facebook"></i>
+                            </a>
+
+                            <a href="#" aria-label="Twitter">
+                                <i class="bi bi-twitter-x"></i>
+                            </a>
+
+                            <a href="#" aria-label="LinkedIn">
+                                <i class="bi bi-linkedin"></i>
+                            </a>
+
+                            <a href="#" aria-label="Instagram">
+                                <i class="bi bi-instagram"></i>
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- CONTACT FORM -->
+
+            <div class="col-lg-7">
+
+                <div class="contact-form-card">
+
+                    <div class="contact-form-header">
+
+                        <span class="contact-form-label">
+                            SEND A MESSAGE
+                        </span>
+
+                        <h3>
+                            How can we
+                            <span>help you?</span>
+                        </h3>
+
+                        <p>
+                            Fill out the form and provide your
+                            requirements. Our team can follow up
+                            regarding your request.
+                        </p>
+
+                    </div>
+
+
+                    <!-- SUCCESS MESSAGE -->
+
+                    @if (TempData["ContactSuccess"] != null)
+                    {
+                        <div class="contact-success show">
+
+                            <i class="bi bi-check-circle-fill"></i>
+
+                            <div>
+                                <strong>Message Sent</strong>
+
+                                <span>
+                                    @TempData["ContactSuccess"]
+                                </span>
+                            </div>
+
+                        </div>
+                    }
+
+
+                    <!-- GENERAL ERROR -->
+
+                    @if (!ViewData.ModelState.IsValid &&
+                         ViewData.ModelState[string.Empty]?.Errors.Count > 0)
+                    {
+                        <div class="alert alert-danger mb-4">
+
+                            <i class="bi bi-exclamation-circle me-2"></i>
+
+                            @foreach (var error in
+                                ViewData.ModelState[string.Empty]!.Errors)
+                            {
+                                <span>@error.ErrorMessage</span>
+                            }
+
+                        </div>
+                    }
+
+
+                    <!-- CONTACT FORM -->
+
+                    <form asp-controller="Home"
+                          asp-action="Contact"
+                          method="post"
+                          id="nexusContactForm">
+
+                        @Html.AntiForgeryToken()
+
+
+                        <div class="row g-3">
+
+                            <!-- FULL NAME -->
+
+                            <div class="col-md-6">
+
+                                <label asp-for="FullName">
+                                    Full Name
+                                </label>
+
+                                <div class="contact-input">
+
+                                    <i class="bi bi-person"></i>
+
+                                    <input asp-for="FullName"
+                                           id="contactName"
+                                           class="form-control"
+                                           placeholder="Enter your name" />
+
+                                </div>
+
+                                <span asp-validation-for="FullName"
+                                      class="text-danger small">
+                                </span>
+
+                            </div>
+
+
+                            <!-- PHONE -->
+
+                            <div class="col-md-6">
+
+                                <label asp-for="Phone">
+                                    Phone Number
+                                </label>
+
+                                <div class="contact-input">
+
+                                    <i class="bi bi-telephone"></i>
+
+                                    <input asp-for="Phone"
+                                           id="contactPhone"
+                                           type="tel"
+                                           class="form-control"
+                                           placeholder="Enter phone number" />
+
+                                </div>
+
+                                <span asp-validation-for="Phone"
+                                      class="text-danger small">
+                                </span>
+
+                            </div>
+
+
+                            <!-- EMAIL -->
+
+                            <div class="col-12">
+
+                                <label asp-for="Email">
+                                    Email Address
+                                </label>
+
+                                <div class="contact-input">
+
+                                    <i class="bi bi-envelope"></i>
+
+                                    <input asp-for="Email"
+                                           id="contactEmail"
+                                           type="email"
+                                           class="form-control"
+                                           placeholder="Enter your email" />
+
+                                </div>
+
+                                <span asp-validation-for="Email"
+                                      class="text-danger small">
+                                </span>
+
+                            </div>
+
+
+                            <!-- SERVICE -->
+
+                            <div class="col-12">
+
+                                <label asp-for="Service">
+                                    Service
+                                </label>
+
+                                <div class="contact-input">
+
+                                    <i class="bi bi-broadcast"></i>
+
+                                    <select asp-for="Service"
+                                            id="contactService"
+                                            class="form-control">
+
+                                        <option value="">
+                                            Select a service
+                                        </option>
+
+                                        <option value="Broadband Internet">
+                                            Broadband Internet
+                                        </option>
+
+                                        <option value="Dial-Up Internet">
+                                            Dial-Up Internet
+                                        </option>
+
+                                        <option value="Telephone / Landline">
+                                            Telephone / Landline
+                                        </option>
+
+                                        <option value="General Inquiry">
+                                            General Inquiry
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+                                <span asp-validation-for="Service"
+                                      class="text-danger small">
+                                </span>
+
+                            </div>
+
+
+                            <!-- MESSAGE -->
+
+                            <div class="col-12">
+
+                                <label asp-for="Message">
+                                    Message
+                                </label>
+
+                                <div class="contact-input contact-textarea">
+
+                                    <i class="bi bi-chat-left-text"></i>
+
+                                    <textarea asp-for="Message"
+                                              id="contactMessage"
+                                              class="form-control"
+                                              rows="5"
+                                              placeholder="Tell us how we can help..."></textarea>
+
+                                </div>
+
+                                <span asp-validation-for="Message"
+                                      class="text-danger small">
+                                </span>
+
+                            </div>
+
+
+                            <!-- SUBMIT -->
+
+                            <div class="col-12">
+
+                                <button type="submit"
+                                        class="btn-nexus-primary contact-submit"
+                                        id="contactSubmitButton">
+
+                                    <span>Send Message</span>
+
+                                    <i class="bi bi-arrow-right"></i>
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     SERVICE HELP
+========================================================= -->
+
+<section class="contact-help nexus-section">
+
+    <div class="container">
+
+        <div class="section-heading text-center">
+
+            <span class="section-eyebrow">
+                NEED HELP?
+            </span>
+
+            <h2>
+                What can we
+                <span>help with?</span>
+            </h2>
+
+        </div>
+
+
+        <div class="row g-4 mt-4">
+
+            <div class="col-lg-4 col-md-6">
+
+                <div class="contact-help-card">
+
+                    <div class="contact-help-icon">
+                        <i class="bi bi-wifi"></i>
+                    </div>
+
+                    <h3>Internet Services</h3>
+
+                    <p>
+                        Questions about Broadband or Dial-Up
+                        Internet services and plans.
+                    </p>
+
+                    <a asp-controller="Home"
+                       asp-action="Services">
+
+                        Explore Services
+
+                        <i class="bi bi-arrow-right"></i>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-lg-4 col-md-6">
+
+                <div class="contact-help-card">
+
+                    <div class="contact-help-icon">
+                        <i class="bi bi-receipt"></i>
+                    </div>
+
+                    <h3>Plans & Pricing</h3>
+
+                    <p>
+                        Explore available service categories
+                        and plan information.
+                    </p>
+
+                    <a asp-controller="Home"
+                       asp-action="Plans">
+
+                        View Plans
+
+                        <i class="bi bi-arrow-right"></i>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-lg-4 col-md-6">
+
+                <div class="contact-help-card">
+
+                    <div class="contact-help-icon">
+                        <i class="bi bi-telephone"></i>
+                    </div>
+
+                    <h3>Telephone Service</h3>
+
+                    <p>
+                        Learn more about NEXUS Telephone /
+                        Landline connectivity.
+                    </p>
+
+                    <a asp-controller="Home"
+                       asp-action="Services">
+
+                        Learn More
+
+                        <i class="bi bi-arrow-right"></i>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     FINAL CTA
+========================================================= -->
+
+<section class="contact-final-cta">
+
+    <div class="contact-final-glow"></div>
+
+    <div class="container">
+
+        <div class="contact-final-content">
+
+            <span class="section-eyebrow">
+                NEXUS CONNECTIVITY
+            </span>
+
+            <h2>
+                Your connection
+                <span>starts here.</span>
+            </h2>
+
+            <p>
+                Explore our services and discover the connectivity
+                solution that fits your requirements.
+            </p>
+
+            <a asp-controller="Home"
+               asp-action="Services"
+               class="btn-nexus-primary">
+
+                Explore Services
+
+                <i class="bi bi-arrow-right"></i>
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const form =
+                document.getElementById("nexusContactForm");
+
+            const button =
+                document.getElementById("contactSubmitButton");
+
+
+            if (!form || !button) {
+                return;
+            }
+
+
+            form.addEventListener("submit", function () {
+
+                if (!form.checkValidity()) {
+                    return;
+                }
+
+
+                button.disabled = true;
+
+                button.innerHTML =
+                    '<span>Sending...</span>' +
+                    '<i class="bi bi-arrow-repeat"></i>';
+            });
+
+        });
+    </script>
+}

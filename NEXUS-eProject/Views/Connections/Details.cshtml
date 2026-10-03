@@ -1,0 +1,481 @@
+﻿@model NEXUS_eProject.Models.Connection
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    ViewData["Title"] = "Connection Details";
+    ViewData["PageTitle"] = "Connection Details";
+    ViewData["PageSubtitle"] = "View complete customer connection information";
+}
+
+<div class="page-heading">
+
+    <div>
+        <h2>Connection Details</h2>
+        <p>Complete information about this customer connection.</p>
+    </div>
+
+    <div>
+        <a asp-action="Index" class="btn btn-outline-light">
+            <i class="bi bi-arrow-left"></i>
+            Back to Connections
+        </a>
+    </div>
+
+</div>
+
+
+<div class="dashboard-card">
+
+    <!-- Connection Header -->
+
+    <div class="details-header">
+
+        <div class="details-avatar">
+            <i class="bi bi-router"></i>
+        </div>
+
+        <div>
+
+            <h3>
+                @Model.AccountId
+            </h3>
+
+            <span class="details-role">
+                @Model.ConnectionType Connection
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- Connection Information -->
+
+    <div class="details-section">
+
+        <h4>
+            <i class="bi bi-router"></i>
+            Connection Information
+        </h4>
+
+        <div class="details-grid">
+
+            <div class="detail-item">
+
+                <span class="detail-label">
+                    Account ID
+                </span>
+
+                <span class="detail-value">
+                    @Model.AccountId
+                </span>
+
+            </div>
+
+
+            <div class="detail-item">
+
+                <span class="detail-label">
+                    Connection Status
+                </span>
+
+                <span class="detail-value">
+
+                    @if (Model.Status == "Active")
+                    {
+                        <span class="status-badge active">
+                            Active
+                        </span>
+                    }
+                    else if (Model.Status == "Suspended")
+                    {
+                        <span class="status-badge inactive">
+                            Suspended
+                        </span>
+                    }
+                    else if (Model.Status == "Terminated")
+                    {
+                        <span class="status-badge inactive">
+                            Terminated
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="status-badge pending">
+                            @Model.Status
+                        </span>
+                    }
+
+                </span>
+
+            </div>
+
+
+            <div class="detail-item">
+
+                <span class="detail-label">
+                    Connection Type
+                </span>
+
+                <span class="detail-value">
+                    @Model.ConnectionType
+                </span>
+
+            </div>
+
+
+            <div class="detail-item">
+
+                <span class="detail-label">
+                    Created Date
+                </span>
+
+                <span class="detail-value">
+                    @Model.CreatedAt.ToString("dd MMM yyyy, hh:mm tt")
+                </span>
+
+            </div>
+
+
+            <div class="detail-item">
+
+                <span class="detail-label">
+                    Installation Date
+                </span>
+
+                <span class="detail-value">
+
+                    @if (Model.InstallationDate.HasValue)
+                    {
+                        @Model.InstallationDate.Value.ToString("dd MMM yyyy")
+                    }
+                    else
+                    {
+                        <span class="text-muted">
+                            Not Installed
+                        </span>
+                    }
+
+                </span>
+
+            </div>
+
+
+            <div class="detail-item">
+
+                <span class="detail-label">
+                    Activated Date
+                </span>
+
+                <span class="detail-value">
+
+                    @if (Model.ActivatedAt.HasValue)
+                    {
+                        @Model.ActivatedAt.Value.ToString("dd MMM yyyy, hh:mm tt")
+                    }
+                    else
+                    {
+                        <span class="text-muted">
+                            Not Activated
+                        </span>
+                    }
+
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Customer Information -->
+
+    <div class="details-section">
+
+        <h4>
+            <i class="bi bi-person"></i>
+            Customer Information
+        </h4>
+
+        <div class="details-grid">
+
+            <div class="detail-item">
+
+                <span class="detail-label">
+                    Full Name
+                </span>
+
+                <span class="detail-value">
+                    @Model.Customer.FullName
+                </span>
+
+            </div>
+
+
+            <div class="detail-item">
+
+                <span class="detail-label">
+                    Father Name
+                </span>
+
+                <span class="detail-value">
+                    @Model.Customer.FatherName
+                </span>
+
+            </div>
+
+
+            <div class="detail-item">
+
+                <span class="detail-label">
+                    Phone
+                </span>
+
+                <span class="detail-value">
+                    @Model.Customer.Phone
+                </span>
+
+            </div>
+
+
+            <div class="detail-item">
+
+                <span class="detail-label">
+                    Email
+                </span>
+
+                <span class="detail-value">
+
+                    @(string.IsNullOrWhiteSpace(Model.Customer.Email)
+                        ? "No email provided"
+                        : Model.Customer.Email)
+
+                </span>
+
+            </div>
+
+
+            <div class="detail-item">
+
+                <span class="detail-label">
+                    City
+                </span>
+
+                <span class="detail-value">
+                    @Model.Customer.City
+                </span>
+
+            </div>
+
+
+            <div class="detail-item full-width">
+
+                <span class="detail-label">
+                    Address
+                </span>
+
+                <span class="detail-value">
+                    @Model.Customer.Address
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Plan Information -->
+
+    <div class="details-section">
+
+        <h4>
+            <i class="bi bi-wifi"></i>
+            Plan Information
+        </h4>
+
+        <div class="details-grid">
+
+            <div class="detail-item">
+
+                <span class="detail-label">
+                    Plan Name
+                </span>
+
+                <span class="detail-value">
+                    @Model.Plan.PlanName
+                </span>
+
+            </div>
+
+
+            <div class="detail-item">
+
+                <span class="detail-label">
+                    Speed
+                </span>
+
+                <span class="detail-value">
+
+                    @(string.IsNullOrWhiteSpace(Model.Plan.Speed)
+                        ? "Not specified"
+                        : Model.Plan.Speed)
+
+                </span>
+
+            </div>
+
+
+            <div class="detail-item">
+
+                <span class="detail-label">
+                    Monthly / Plan Price
+                </span>
+
+                <span class="detail-value">
+                    Rs. @Model.Plan.Price.ToString("N2")
+                </span>
+
+            </div>
+
+
+            <div class="detail-item">
+
+                <span class="detail-label">
+                    Duration
+                </span>
+
+                <span class="detail-value">
+
+                    @(string.IsNullOrWhiteSpace(Model.Plan.Duration)
+                        ? "Not specified"
+                        : Model.Plan.Duration)
+
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Equipment Information -->
+
+    <div class="details-section">
+
+        <h4>
+            <i class="bi bi-hdd-network"></i>
+            Equipment Information
+        </h4>
+
+        <div class="details-grid">
+
+            <div class="detail-item">
+
+                <span class="detail-label">
+                    Equipment
+                </span>
+
+                <span class="detail-value">
+
+                    @(string.IsNullOrWhiteSpace(Model.Equipment)
+                        ? "Not Assigned"
+                        : Model.Equipment)
+
+                </span>
+
+            </div>
+
+
+            <div class="detail-item">
+
+                <span class="detail-label">
+                    Router Serial
+                </span>
+
+                <span class="detail-value">
+
+                    @(string.IsNullOrWhiteSpace(Model.RouterSerial)
+                        ? "Not Assigned"
+                        : Model.RouterSerial)
+
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Order Reference -->
+
+    <div class="details-section">
+
+        <h4>
+            <i class="bi bi-receipt"></i>
+            Order Reference
+        </h4>
+
+        <div class="details-grid">
+
+            <div class="detail-item">
+
+                <span class="detail-label">
+                    Order Number
+                </span>
+
+                <span class="detail-value">
+                    @Model.Order.OrderNumber
+                </span>
+
+            </div>
+
+
+            <div class="detail-item">
+
+                <span class="detail-label">
+                    Order Date
+                </span>
+
+                <span class="detail-value">
+                    @Model.Order.CreatedAt.ToString("dd MMM yyyy, hh:mm tt")
+                </span>
+
+            </div>
+
+
+            <div class="detail-item">
+
+                <span class="detail-label">
+                    Order Status
+                </span>
+
+                <span class="detail-value">
+                    @Model.Order.Status
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Security / Information Note -->
+
+    <div class="security-note">
+
+        <i class="bi bi-info-circle"></i>
+
+        <span>
+            Connection information is linked to the customer's registered
+            account and original order.
+        </span>
+
+    </div>
+
+</div>

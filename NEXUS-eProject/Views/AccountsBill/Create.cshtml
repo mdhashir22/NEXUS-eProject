@@ -1,0 +1,755 @@
+﻿@model NEXUS_eProject.Models.AccountsBillCreateViewModel
+
+@{
+    ViewData["Title"] = "Generate Bill";
+    ViewData["PageTitle"] = "Generate Bill";
+    Layout = "~/Views/Shared/_AccountsLayout.cshtml";
+}
+
+<div class="abc-page">
+
+    <!-- =====================================================
+         PAGE HEADER
+    ====================================================== -->
+    <div class="abc-header">
+
+        <div>
+            <span>
+                <i class="bi bi-receipt-cutoff"></i>
+                BILL GENERATION
+            </span>
+
+            <h2>Generate Customer Bill</h2>
+
+            <p>
+                Review connection charges and generate
+                the customer's bill.
+            </p>
+        </div>
+
+        <a asp-controller="AccountsBill"
+           asp-action="Pending"
+           class="abc-back">
+
+            <i class="bi bi-arrow-left"></i>
+            Billing Queue
+
+        </a>
+
+    </div>
+
+
+    <!-- =====================================================
+         VALIDATION / ERROR MESSAGE
+    ====================================================== -->
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="ab-alert error">
+            <i class="bi bi-exclamation-circle-fill"></i>
+            @TempData["Error"]
+        </div>
+    }
+
+
+    <!-- =====================================================
+         BILL FORM
+    ====================================================== -->
+
+    <form asp-controller="AccountsBill"
+          asp-action="Create"
+          method="post"
+          id="billForm">
+
+        <!--
+            ASP.NET Core Form Tag Helper automatically
+            generates the Anti Forgery Token.
+        -->
+
+        <input asp-for="ConnectionId"
+               type="hidden" />
+
+
+        <div asp-validation-summary="ModelOnly"
+             class="abc-validation">
+        </div>
+
+
+        <div class="abc-grid">
+
+
+            <!-- =================================================
+                 LEFT SIDE
+            ================================================== -->
+            <div>
+
+
+                <!-- =============================================
+                     CUSTOMER / CONNECTION INFORMATION
+                ============================================== -->
+
+                <div class="abc-card">
+
+                    <div class="abc-card-header">
+
+                        <h5>
+                            <i class="bi bi-person"></i>
+                            Customer & Connection
+                        </h5>
+
+                    </div>
+
+
+                    <div class="abc-info-grid">
+
+
+                        <div>
+
+                            <span>Customer</span>
+
+                            <strong>
+                                @(string.IsNullOrWhiteSpace(Model.CustomerName)
+                                    ? "-"
+                                    : Model.CustomerName)
+                            </strong>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>Phone</span>
+
+                            <strong>
+                                @(string.IsNullOrWhiteSpace(Model.Phone)
+                                    ? "-"
+                                    : Model.Phone)
+                            </strong>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>Account ID</span>
+
+                            <strong class="abc-purple">
+                                @(string.IsNullOrWhiteSpace(Model.AccountId)
+                                    ? "-"
+                                    : Model.AccountId)
+                            </strong>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>Order Number</span>
+
+                            <strong>
+                                @(string.IsNullOrWhiteSpace(Model.OrderNumber)
+                                    ? "-"
+                                    : Model.OrderNumber)
+                            </strong>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>Connection Type</span>
+
+                            <strong>
+                                @(string.IsNullOrWhiteSpace(Model.ConnectionType)
+                                    ? "-"
+                                    : Model.ConnectionType)
+                            </strong>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>Plan</span>
+
+                            <strong>
+
+                                @(string.IsNullOrWhiteSpace(Model.PlanName)
+                                    ? "-"
+                                    : Model.PlanName)
+
+                                @if (!string.IsNullOrWhiteSpace(Model.Speed))
+                                {
+                                    <small>
+                                        (@Model.Speed)
+                                    </small>
+                                }
+
+                            </strong>
+
+                        </div>
+
+
+                        <div class="full">
+
+                            <span>Equipment</span>
+
+                            <strong>
+                                @(string.IsNullOrWhiteSpace(Model.Equipment)
+                                    ? "No equipment specified"
+                                    : Model.Equipment)
+                            </strong>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+                <!-- =============================================
+                     BILL CHARGES
+                ============================================== -->
+
+                <div class="abc-card">
+
+                    <div class="abc-card-header">
+
+                        <h5>
+                            <i class="bi bi-calculator"></i>
+                            Bill Charges
+                        </h5>
+
+                    </div>
+
+
+                    <div class="abc-form-grid">
+
+
+                        <!-- PLAN AMOUNT -->
+                        <div class="abc-field">
+
+                            <label asp-for="PlanAmount">
+                                Plan Amount
+                            </label>
+
+                            <div class="abc-money-input">
+
+                                <span>Rs.</span>
+
+                                <input asp-for="PlanAmount"
+                                       id="planAmount"
+                                       type="number"
+                                       step="0.01"
+                                       min="0" />
+
+                            </div>
+
+                            <span asp-validation-for="PlanAmount"
+                                  class="abc-validation">
+                            </span>
+
+                        </div>
+
+
+                        <!-- EQUIPMENT AMOUNT -->
+                        <div class="abc-field">
+
+                            <label asp-for="EquipmentAmount">
+                                Equipment Amount
+                            </label>
+
+                            <div class="abc-money-input">
+
+                                <span>Rs.</span>
+
+                                <input asp-for="EquipmentAmount"
+                                       id="equipmentAmount"
+                                       type="number"
+                                       step="0.01"
+                                       min="0" />
+
+                            </div>
+
+                            <span asp-validation-for="EquipmentAmount"
+                                  class="abc-validation">
+                            </span>
+
+                        </div>
+
+
+                        <!-- PREVIOUS DUE -->
+                        <div class="abc-field">
+
+                            <label asp-for="PreviousDue">
+                                Previous Due
+                            </label>
+
+                            <div class="abc-money-input">
+
+                                <span>Rs.</span>
+
+                                <input asp-for="PreviousDue"
+                                       id="previousDue"
+                                       type="number"
+                                       step="0.01"
+                                       min="0" />
+
+                            </div>
+
+                            <span asp-validation-for="PreviousDue"
+                                  class="abc-validation">
+                            </span>
+
+                        </div>
+
+
+                        <!-- DISCOUNT -->
+                        <div class="abc-field">
+
+                            <label asp-for="Discount">
+                                Discount
+                            </label>
+
+                            <div class="abc-money-input">
+
+                                <span>Rs.</span>
+
+                                <input asp-for="Discount"
+                                       id="discount"
+                                       type="number"
+                                       step="0.01"
+                                       min="0" />
+
+                            </div>
+
+                            <span asp-validation-for="Discount"
+                                  class="abc-validation">
+                            </span>
+
+                        </div>
+
+
+                        <!-- TAX -->
+                        <div class="abc-field">
+
+                            <label asp-for="TaxPercentage">
+                                Tax Percentage
+                            </label>
+
+                            <div class="abc-money-input">
+
+                                <input asp-for="TaxPercentage"
+                                       id="taxPercentage"
+                                       type="number"
+                                       step="0.01"
+                                       min="0"
+                                       max="100" />
+
+                                <span>%</span>
+
+                            </div>
+
+                            <span asp-validation-for="TaxPercentage"
+                                  class="abc-validation">
+                            </span>
+
+                        </div>
+
+
+                        <!-- BILLING DATE -->
+                        <div class="abc-field">
+
+                            <label asp-for="BillingDate">
+                                Billing Date
+                            </label>
+
+                            <input asp-for="BillingDate"
+                                   type="date"
+                                   class="abc-input" />
+
+                            <span asp-validation-for="BillingDate"
+                                  class="abc-validation">
+                            </span>
+
+                        </div>
+
+
+                        <!-- DUE DATE -->
+                        <div class="abc-field">
+
+                            <label asp-for="DueDate">
+                                Due Date
+                            </label>
+
+                            <input asp-for="DueDate"
+                                   type="date"
+                                   class="abc-input" />
+
+                            <span asp-validation-for="DueDate"
+                                  class="abc-validation">
+                            </span>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- =================================================
+                 RIGHT SIDE - BILL SUMMARY
+            ================================================== -->
+
+            <div>
+
+                <div class="abc-summary">
+
+
+                    <div class="abc-summary-title">
+
+                        <i class="bi bi-receipt"></i>
+
+                        <div>
+
+                            <h5>
+                                Bill Summary
+                            </h5>
+
+                            <span>
+                                Live calculation
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- PLAN -->
+                    <div class="abc-summary-row">
+
+                        <span>
+                            Plan Amount
+                        </span>
+
+                        <strong id="summaryPlan">
+                            Rs. 0.00
+                        </strong>
+
+                    </div>
+
+
+                    <!-- EQUIPMENT -->
+                    <div class="abc-summary-row">
+
+                        <span>
+                            Equipment
+                        </span>
+
+                        <strong id="summaryEquipment">
+                            Rs. 0.00
+                        </strong>
+
+                    </div>
+
+
+                    <!-- PREVIOUS DUE -->
+                    <div class="abc-summary-row">
+
+                        <span>
+                            Previous Due
+                        </span>
+
+                        <strong id="summaryDue">
+                            Rs. 0.00
+                        </strong>
+
+                    </div>
+
+
+                    <!-- DISCOUNT -->
+                    <div class="abc-summary-row discount">
+
+                        <span>
+                            Discount
+                        </span>
+
+                        <strong id="summaryDiscount">
+                            - Rs. 0.00
+                        </strong>
+
+                    </div>
+
+
+                    <!-- SUBTOTAL -->
+                    <div class="abc-summary-row">
+
+                        <span>
+                            Amount After Discount
+                        </span>
+
+                        <strong id="summarySubtotal">
+                            Rs. 0.00
+                        </strong>
+
+                    </div>
+
+
+                    <!-- TAX -->
+                    <div class="abc-summary-row">
+
+                        <span id="summaryTaxLabel">
+                            Tax
+                        </span>
+
+                        <strong id="summaryTax">
+                            Rs. 0.00
+                        </strong>
+
+                    </div>
+
+
+                    <!-- TOTAL -->
+                    <div class="abc-summary-total">
+
+                        <span>
+                            TOTAL PAYABLE
+                        </span>
+
+                        <strong id="summaryTotal">
+                            Rs. 0.00
+                        </strong>
+
+                    </div>
+
+
+                    <!-- WORKFLOW NOTE -->
+                    <div class="abc-summary-note">
+
+                        <i class="bi bi-info-circle"></i>
+
+                        Generating this bill will move
+                        the customer's application to
+
+                        <strong>
+                            Payment Pending
+                        </strong>.
+
+                    </div>
+
+
+                    <!-- SUBMIT -->
+                    <button type="submit"
+                            class="abc-generate">
+
+                        <i class="bi bi-receipt-cutoff"></i>
+
+                        Generate Bill
+
+                    </button>
+
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </form>
+
+</div>
+
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+
+    <script>
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                const planAmount =
+                    document.getElementById("planAmount");
+
+                const equipmentAmount =
+                    document.getElementById("equipmentAmount");
+
+                const previousDue =
+                    document.getElementById("previousDue");
+
+                const discount =
+                    document.getElementById("discount");
+
+                const taxPercentage =
+                    document.getElementById("taxPercentage");
+
+
+                function getValue(element) {
+
+                    if (!element) {
+                        return 0;
+                    }
+
+                    const parsed =
+                        parseFloat(element.value);
+
+                    return isNaN(parsed)
+                        ? 0
+                        : parsed;
+                }
+
+
+                function formatMoney(amount) {
+
+                    return "Rs. " +
+                        amount.toLocaleString(
+                            "en-PK",
+                            {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2
+                            }
+                        );
+                }
+
+
+                function calculateBill() {
+
+                    const plan =
+                        getValue(planAmount);
+
+                    const equipment =
+                        getValue(equipmentAmount);
+
+                    const due =
+                        getValue(previousDue);
+
+                    const billDiscount =
+                        getValue(discount);
+
+                    const taxRate =
+                        getValue(taxPercentage);
+
+
+                    const grossAmount =
+                        plan +
+                        equipment +
+                        due;
+
+
+                    const amountAfterDiscount =
+                        Math.max(
+                            0,
+                            grossAmount - billDiscount
+                        );
+
+
+                    const taxAmount =
+                        amountAfterDiscount *
+                        (taxRate / 100);
+
+
+                    const totalAmount =
+                        amountAfterDiscount +
+                        taxAmount;
+
+
+                    document.getElementById(
+                        "summaryPlan"
+                    ).textContent =
+                        formatMoney(plan);
+
+
+                    document.getElementById(
+                        "summaryEquipment"
+                    ).textContent =
+                        formatMoney(equipment);
+
+
+                    document.getElementById(
+                        "summaryDue"
+                    ).textContent =
+                        formatMoney(due);
+
+
+                    document.getElementById(
+                        "summaryDiscount"
+                    ).textContent =
+                        "- " +
+                        formatMoney(billDiscount);
+
+
+                    document.getElementById(
+                        "summarySubtotal"
+                    ).textContent =
+                        formatMoney(
+                            amountAfterDiscount
+                        );
+
+
+                    document.getElementById(
+                        "summaryTaxLabel"
+                    ).textContent =
+                        "Tax (" +
+                        taxRate.toFixed(2) +
+                        "%)";
+
+
+                    document.getElementById(
+                        "summaryTax"
+                    ).textContent =
+                        formatMoney(taxAmount);
+
+
+                    document.getElementById(
+                        "summaryTotal"
+                    ).textContent =
+                        formatMoney(totalAmount);
+                }
+
+
+                const billInputs = [
+                    planAmount,
+                    equipmentAmount,
+                    previousDue,
+                    discount,
+                    taxPercentage
+                ];
+
+
+                billInputs.forEach(
+                    function (input) {
+
+                        if (input) {
+
+                            input.addEventListener(
+                                "input",
+                                calculateBill
+                            );
+
+                            input.addEventListener(
+                                "change",
+                                calculateBill
+                            );
+                        }
+
+                    }
+                );
+
+
+                calculateBill();
+
+            }
+        );
+
+    </script>
+
+}

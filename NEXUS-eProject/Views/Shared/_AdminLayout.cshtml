@@ -1,0 +1,517 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> UserManager
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewData["Title"] - Nexus</title>
+
+
+    <!-- Bootstrap -->
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+
+
+    <!-- Bootstrap Icons -->
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+
+
+    <!-- Nexus Admin CSS -->
+
+    <link rel="stylesheet"
+          href="~/css/admin.css"
+          asp-append-version="true" />
+
+</head>
+
+
+<body>
+
+    @{
+        var currentController =
+            ViewContext.RouteData.Values["controller"]?.ToString();
+
+        var currentAction =
+            ViewContext.RouteData.Values["action"]?.ToString();
+
+        var currentUser =
+            await UserManager.GetUserAsync(User);
+
+        var userEmail =
+            currentUser?.Email ?? "Admin";
+
+        var userInitial =
+            string.IsNullOrWhiteSpace(userEmail)
+                ? "A"
+                : userEmail.Substring(0, 1).ToUpper();
+    }
+
+
+    <div class="admin-wrapper">
+
+
+        <!-- ================================================= -->
+        <!-- SIDEBAR -->
+        <!-- ================================================= -->
+
+        <aside class="sidebar">
+
+
+            <!-- ================================================= -->
+            <!-- BRAND -->
+            <!-- ================================================= -->
+
+            <div class="sidebar-brand">
+
+                <div class="brand-icon">
+
+                    <i class="bi bi-grid-1x2-fill"></i>
+
+                </div>
+
+                <div>
+
+                    <h4>
+                        NEXUS
+                    </h4>
+
+                    <span>
+                        Management System
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- SIDEBAR MENU -->
+            <!-- ================================================= -->
+
+            <div class="sidebar-menu">
+
+
+                <!-- ================================================= -->
+                <!-- MAIN MENU -->
+                <!-- ================================================= -->
+
+                <div class="menu-title">
+                    MAIN MENU
+                </div>
+
+
+                <!-- Dashboard -->
+
+                <a asp-controller="Admin"
+                   asp-action="Dashboard"
+                   class="menu-item @(currentController == "Admin" && currentAction == "Dashboard" ? "active" : "")">
+
+                    <i class="bi bi-grid-1x2"></i>
+
+                    <span>
+                        Dashboard
+                    </span>
+
+                </a>
+
+
+                <!-- ================================================= -->
+                <!-- MANAGEMENT -->
+                <!-- ================================================= -->
+
+                <div class="menu-title">
+                    MANAGEMENT
+                </div>
+
+
+                <!-- Employees -->
+
+                <a asp-controller="Employees"
+                   asp-action="Index"
+                   class="menu-item @(currentController == "Employees" ? "active" : "")">
+
+                    <i class="bi bi-people"></i>
+
+                    <span>
+                        Employees
+                    </span>
+
+                </a>
+
+
+                <!-- Shops -->
+
+                <a asp-controller="Shops"
+                   asp-action="Index"
+                   class="menu-item @(currentController == "Shops" ? "active" : "")">
+
+                    <i class="bi bi-shop"></i>
+
+                    <span>
+                        Shops
+                    </span>
+
+                </a>
+
+
+                <!-- Vendors -->
+
+                <a asp-controller="Vendors"
+                   asp-action="Index"
+                   class="menu-item @(currentController == "Vendors" ? "active" : "")">
+
+                    <i class="bi bi-truck"></i>
+
+                    <span>
+                        Vendors
+                    </span>
+
+                </a>
+
+
+                <!-- Products -->
+
+                <a asp-controller="Products"
+                   asp-action="Index"
+                   class="menu-item @(currentController == "Products" ? "active" : "")">
+
+                    <i class="bi bi-box"></i>
+
+                    <span>
+                        Products
+                    </span>
+
+                </a>
+
+
+                <!-- Internet Plans -->
+
+                <a asp-controller="Plans"
+                   asp-action="Index"
+                   class="menu-item @(currentController == "Plans" ? "active" : "")">
+
+                    <i class="bi bi-wifi"></i>
+
+                    <span>
+                        Internet Plans
+                    </span>
+
+                </a>
+
+
+                <!-- ================================================= -->
+                <!-- OPERATIONS -->
+                <!-- ================================================= -->
+
+                <div class="menu-title">
+                    OPERATIONS
+                </div>
+
+
+                <!-- Customers -->
+
+                <a asp-controller="Customers"
+                   asp-action="Index"
+                   class="menu-item @(currentController == "Customers" ? "active" : "")">
+
+                    <i class="bi bi-people"></i>
+
+                    <span>
+                        Customers
+                    </span>
+
+                </a>
+
+
+                <!-- Feedback -->
+
+                <a asp-controller="Feedbacks"
+                   asp-action="Index"
+                   class="menu-item @(currentController == "Feedbacks" ? "active" : "")">
+
+                    <i class="bi bi-chat-square-text"></i>
+
+                    <span>
+                        Feedback
+                    </span>
+
+                </a>
+
+
+                <!-- Orders -->
+
+                <a asp-controller="Orders"
+                   asp-action="Index"
+                   class="menu-item @(currentController == "Orders" ? "active" : "")">
+
+                    <i class="bi bi-cart-check"></i>
+
+                    <span>
+                        Orders
+                    </span>
+
+                </a>
+
+
+                <!-- Connections -->
+
+                <a asp-controller="Connections"
+                   asp-action="Index"
+                   class="menu-item @(currentController == "Connections" ? "active" : "")">
+
+                    <i class="bi bi-router"></i>
+
+                    <span>
+                        Connections
+                    </span>
+
+                </a>
+
+
+                <!-- ================================================= -->
+                <!-- REPORTS -->
+                <!-- ================================================= -->
+
+                <div class="menu-title">
+                    REPORTS
+                </div>
+
+
+                <!-- Reports -->
+
+                <a asp-controller="Reports"
+                   asp-action="Index"
+                   class="menu-item @(currentController == "Reports" ? "active" : "")">
+
+                    <i class="bi bi-bar-chart"></i>
+
+                    <span>
+                        Reports
+                    </span>
+
+                </a>
+
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- SIDEBAR BOTTOM -->
+            <!-- ================================================= -->
+
+            <div class="sidebar-bottom">
+
+
+                <!-- Settings -->
+
+                <a asp-controller="Settings"
+                   asp-action="Index"
+                   class="menu-item @(currentController == "Settings" ? "active" : "")">
+
+                    <i class="bi bi-gear"></i>
+
+                    <span>
+                        Settings
+                    </span>
+
+                </a>
+
+
+                <!-- ================================================= -->
+                <!-- LOGOUT -->
+                <!-- ================================================= -->
+
+                <form asp-controller="Account"
+                      asp-action="Logout"
+                      method="post"
+                      class="logout-form">
+
+                    @Html.AntiForgeryToken()
+
+                    <button type="submit"
+                            class="menu-item logout-item">
+
+                        <i class="bi bi-box-arrow-right"></i>
+
+                        <span>
+                            Logout
+                        </span>
+
+                    </button>
+
+                </form>
+
+
+            </div>
+
+
+        </aside>
+
+
+        <!-- ================================================= -->
+        <!-- MAIN CONTENT -->
+        <!-- ================================================= -->
+
+        <main class="main-content">
+
+
+            <!-- ================================================= -->
+            <!-- TOPBAR -->
+            <!-- ================================================= -->
+
+            <header class="topbar">
+
+
+                <!-- TOPBAR LEFT -->
+
+                <div class="topbar-left">
+
+
+                    <!-- Sidebar Toggle -->
+
+                    <button class="sidebar-toggle"
+                            id="sidebarToggle"
+                            type="button">
+
+                        <i class="bi bi-list"></i>
+
+                    </button>
+
+
+                    <!-- Page Heading -->
+
+                    <div>
+
+                        <h6 class="topbar-title">
+                            @ViewData["PageTitle"]
+                        </h6>
+
+                        <small>
+                            @ViewData["PageSubtitle"]
+                        </small>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- ================================================= -->
+                <!-- TOPBAR RIGHT -->
+                <!-- ================================================= -->
+
+                <div class="topbar-right">
+
+
+                    <!-- Search -->
+
+                    <div class="search-box">
+
+                        <i class="bi bi-search"></i>
+
+                        <input type="text"
+                               placeholder="Search..." />
+
+                    </div>
+
+
+                    <!-- Notifications -->
+
+                    <button class="icon-button"
+                            type="button">
+
+                        <i class="bi bi-bell"></i>
+
+                        <span class="notification-dot"></span>
+
+                    </button>
+
+
+                    <!-- ================================================= -->
+                    <!-- PROFILE -->
+                    <!-- ================================================= -->
+
+                    <div class="profile">
+
+
+                        <div class="profile-avatar">
+
+                            @userInitial
+
+                        </div>
+
+
+                        <div class="profile-info">
+
+                            <strong>
+                                Admin
+                            </strong>
+
+                            <small>
+                                @userEmail
+                            </small>
+
+                        </div>
+
+
+                        <i class="bi bi-chevron-down profile-arrow"></i>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </header>
+
+
+            <!-- ================================================= -->
+            <!-- PAGE CONTENT -->
+            <!-- ================================================= -->
+
+            <section class="page-content">
+
+                @RenderBody()
+
+            </section>
+
+
+        </main>
+
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- BOOTSTRAP JS -->
+    <!-- ================================================= -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
+    <!-- ================================================= -->
+    <!-- NEXUS ADMIN JS -->
+    <!-- ================================================= -->
+
+    <script src="~/js/admin.js"
+            asp-append-version="true"></script>
+
+
+    @await RenderSectionAsync(
+        "Scripts",
+        required: false)
+
+</body>
+
+</html>

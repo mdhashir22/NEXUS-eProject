@@ -1,0 +1,211 @@
+﻿@model NEXUS_eProject.Models.Customer
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    ViewData["Title"] = "Customer Details";
+    ViewData["PageTitle"] = "Customer Details";
+    ViewData["PageSubtitle"] = "View complete customer information";
+}
+
+<div class="page-heading">
+    <div>
+        <h2>Customer Details</h2>
+        <p>Complete information about this customer.</p>
+    </div>
+
+    <a asp-action="Index"
+       class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left"></i>
+        Back
+    </a>
+</div>
+
+<div class="form-card">
+
+    <div class="details-header">
+        <div class="details-avatar">
+            <i class="bi bi-person"></i>
+        </div>
+
+        <div>
+            <h3>@Model.FullName</h3>
+
+            <span class="details-role">
+                Customer #@Model.CustomerId
+            </span>
+        </div>
+    </div>
+
+    <div class="details-section">
+
+        <h4>
+            <i class="bi bi-person-vcard"></i>
+            Personal Information
+        </h4>
+
+        <div class="details-grid">
+
+            <div class="detail-item">
+                <span class="detail-label">
+                    Full Name
+                </span>
+
+                <span class="detail-value">
+                    @Model.FullName
+                </span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">
+                    Father Name
+                </span>
+
+                <span class="detail-value">
+                    @Model.FatherName
+                </span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">
+                    Phone Number
+                </span>
+
+                <span class="detail-value">
+                    @Model.Phone
+                </span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">
+                    Email Address
+                </span>
+
+                <span class="detail-value">
+                    @(string.IsNullOrWhiteSpace(Model.Email)
+                        ? "Not provided"
+                        : Model.Email)
+                </span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">
+                    City
+                </span>
+
+                <span class="detail-value">
+                    @Model.City
+                </span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">
+                    Account Status
+                </span>
+
+                <span class="detail-value">
+
+                    @if (Model.IsActive)
+                    {
+                        <span class="status-badge active">
+                            Active
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="status-badge inactive">
+                            Inactive
+                        </span>
+                    }
+
+                </span>
+            </div>
+
+            <div class="detail-item full-width">
+                <span class="detail-label">
+                    Address
+                </span>
+
+                <span class="detail-value">
+                    @Model.Address
+                </span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">
+                    Registration Date
+                </span>
+
+                <span class="detail-value">
+                    @Model.CreatedAt.ToString("dd MMM yyyy, hh:mm tt")
+                </span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">
+                    Customer ID
+                </span>
+
+                <span class="detail-value">
+                    #@Model.CustomerId
+                </span>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="details-section">
+
+        <h4>
+            <i class="bi bi-shield-lock"></i>
+            Account Information
+        </h4>
+
+        <div class="details-grid">
+
+            <div class="detail-item">
+                <span class="detail-label">
+                    Login Email
+                </span>
+
+                <span class="detail-value">
+                    @(string.IsNullOrWhiteSpace(Model.Email)
+                        ? "Not provided"
+                        : Model.Email)
+                </span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">
+                    Password
+                </span>
+
+                <span class="detail-value password-hidden">
+                    <i class="bi bi-lock-fill"></i>
+                    Hidden for security
+                </span>
+            </div>
+
+        </div>
+
+        <div class="security-note">
+            <i class="bi bi-info-circle"></i>
+
+            Customer passwords are securely hashed by
+            ASP.NET Identity and cannot be displayed.
+        </div>
+
+    </div>
+
+    <div class="form-footer">
+
+        <a asp-action="Index"
+           class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i>
+            Back
+        </a>
+
+    </div>
+
+</div>

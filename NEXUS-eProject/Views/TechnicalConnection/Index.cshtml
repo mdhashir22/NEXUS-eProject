@@ -1,0 +1,419 @@
+﻿@model IEnumerable<NEXUS_eProject.Models.Connection>
+
+@{
+    ViewData["Title"] = "Connections";
+    ViewData["PageTitle"] = "Connections";
+    ViewData["PageSubtitle"] = "Technical Operations";
+    Layout = "~/Views/Shared/_TechnicalLayout.cshtml";
+
+    var search = ViewBag.Search as string;
+    var status = ViewBag.Status as string;
+    var connectionType = ViewBag.ConnectionType as string;
+
+    var totalConnections = Model.Count();
+    var activeConnections = Model.Count(c => c.Status == "Active");
+    var pendingConnections = Model.Count(c =>
+        c.Status == "Pending" ||
+        c.Status == "Installation Pending");
+
+    var inactiveConnections = Model.Count(c =>
+        c.Status == "Inactive");
+}
+
+<div class="tci-page">
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="tci-header">
+
+        <div>
+            <div class="tci-eyebrow">
+                <i class="bi bi-hdd-network"></i>
+                TECHNICAL OPERATIONS
+            </div>
+
+            <h2>Connections</h2>
+
+            <p>
+                Manage and monitor customer service connections.
+            </p>
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         STATS
+    ====================================================== -->
+
+    <div class="tci-stats-grid">
+
+        <div class="tci-stat-card">
+
+            <div class="tci-stat-icon purple">
+                <i class="bi bi-hdd-network"></i>
+            </div>
+
+            <div>
+                <span>TOTAL CONNECTIONS</span>
+                <strong>@totalConnections</strong>
+            </div>
+
+        </div>
+
+
+        <div class="tci-stat-card">
+
+            <div class="tci-stat-icon green">
+                <i class="bi bi-check-circle"></i>
+            </div>
+
+            <div>
+                <span>ACTIVE</span>
+                <strong>@activeConnections</strong>
+            </div>
+
+        </div>
+
+
+        <div class="tci-stat-card">
+
+            <div class="tci-stat-icon orange">
+                <i class="bi bi-clock-history"></i>
+            </div>
+
+            <div>
+                <span>PENDING</span>
+                <strong>@pendingConnections</strong>
+            </div>
+
+        </div>
+
+
+        <div class="tci-stat-card">
+
+            <div class="tci-stat-icon red">
+                <i class="bi bi-x-circle"></i>
+            </div>
+
+            <div>
+                <span>INACTIVE</span>
+                <strong>@inactiveConnections</strong>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         FILTERS
+    ====================================================== -->
+
+    <div class="tci-filter-card">
+
+        <form asp-controller="TechnicalConnection"
+              asp-action="Index"
+              method="get"
+              class="tci-filter-form">
+
+            <div class="tci-search">
+
+                <i class="bi bi-search"></i>
+
+                <input type="text"
+                       name="search"
+                       value="@search"
+                       placeholder="Search account, customer or phone..." />
+
+            </div>
+
+
+            <select name="status"
+                    class="tci-select">
+
+                <option value="">All Statuses</option>
+
+                <option value="Pending"
+                        selected="@(status == "Pending")">
+                    Pending
+                </option>
+
+                <option value="Installation Pending"
+                        selected="@(status == "Installation Pending")">
+                    Installation Pending
+                </option>
+
+                <option value="Active"
+                        selected="@(status == "Active")">
+                    Active
+                </option>
+
+                <option value="Inactive"
+                        selected="@(status == "Inactive")">
+                    Inactive
+                </option>
+
+            </select>
+
+
+            <select name="connectionType"
+                    class="tci-select">
+
+                <option value="">
+                    All Connection Types
+                </option>
+
+                <option value="Broadband"
+                        selected="@(connectionType == "Broadband")">
+                    Broadband
+                </option>
+
+                <option value="Dial-Up"
+                        selected="@(connectionType == "Dial-Up")">
+                    Dial-Up
+                </option>
+
+                <option value="Telephone/Landline"
+                        selected="@(connectionType == "Telephone/Landline")">
+                    Telephone / Landline
+                </option>
+
+            </select>
+
+
+            <button type="submit"
+                    class="tci-filter-btn">
+
+                <i class="bi bi-funnel"></i>
+                Filter
+
+            </button>
+
+
+            @if (!string.IsNullOrWhiteSpace(search) ||
+                 !string.IsNullOrWhiteSpace(status) ||
+                 !string.IsNullOrWhiteSpace(connectionType))
+            {
+                <a asp-controller="TechnicalConnection"
+                   asp-action="Index"
+                   class="tci-clear-btn">
+
+                    <i class="bi bi-x-lg"></i>
+                    Clear
+
+                </a>
+            }
+
+        </form>
+
+    </div>
+
+
+    <!-- =====================================================
+         CONNECTION TABLE
+    ====================================================== -->
+
+    <div class="tci-table-card">
+
+        <div class="tci-table-header">
+
+            <div>
+                <h5>
+                    <i class="bi bi-hdd-network"></i>
+                    Connection Records
+                </h5>
+
+                <span>
+                    @totalConnections connection record(s) found
+                </span>
+            </div>
+
+        </div>
+
+
+        @if (Model.Any())
+        {
+            <div class="tci-table-wrapper">
+
+                <table class="tci-table">
+
+                    <thead>
+
+                        <tr>
+                            <th>ACCOUNT ID</th>
+                            <th>CUSTOMER</th>
+                            <th>TYPE</th>
+                            <th>PLAN</th>
+                            <th>ROUTER SERIAL</th>
+                            <th>INSTALLATION</th>
+                            <th>STATUS</th>
+                            <th>ACTION</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var connection in Model)
+                        {
+                            var connectionStatus =
+                                connection.Status ?? "Pending";
+
+                            var statusClass =
+                                connectionStatus == "Active"
+                                    ? "success"
+                                    : connectionStatus == "Inactive"
+                                        ? "danger"
+                                        : "warning";
+
+                            <tr>
+
+                                <td>
+
+                                    <div class="tci-account">
+
+                                        <div class="tci-account-icon">
+                                            <i class="bi bi-person-badge"></i>
+                                        </div>
+
+                                        <strong>
+                                            @connection.AccountId
+                                        </strong>
+
+                                    </div>
+
+                                </td>
+
+
+                                <td>
+
+                                    <div class="tci-customer">
+
+                                        <strong>
+                                            @(connection.Customer?.FullName
+                                                ?? "Unknown Customer")
+                                        </strong>
+
+                                        <span>
+                                            @(connection.Customer?.Phone
+                                                ?? "-")
+                                        </span>
+
+                                    </div>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="tci-type">
+                                        @(connection.ConnectionType ?? "-")
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <div class="tci-plan">
+
+                                        <strong>
+                                            @(connection.Plan?.PlanName ?? "-")
+                                        </strong>
+
+                                        <span>
+                                            @(connection.Plan?.Speed ?? "-")
+                                        </span>
+
+                                    </div>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="tci-serial">
+                                        @(string.IsNullOrWhiteSpace(
+                                            connection.RouterSerial)
+                                            ? "-"
+                                            : connection.RouterSerial)
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <div class="tci-date">
+
+                                        <strong>
+                                            @(connection.InstallationDate?
+                                                .ToString("dd MMM yyyy")
+                                                ?? "Not Scheduled")
+                                        </strong>
+
+                                    </div>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="tci-status @statusClass">
+
+                                        <i class="bi bi-circle-fill"></i>
+
+                                        @connectionStatus
+
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <a asp-controller="TechnicalConnection"
+                                       asp-action="Details"
+                                       asp-route-id="@connection.ConnectionId"
+                                       class="tci-action-btn"
+                                       title="View Connection">
+
+                                        <i class="bi bi-eye"></i>
+
+                                    </a>
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+        else
+        {
+            <div class="tci-empty">
+
+                <div class="tci-empty-icon">
+                    <i class="bi bi-hdd-network"></i>
+                </div>
+
+                <h5>No Connections Found</h5>
+
+                <p>
+                    There are currently no connection records
+                    matching your filters.
+                </p>
+
+            </div>
+        }
+
+    </div>
+
+</div>

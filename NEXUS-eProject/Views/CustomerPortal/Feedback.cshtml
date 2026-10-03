@@ -1,0 +1,387 @@
+﻿@model IEnumerable<NEXUS_eProject.Models.Feedback>
+
+@{
+    Layout = "_PublicLayout";
+    ViewData["Title"] = "Feedback";
+}
+
+<div class="customer-feedback-page">
+
+    <div class="container">
+
+        <!-- HEADER -->
+        <div class="customer-page-header">
+
+            <div>
+
+                <span class="portal-eyebrow">
+                    <i class="bi bi-chat-heart"></i>
+                    CUSTOMER PORTAL
+                </span>
+
+                <h1>Feedback</h1>
+
+                <p>
+                    Share your experience with NEXUS and help us
+                    improve our services.
+                </p>
+
+            </div>
+
+        </div>
+
+        <!-- BACK -->
+        <div class="application-back-wrapper">
+
+            <a asp-controller="CustomerPortal"
+               asp-action="Index"
+               class="portal-back-link">
+
+                <i class="bi bi-arrow-left"></i>
+                Back to My Account
+
+            </a>
+
+        </div>
+
+        <!-- ALERTS -->
+        @if (TempData["FeedbackSuccess"] != null)
+        {
+            <div class="feedback-alert feedback-success">
+
+                <i class="bi bi-check-circle-fill"></i>
+
+                <span>
+                    @TempData["FeedbackSuccess"]
+                </span>
+
+            </div>
+        }
+
+        @if (TempData["FeedbackError"] != null)
+        {
+            <div class="feedback-alert feedback-error">
+
+                <i class="bi bi-exclamation-circle-fill"></i>
+
+                <span>
+                    @TempData["FeedbackError"]
+                </span>
+
+            </div>
+        }
+
+        <div class="feedback-layout">
+
+            <!-- FORM -->
+            <div class="feedback-form-card">
+
+                <div class="feedback-form-heading">
+
+                    <div class="feedback-form-icon">
+                        <i class="bi bi-chat-square-heart"></i>
+                    </div>
+
+                    <div>
+
+                        <span>YOUR VOICE MATTERS</span>
+
+                        <h2>Send Feedback</h2>
+
+                    </div>
+
+                </div>
+
+                <form asp-controller="CustomerPortal"
+                      asp-action="Feedback"
+                      method="post">
+
+                    @Html.AntiForgeryToken()
+
+                    <div class="feedback-field">
+
+                        <label for="subject">
+                            Subject
+                        </label>
+
+                        <select id="subject"
+                                name="subject"
+                                class="nexus-select"
+                                required>
+
+                            <option value="">
+                                Select Subject
+                            </option>
+
+                            <option value="Service Quality">
+                                Service Quality
+                            </option>
+
+                            <option value="Internet Speed">
+                                Internet Speed
+                            </option>
+
+                            <option value="Customer Support">
+                                Customer Support
+                            </option>
+
+                            <option value="Billing">
+                                Billing
+                            </option>
+
+                            <option value="Technical Issue">
+                                Technical Issue
+                            </option>
+
+                            <option value="Website Experience">
+                                Website Experience
+                            </option>
+
+                            <option value="Other">
+                                Other
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="feedback-field">
+
+                        <label>
+                            Your Rating
+                        </label>
+
+                        <div class="feedback-stars">
+
+                            <input type="radio"
+                                   id="star5"
+                                   name="rating"
+                                   value="5"
+                                   required />
+
+                            <label for="star5"
+                                   title="Excellent">
+                                ★
+                            </label>
+
+                            <input type="radio"
+                                   id="star4"
+                                   name="rating"
+                                   value="4" />
+
+                            <label for="star4"
+                                   title="Very Good">
+                                ★
+                            </label>
+
+                            <input type="radio"
+                                   id="star3"
+                                   name="rating"
+                                   value="3" />
+
+                            <label for="star3"
+                                   title="Good">
+                                ★
+                            </label>
+
+                            <input type="radio"
+                                   id="star2"
+                                   name="rating"
+                                   value="2" />
+
+                            <label for="star2"
+                                   title="Fair">
+                                ★
+                            </label>
+
+                            <input type="radio"
+                                   id="star1"
+                                   name="rating"
+                                   value="1" />
+
+                            <label for="star1"
+                                   title="Poor">
+                                ★
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                    <div class="feedback-field">
+
+                        <label for="message">
+                            Your Message
+                        </label>
+
+                        <textarea id="message"
+                                  name="message"
+                                  class="nexus-input feedback-textarea"
+                                  rows="6"
+                                  maxlength="1000"
+                                  placeholder="Tell us about your experience..."
+                                  required></textarea>
+
+                    </div>
+
+                    <button type="submit"
+                            class="btn-nexus-primary feedback-submit">
+
+                        <i class="bi bi-send"></i>
+
+                        Submit Feedback
+
+                    </button>
+
+                </form>
+
+            </div>
+
+            <!-- INFO -->
+            <div class="feedback-info-column">
+
+                <div class="feedback-info-card">
+
+                    <div class="feedback-info-icon">
+                        <i class="bi bi-headset"></i>
+                    </div>
+
+                    <h3>We're Listening</h3>
+
+                    <p>
+                        Your feedback helps NEXUS improve network
+                        quality, customer support and overall
+                        service experience.
+                    </p>
+
+                </div>
+
+                <div class="feedback-info-card">
+
+                    <div class="feedback-info-icon">
+                        <i class="bi bi-shield-check"></i>
+                    </div>
+
+                    <h3>Your Feedback is Secure</h3>
+
+                    <p>
+                        Your submitted feedback is associated with
+                        your customer account and can only be viewed
+                        by authorized NEXUS staff.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- PREVIOUS FEEDBACK -->
+        <div class="previous-feedback-section">
+
+            <div class="payment-section-title">
+
+                <span class="portal-eyebrow">
+                    <i class="bi bi-clock-history"></i>
+                    FEEDBACK HISTORY
+                </span>
+
+                <h2>Your Previous Feedback</h2>
+
+            </div>
+
+            @if (Model != null && Model.Any())
+            {
+                <div class="feedback-history-list">
+
+                    @foreach (var feedback in Model)
+                    {
+                        <div class="feedback-history-card">
+
+                            <div class="feedback-history-top">
+
+                                <div>
+
+                                    <span class="feedback-history-subject">
+                                        @feedback.Subject
+                                    </span>
+
+                                    <small>
+                                        @feedback.CreatedAt.ToString("dd MMM yyyy, hh:mm tt")
+                                    </small>
+
+                                </div>
+
+                                <div class="feedback-history-rating">
+
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        if (i <= feedback.Rating)
+                                        {
+                                            <span>★</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="empty-star">★</span>
+                                        }
+                                    }
+
+                                </div>
+
+                            </div>
+
+                            <p class="feedback-history-message">
+                                @feedback.Message
+                            </p>
+
+                            <div class="feedback-history-bottom">
+
+                                <span class="feedback-status">
+                                    @feedback.Status
+                                </span>
+
+                                @if (!string.IsNullOrWhiteSpace(feedback.AdminResponse))
+                                {
+                                    <div class="feedback-response">
+
+                                        <strong>
+                                            NEXUS Response
+                                        </strong>
+
+                                        <p>
+                                            @feedback.AdminResponse
+                                        </p>
+
+                                    </div>
+                                }
+
+                            </div>
+
+                        </div>
+                    }
+
+                </div>
+            }
+            else
+            {
+                <div class="feedback-empty">
+
+                    <div class="feedback-empty-icon">
+                        <i class="bi bi-chat-square-text"></i>
+                    </div>
+
+                    <h3>No Feedback Yet</h3>
+
+                    <p>
+                        You haven't submitted any feedback yet.
+                        Your feedback will appear here after submission.
+                    </p>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>

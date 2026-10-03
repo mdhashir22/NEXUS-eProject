@@ -1,0 +1,576 @@
+﻿@model NEXUS_eProject.Models.Connection
+
+@using NEXUS_eProject.Models
+
+@{
+    ViewData["Title"] = "Connection Details";
+    ViewData["PageTitle"] = "Connection Details";
+    Layout = "~/Views/Shared/_AccountsLayout.cshtml";
+
+    var bills =
+        ViewBag.Bills as List<Bill>
+        ?? new List<Bill>();
+
+    var payments =
+        ViewBag.Payments as List<Payment>
+        ?? new List<Payment>();
+
+    decimal totalBilled =
+        ViewBag.TotalBilled != null
+            ? Convert.ToDecimal(ViewBag.TotalBilled)
+            : 0m;
+
+    decimal totalPaid =
+        ViewBag.TotalPaid != null
+            ? Convert.ToDecimal(ViewBag.TotalPaid)
+            : 0m;
+
+    decimal outstanding =
+        ViewBag.Outstanding != null
+            ? Convert.ToDecimal(ViewBag.Outstanding)
+            : 0m;
+}
+
+<div class="acod-page">
+
+    <div class="aco-header">
+
+        <div>
+
+            <div class="aco-eyebrow">
+                <i class="bi bi-router"></i>
+                CONNECTION ACCOUNT
+            </div>
+
+            <h2>@Model.AccountId</h2>
+
+            <p>
+                Connection, customer and financial details.
+            </p>
+
+        </div>
+
+
+        <a asp-controller="AccountsConnection"
+           asp-action="Index"
+           class="aco-btn secondary">
+
+            <i class="bi bi-arrow-left"></i>
+            Back to Connections
+
+        </a>
+
+    </div>
+
+
+    <!-- FINANCIAL SUMMARY -->
+
+    <div class="acod-stats">
+
+        <div class="acod-stat">
+
+            <div class="acod-stat-icon purple">
+                <i class="bi bi-receipt"></i>
+            </div>
+
+            <div>
+                <span>TOTAL BILLS</span>
+                <strong>@bills.Count</strong>
+            </div>
+
+        </div>
+
+
+        <div class="acod-stat">
+
+            <div class="acod-stat-icon blue">
+                <i class="bi bi-cash-stack"></i>
+            </div>
+
+            <div>
+                <span>TOTAL BILLED</span>
+
+                <strong>
+                    Rs. @totalBilled.ToString("N2")
+                </strong>
+            </div>
+
+        </div>
+
+
+        <div class="acod-stat">
+
+            <div class="acod-stat-icon green">
+                <i class="bi bi-check-circle"></i>
+            </div>
+
+            <div>
+                <span>TOTAL PAID</span>
+
+                <strong>
+                    Rs. @totalPaid.ToString("N2")
+                </strong>
+            </div>
+
+        </div>
+
+
+        <div class="acod-stat">
+
+            <div class="acod-stat-icon red">
+                <i class="bi bi-exclamation-circle"></i>
+            </div>
+
+            <div>
+                <span>OUTSTANDING</span>
+
+                <strong>
+                    Rs. @outstanding.ToString("N2")
+                </strong>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- CONNECTION INFORMATION -->
+
+    <div class="acod-card">
+
+        <div class="acod-card-header">
+
+            <div>
+                <i class="bi bi-broadcast-pin"></i>
+                <span>Connection Information</span>
+            </div>
+
+            <span class="acod-status">
+                @Model.Status
+            </span>
+
+        </div>
+
+
+        <div class="acod-info-grid">
+
+            <div class="acod-info">
+                <span>Account ID</span>
+
+                <strong class="aco-purple">
+                    @Model.AccountId
+                </strong>
+            </div>
+
+
+            <div class="acod-info">
+                <span>Connection Type</span>
+
+                <strong>
+                    @Model.ConnectionType
+                </strong>
+            </div>
+
+
+            <div class="acod-info">
+                <span>Plan</span>
+
+                <strong>
+                    @(Model.Plan?.PlanName ?? "-")
+                </strong>
+            </div>
+
+
+            <div class="acod-info">
+                <span>Speed</span>
+
+                <strong>
+                    @(Model.Plan?.Speed ?? "-")
+                </strong>
+            </div>
+
+
+            <div class="acod-info">
+                <span>Plan Price</span>
+
+                <strong>
+                    Rs. @(Model.Plan?.Price.ToString("N2") ?? "0.00")
+                </strong>
+            </div>
+
+
+            <div class="acod-info">
+                <span>Equipment</span>
+
+                <strong>
+                    @(string.IsNullOrWhiteSpace(Model.Equipment)
+                        ? "-"
+                        : Model.Equipment)
+                </strong>
+            </div>
+
+
+            <div class="acod-info">
+                <span>Router Serial</span>
+
+                <strong>
+                    @(string.IsNullOrWhiteSpace(Model.RouterSerial)
+                        ? "-"
+                        : Model.RouterSerial)
+                </strong>
+            </div>
+
+
+            <div class="acod-info">
+                <span>Created</span>
+
+                <strong>
+                    @Model.CreatedAt.ToString("dd MMM yyyy")
+                </strong>
+            </div>
+
+
+            <div class="acod-info">
+                <span>Installation Date</span>
+
+                <strong>
+                    @(Model.InstallationDate.HasValue
+                        ? Model.InstallationDate.Value.ToString("dd MMM yyyy")
+                        : "-")
+                </strong>
+            </div>
+
+
+            <div class="acod-info">
+                <span>Activated At</span>
+
+                <strong>
+                    @(Model.ActivatedAt.HasValue
+                        ? Model.ActivatedAt.Value.ToString("dd MMM yyyy, hh:mm tt")
+                        : "-")
+                </strong>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- CUSTOMER + ORDER -->
+
+    <div class="acod-two-column">
+
+        <div class="acod-card">
+
+            <div class="acod-card-header">
+
+                <div>
+                    <i class="bi bi-person"></i>
+                    <span>Customer</span>
+                </div>
+
+            </div>
+
+
+            <div class="acod-info-list">
+
+                <div>
+                    <span>Name</span>
+                    <strong>@(Model.Customer?.FullName ?? "-")</strong>
+                </div>
+
+                <div>
+                    <span>Phone</span>
+                    <strong>@(Model.Customer?.Phone ?? "-")</strong>
+                </div>
+
+                <div>
+                    <span>Email</span>
+                    <strong>@(Model.Customer?.Email ?? "-")</strong>
+                </div>
+
+                <div>
+                    <span>City</span>
+                    <strong>@(Model.Customer?.City ?? "-")</strong>
+                </div>
+
+            </div>
+
+
+            @if (Model.Customer != null)
+            {
+                <a asp-controller="AccountsCustomer"
+                   asp-action="Details"
+                   asp-route-id="@Model.Customer.CustomerId"
+                   class="acod-link">
+
+                    View Customer Account
+                    <i class="bi bi-arrow-right"></i>
+
+                </a>
+            }
+
+        </div>
+
+
+        <div class="acod-card">
+
+            <div class="acod-card-header">
+
+                <div>
+                    <i class="bi bi-box"></i>
+                    <span>Order</span>
+                </div>
+
+            </div>
+
+
+            <div class="acod-info-list">
+
+                <div>
+                    <span>Order Number</span>
+
+                    <strong>
+                        @(Model.Order?.OrderNumber ?? "-")
+                    </strong>
+                </div>
+
+
+                <div>
+                    <span>Order Status</span>
+
+                    <strong class="aco-purple">
+                        @(Model.Order?.Status ?? "-")
+                    </strong>
+                </div>
+
+
+                <div>
+                    <span>Order Date</span>
+
+                    <strong>
+                        @(Model.Order != null
+                            ? Model.Order.CreatedAt.ToString("dd MMM yyyy")
+                            : "-")
+                    </strong>
+                </div>
+
+
+                <div>
+                    <span>Last Updated</span>
+
+                    <strong>
+                        @(Model.Order?.UpdatedAt != null
+                            ? Model.Order.UpdatedAt.Value.ToString("dd MMM yyyy, hh:mm tt")
+                            : "-")
+                    </strong>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- BILLS -->
+
+    <div class="acod-card">
+
+        <div class="acod-card-header">
+
+            <div>
+                <i class="bi bi-receipt"></i>
+                <span>Billing History</span>
+            </div>
+
+            <span class="acod-count">
+                @bills.Count
+            </span>
+
+        </div>
+
+
+        @if (bills.Any())
+        {
+            <div class="aco-table-wrap">
+
+                <table class="aco-table">
+
+                    <thead>
+                        <tr>
+                            <th>BILL</th>
+                            <th>BILLING DATE</th>
+                            <th>DUE DATE</th>
+                            <th>AMOUNT</th>
+                            <th>STATUS</th>
+                            <th>ACTION</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var bill in bills)
+                        {
+                            <tr>
+
+                                <td>
+                                    <span class="aco-account">
+                                        @bill.BillNumber
+                                    </span>
+                                </td>
+
+                                <td>
+                                    @bill.BillingDate.ToString("dd MMM yyyy")
+                                </td>
+
+                                <td>
+                                    @bill.DueDate.ToString("dd MMM yyyy")
+                                </td>
+
+                                <td>
+                                    <strong>
+                                        Rs. @bill.TotalAmount.ToString("N2")
+                                    </strong>
+                                </td>
+
+                                <td>
+                                    <span class="acod-status">
+                                        @bill.Status
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <a asp-controller="AccountsBill"
+                                       asp-action="Details"
+                                       asp-route-id="@bill.BillId"
+                                       class="aco-view">
+
+                                        <i class="bi bi-eye"></i>
+                                        View
+
+                                    </a>
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+        else
+        {
+            <div class="acod-empty">
+                No bills have been generated for this connection.
+            </div>
+        }
+
+    </div>
+
+
+    <!-- PAYMENTS -->
+
+    <div class="acod-card">
+
+        <div class="acod-card-header">
+
+            <div>
+                <i class="bi bi-credit-card"></i>
+                <span>Payment History</span>
+            </div>
+
+            <span class="acod-count">
+                @payments.Count
+            </span>
+
+        </div>
+
+
+        @if (payments.Any())
+        {
+            <div class="aco-table-wrap">
+
+                <table class="aco-table">
+
+                    <thead>
+                        <tr>
+                            <th>PAYMENT</th>
+                            <th>BILL</th>
+                            <th>AMOUNT</th>
+                            <th>METHOD</th>
+                            <th>DATE</th>
+                            <th>STATUS</th>
+                            <th>ACTION</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var payment in payments)
+                        {
+                            <tr>
+
+                                <td>
+                                    <span class="aco-account">
+                                        @payment.PaymentNumber
+                                    </span>
+                                </td>
+
+                                <td>
+                                    @(payment.Bill?.BillNumber ?? "-")
+                                </td>
+
+                                <td>
+                                    <strong>
+                                        Rs. @payment.Amount.ToString("N2")
+                                    </strong>
+                                </td>
+
+                                <td>
+                                    @payment.PaymentMethod
+                                </td>
+
+                                <td>
+                                    @payment.PaymentDate.ToString("dd MMM yyyy")
+                                </td>
+
+                                <td>
+                                    <span class="acod-status">
+                                        @payment.Status
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <a asp-controller="AccountsPayment"
+                                       asp-action="Details"
+                                       asp-route-id="@payment.PaymentId"
+                                       class="aco-view">
+
+                                        <i class="bi bi-eye"></i>
+                                        View
+
+                                    </a>
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+        else
+        {
+            <div class="acod-empty">
+                No payment records found for this connection.
+            </div>
+        }
+
+    </div>
+
+</div>

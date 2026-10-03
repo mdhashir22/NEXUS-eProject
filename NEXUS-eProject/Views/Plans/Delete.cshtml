@@ -1,0 +1,110 @@
+﻿@model NEXUS_eProject.Models.Plan
+
+@{
+    ViewData["Title"] = "Delete Plan";
+    ViewData["PageTitle"] = "Delete Plan";
+    ViewData["PageSubtitle"] = "Remove plan from Nexus";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="page-heading">
+
+    <div>
+        <h2>Delete Plan</h2>
+        <p>Confirm plan deletion.</p>
+    </div>
+
+</div>
+
+
+<div class="form-card delete-card">
+
+    <div class="delete-icon">
+        <i class="bi bi-trash"></i>
+    </div>
+
+
+    <h3>
+        Delete this plan?
+    </h3>
+
+
+    <p>
+        Are you sure you want to permanently delete
+        <strong>@Model.PlanName</strong>?
+    </p>
+
+
+    <div class="delete-info">
+
+        <div>
+            <span>Plan</span>
+
+            <strong>
+                @Model.PlanName
+            </strong>
+        </div>
+
+
+        <div>
+            <span>Connection</span>
+
+            <strong>
+                @Model.ConnectionType
+            </strong>
+        </div>
+
+
+        <div>
+            <span>Speed</span>
+
+            <strong>
+                @(Model.Speed ?? "N/A")
+            </strong>
+        </div>
+
+
+        <div>
+            <span>Price</span>
+
+            <strong>
+                Rs. @Model.Price.ToString("N2")
+            </strong>
+        </div>
+
+    </div>
+
+
+    <form asp-action="Delete"
+          method="post">
+
+        @Html.AntiForgeryToken()
+
+        <input type="hidden"
+               asp-for="PlanId" />
+
+
+        <div class="form-footer">
+
+            <a asp-action="Index"
+               class="secondary-action">
+
+                <i class="bi bi-arrow-left"></i>
+                Cancel
+
+            </a>
+
+
+            <button type="submit"
+                    class="delete-button">
+
+                <i class="bi bi-trash"></i>
+                Delete Plan
+
+            </button>
+
+        </div>
+
+    </form>
+
+</div>

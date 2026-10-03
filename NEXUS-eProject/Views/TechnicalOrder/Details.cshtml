@@ -1,0 +1,820 @@
+﻿@model NEXUS_eProject.Models.Order
+
+@{
+    ViewData["Title"] = "Order Details";
+    ViewData["PageTitle"] = "Order Details";
+    ViewData["PageSubtitle"] = "Technical Operations";
+    Layout = "~/Views/Shared/_TechnicalLayout.cshtml";
+
+    var status = Model.Status ?? "Pending";
+
+    var statusClass = "pending";
+
+    if (status == "Feasible" ||
+        status == "Connection Created" ||
+        status == "Payment Verified" ||
+        status == "Active")
+    {
+        statusClass = "success";
+    }
+    else if (status == "Technical Rejected" ||
+             status == "Rejected")
+    {
+        statusClass = "danger";
+    }
+    else if (status == "Billing Pending" ||
+             status == "Payment Pending" ||
+             status == "Installation Pending")
+    {
+        statusClass = "warning";
+    }
+
+    var customerName =
+        string.IsNullOrWhiteSpace(Model.Customer?.FullName)
+            ? "Unknown Customer"
+            : Model.Customer.FullName;
+
+    var customerInitial =
+        customerName.Substring(0, 1).ToUpper();
+
+    var isPendingTechnical =
+        status == "Retail Accepted";
+}
+
+<div class="technical-order-details">
+
+    <!-- HEADER -->
+    <div class="tod-page-header">
+
+        <div class="tod-header-left">
+
+            <a asp-controller="TechnicalOrder"
+               asp-action="Index"
+               class="tod-back-btn">
+                <i class="bi bi-arrow-left"></i>
+            </a>
+
+            <div>
+                <div class="tod-breadcrumb">
+                    <span>Technical Orders</span>
+                    <i class="bi bi-chevron-right"></i>
+                    <strong>Order Details</strong>
+                </div>
+
+                <h2>
+                    @(Model.OrderNumber ?? "Order Details")
+                </h2>
+
+                <p>
+                    Review customer application and technical
+                    processing information.
+                </p>
+            </div>
+
+        </div>
+
+        <div class="tod-header-status">
+
+            <span class="tod-status @statusClass">
+                <i class="bi bi-circle-fill"></i>
+                @status
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- ORDER SUMMARY -->
+    <div class="tod-summary-grid">
+
+        <div class="tod-summary-card">
+
+            <div class="tod-summary-icon purple">
+                <i class="bi bi-hash"></i>
+            </div>
+
+            <div>
+                <span>ORDER ID</span>
+                <strong>
+                    @(Model.OrderNumber ?? "-")
+                </strong>
+            </div>
+
+        </div>
+
+
+        <div class="tod-summary-card">
+
+            <div class="tod-summary-icon blue">
+                <i class="bi bi-wifi"></i>
+            </div>
+
+            <div>
+                <span>CONNECTION TYPE</span>
+                <strong>
+                    @(Model.ConnectionType ?? "-")
+                </strong>
+            </div>
+
+        </div>
+
+
+        <div class="tod-summary-card">
+
+            <div class="tod-summary-icon green">
+                <i class="bi bi-box-seam"></i>
+            </div>
+
+            <div>
+                <span>PLAN</span>
+                <strong>
+                    @(Model.Plan?.PlanName ?? "-")
+                </strong>
+            </div>
+
+        </div>
+
+
+        <div class="tod-summary-card">
+
+            <div class="tod-summary-icon orange">
+                <i class="bi bi-calendar3"></i>
+            </div>
+
+            <div>
+                <span>SUBMITTED</span>
+                <strong>
+                    @Model.CreatedAt.ToString("dd MMM yyyy")
+                </strong>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="tod-main-grid">
+
+        <!-- LEFT -->
+        <div class="tod-left-column">
+
+            <!-- CUSTOMER -->
+            <div class="tod-card">
+
+                <div class="tod-card-header">
+
+                    <div>
+                        <h5>
+                            <i class="bi bi-person"></i>
+                            Customer Information
+                        </h5>
+
+                        <span>
+                            Customer details associated with this application.
+                        </span>
+                    </div>
+
+                </div>
+
+
+                <div class="tod-customer-profile">
+
+                    <div class="tod-large-avatar">
+                        @customerInitial
+                    </div>
+
+                    <div class="tod-customer-name">
+
+                        <strong>
+                            @customerName
+                        </strong>
+
+                        <span>
+                            Customer ID:
+                            @(Model.CustomerId)
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="tod-info-grid">
+
+                    <div class="tod-info-item">
+
+                        <span>Father Name</span>
+
+                        <strong>
+                            @(Model.Customer?.FatherName ?? "-")
+                        </strong>
+
+                    </div>
+
+
+                    <div class="tod-info-item">
+
+                        <span>Phone</span>
+
+                        <strong>
+                            @(Model.Customer?.Phone ?? "-")
+                        </strong>
+
+                    </div>
+
+
+                    <div class="tod-info-item">
+
+                        <span>Email</span>
+
+                        <strong>
+                            @(Model.Customer?.Email ?? "-")
+                        </strong>
+
+                    </div>
+
+
+                    <div class="tod-info-item">
+
+                        <span>City</span>
+
+                        <strong>
+                            @(Model.Customer?.City ?? "-")
+                        </strong>
+
+                    </div>
+
+
+                    <div class="tod-info-item full">
+
+                        <span>Address</span>
+
+                        <strong>
+                            @(Model.Customer?.Address ?? "-")
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- APPLICATION -->
+            <div class="tod-card">
+
+                <div class="tod-card-header">
+
+                    <div>
+                        <h5>
+                            <i class="bi bi-file-earmark-text"></i>
+                            Application Details
+                        </h5>
+
+                        <span>
+                            Original application submitted by the customer.
+                        </span>
+                    </div>
+
+                </div>
+
+
+                <div class="tod-info-grid">
+
+                    <div class="tod-info-item">
+
+                        <span>Order Number</span>
+
+                        <strong class="highlight">
+                            @(Model.OrderNumber ?? "-")
+                        </strong>
+
+                    </div>
+
+
+                    <div class="tod-info-item">
+
+                        <span>Connection Type</span>
+
+                        <strong>
+                            @(Model.ConnectionType ?? "-")
+                        </strong>
+
+                    </div>
+
+
+                    <div class="tod-info-item">
+
+                        <span>Plan</span>
+
+                        <strong>
+                            @(Model.Plan?.PlanName ?? "-")
+                        </strong>
+
+                    </div>
+
+
+                    <div class="tod-info-item">
+
+                        <span>Speed</span>
+
+                        <strong>
+                            @(Model.Plan?.Speed ?? "-")
+                        </strong>
+
+                    </div>
+
+
+                    <div class="tod-info-item">
+
+                        <span>Plan Price</span>
+
+                        <strong class="price">
+                            @(Model.Plan != null
+                                ? Model.Plan.Price.ToString("N2")
+                                : "0.00")
+                        </strong>
+
+                    </div>
+
+
+                    <div class="tod-info-item">
+
+                        <span>Equipment Requested</span>
+
+                        <strong>
+                            @(Model.Equipment ?? "Not specified")
+                        </strong>
+
+                    </div>
+
+
+                    <div class="tod-info-item full">
+
+                        <span>Additional Information</span>
+
+                        <div class="tod-description">
+
+                            @(string.IsNullOrWhiteSpace(Model.AdditionalInfo)
+                                ? "No additional information provided."
+                                : Model.AdditionalInfo)
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- TIMELINE -->
+            <div class="tod-card">
+
+                <div class="tod-card-header">
+
+                    <div>
+                        <h5>
+                            <i class="bi bi-clock-history"></i>
+                            Order Timeline
+                        </h5>
+
+                        <span>
+                            Current position in the service workflow.
+                        </span>
+                    </div>
+
+                </div>
+
+
+                <div class="tod-timeline">
+
+                    <div class="tod-timeline-item completed">
+
+                        <div class="tod-timeline-dot">
+                            <i class="bi bi-check"></i>
+                        </div>
+
+                        <div class="tod-timeline-content">
+
+                            <strong>
+                                Application Submitted
+                            </strong>
+
+                            <span>
+                                Customer submitted the application.
+                            </span>
+
+                            <small>
+                                @Model.CreatedAt.ToString("dd MMM yyyy, hh:mm tt")
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="tod-timeline-line"></div>
+
+
+                    <div class="tod-timeline-item completed">
+
+                        <div class="tod-timeline-dot">
+                            <i class="bi bi-check"></i>
+                        </div>
+
+                        <div class="tod-timeline-content">
+
+                            <strong>
+                                Retail Review
+                            </strong>
+
+                            <span>
+                                Application was accepted by Retail.
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="tod-timeline-line"></div>
+
+
+                    <div class="tod-timeline-item @(isPendingTechnical ? "current" : "completed")">
+
+                        <div class="tod-timeline-dot">
+
+                            @if (isPendingTechnical)
+                            {
+                                <i class="bi bi-clipboard-check"></i>
+                            }
+                            else
+                            {
+                                <i class="bi bi-check"></i>
+                            }
+
+                        </div>
+
+                        <div class="tod-timeline-content">
+
+                            <strong>
+                                Technical Feasibility
+                            </strong>
+
+                            <span>
+                                Technical team checks service availability.
+                            </span>
+
+                            @if (isPendingTechnical)
+                            {
+                                <small>
+                                    Action required
+                                </small>
+                            }
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="tod-timeline-line"></div>
+
+
+                    <div class="tod-timeline-item">
+
+                        <div class="tod-timeline-dot">
+                            <i class="bi bi-circle"></i>
+                        </div>
+
+                        <div class="tod-timeline-content">
+
+                            <strong>
+                                Connection & Installation
+                            </strong>
+
+                            <span>
+                                Connection setup and installation.
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="tod-timeline-line"></div>
+
+
+                    <div class="tod-timeline-item">
+
+                        <div class="tod-timeline-dot">
+                            <i class="bi bi-circle"></i>
+                        </div>
+
+                        <div class="tod-timeline-content">
+
+                            <strong>
+                                Activation
+                            </strong>
+
+                            <span>
+                                Network connection becomes active.
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- RIGHT -->
+        <div class="tod-right-column">
+
+            <!-- TECHNICAL ACTION -->
+            <div class="tod-card tod-action-card">
+
+                <div class="tod-card-header">
+
+                    <div>
+                        <h5>
+                            <i class="bi bi-tools"></i>
+                            Technical Action
+                        </h5>
+
+                        <span>
+                            Process this application.
+                        </span>
+                    </div>
+
+                </div>
+
+
+                @if (isPendingTechnical)
+                {
+                    <div class="tod-action-body">
+
+                        <div class="tod-action-icon">
+                            <i class="bi bi-clipboard-check"></i>
+                        </div>
+
+                        <strong>
+                            Feasibility Check Required
+                        </strong>
+
+                        <p>
+                            This application has been accepted by
+                            Retail and is waiting for technical
+                            feasibility verification.
+                        </p>
+
+                        <a asp-controller="TechnicalOrder"
+                           asp-action="CheckFeasibility"
+                           asp-route-id="@Model.OrderId"
+                           class="tod-primary-btn">
+                        
+                            <i class="bi bi-clipboard-check"></i>
+                        
+                            Start Feasibility Check
+                        
+                        </a>
+
+                    </div>
+                }
+                else if (status == "Feasible")
+                {
+                    <div class="tod-action-body success-body">
+                
+                        <div class="tod-action-icon success">
+                            <i class="bi bi-check-circle"></i>
+                        </div>
+                
+                        <strong>
+                            Technical Feasibility Approved
+                        </strong>
+                
+                        <p>
+                            This application has passed technical
+                            feasibility successfully. The customer
+                            connection can now be created.
+                        </p>
+                
+                        <span class="tod-action-note">
+                            <i class="bi bi-info-circle"></i>
+                            Create the connection to generate the
+                            customer's Account ID.
+                        </span>
+                
+                        <a asp-controller="TechnicalConnection"
+                           asp-action="Create"
+                           asp-route-orderId="@Model.OrderId"
+                           class="tod-primary-btn">
+                
+                            <i class="bi bi-router-fill"></i>
+                
+                            Create Connection
+                
+                        </a>
+                
+                    </div>
+                }
+                else if (status == "Technical Rejected")
+                {
+                    <div class="tod-action-body danger-body">
+
+                        <div class="tod-action-icon danger">
+                            <i class="bi bi-x-circle"></i>
+                        </div>
+
+                        <strong>
+                            Technical Feasibility Rejected
+                        </strong>
+
+                        <p>
+                            This application was rejected during
+                            technical feasibility.
+                        </p>
+
+                    </div>
+                }
+                else
+                {
+                    <div class="tod-action-body">
+
+                        <div class="tod-action-icon">
+                            <i class="bi bi-info-circle"></i>
+                        </div>
+
+                        <strong>
+                            Technical Processing
+                        </strong>
+
+                        <p>
+                            This order has already moved beyond
+                            the initial feasibility stage.
+                        </p>
+
+                    </div>
+                }
+
+            </div>
+
+
+            <!-- PLAN -->
+            <div class="tod-card">
+
+                <div class="tod-card-header">
+
+                    <div>
+                        <h5>
+                            <i class="bi bi-speedometer2"></i>
+                            Plan Information
+                        </h5>
+                    </div>
+
+                </div>
+
+
+                <div class="tod-plan-box">
+
+                    <div class="tod-plan-icon">
+                        <i class="bi bi-wifi"></i>
+                    </div>
+
+                    <div class="tod-plan-main">
+
+                        <strong>
+                            @(Model.Plan?.PlanName ?? "No Plan")
+                        </strong>
+
+                        <span>
+                            @(Model.Plan?.Speed ?? "Speed not specified")
+                        </span>
+
+                    </div>
+
+                    <div class="tod-plan-price">
+
+                        <span>MONTHLY</span>
+
+                        <strong>
+                            Rs.
+                            @(Model.Plan != null
+                                ? Model.Plan.Price.ToString("N0")
+                                : "0")
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                @if (!string.IsNullOrWhiteSpace(Model.Plan?.Description))
+                {
+                    <div class="tod-plan-description">
+                        @Model.Plan.Description
+                    </div>
+                }
+
+            </div>
+
+
+            <!-- ORDER META -->
+            <div class="tod-card">
+
+                <div class="tod-card-header">
+
+                    <div>
+                        <h5>
+                            <i class="bi bi-info-circle"></i>
+                            Order Information
+                        </h5>
+                    </div>
+
+                </div>
+
+
+                <div class="tod-meta-list">
+
+                    <div>
+
+                        <span>
+                            <i class="bi bi-hash"></i>
+                            Order ID
+                        </span>
+
+                        <strong>
+                            @Model.OrderId
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            <i class="bi bi-calendar3"></i>
+                            Created
+                        </span>
+
+                        <strong>
+                            @Model.CreatedAt.ToString("dd MMM yyyy")
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            <i class="bi bi-arrow-repeat"></i>
+                            Last Updated
+                        </span>
+
+                        <strong>
+                            @(Model.UpdatedAt?.ToString("dd MMM yyyy")
+                                ?? "Not updated")
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            <i class="bi bi-flag"></i>
+                            Status
+                        </span>
+
+                        <strong class="status-text @statusClass">
+                            @status
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- BACK -->
+            <a asp-controller="TechnicalOrder"
+               asp-action="Index"
+               class="tod-secondary-btn">
+
+                <i class="bi bi-arrow-left"></i>
+
+                Back to Technical Orders
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>

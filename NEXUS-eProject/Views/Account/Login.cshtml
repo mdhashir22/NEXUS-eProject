@@ -1,0 +1,156 @@
+﻿@model NEXUS_eProject.Models.LoginViewModel
+
+@{
+    ViewData["Title"] = "Login";
+    Layout = "_PublicLayout";
+}
+
+<section class="account-page">
+
+    <div class="account-glow"></div>
+
+    <div class="container">
+
+        <div class="account-wrapper">
+
+            <div class="account-card">
+
+                <div class="account-logo">
+                    <div class="account-logo-icon">
+                        <i class="bi bi-globe2"></i>
+                    </div>
+
+                    <div>
+                        <strong>NEXUS</strong>
+                        <span>CONNECTING YOUR WORLD</span>
+                    </div>
+                </div>
+
+                <div class="account-heading">
+
+                    <span>WELCOME BACK</span>
+
+                    <h1>Sign in to <b>NEXUS.</b></h1>
+
+                    <p>
+                        Login to access your NEXUS account.
+                    </p>
+
+                </div>
+
+
+                <form asp-action="Login"
+                      method="post">
+
+                    @Html.AntiForgeryToken()
+
+                    <div asp-validation-summary="ModelOnly"
+                         class="account-validation">
+                    </div>
+
+
+                    <div class="account-field">
+
+                        <label asp-for="Email">
+                            Email Address
+                        </label>
+
+                        <div class="account-input">
+
+                            <i class="bi bi-envelope"></i>
+
+                            <input asp-for="Email"
+                                   placeholder="Enter your email" />
+
+                        </div>
+
+                        <span asp-validation-for="Email"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <div class="account-field">
+
+                        <label asp-for="Password">
+                            Password
+                        </label>
+
+                        <div class="account-input">
+
+                            <i class="bi bi-lock"></i>
+
+                            <input asp-for="Password"
+                                   placeholder="Enter your password" />
+
+                        </div>
+
+                        <span asp-validation-for="Password"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <div class="account-options">
+
+                        <label class="remember-check">
+
+                            <input asp-for="RememberMe" />
+
+                            <span>Remember me</span>
+
+                        </label>
+
+                    </div>
+
+
+                    <button type="submit"
+                            class="account-submit">
+
+                        Sign In
+
+                        <i class="bi bi-arrow-right"></i>
+
+                    </button>
+
+                </form>
+
+
+                <div class="account-footer">
+
+                    <span>Don't have an account?</span>
+
+                    <a asp-action="Register">
+                        Create Account
+                    </a>
+
+                </div>
+
+                <div class="account-back">
+
+                    <a asp-controller="Home"
+                       asp-action="Index">
+
+                        <i class="bi bi-arrow-left"></i>
+
+                        Back to NEXUS
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+}

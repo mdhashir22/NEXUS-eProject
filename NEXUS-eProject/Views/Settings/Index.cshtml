@@ -1,0 +1,1150 @@
+﻿@model NEXUS_eProject.Models.SystemSetting
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    ViewData["Title"] = "Settings";
+    ViewData["PageTitle"] = "Settings";
+    ViewData["PageSubtitle"] = "Configure and manage NEXUS system preferences";
+}
+
+<div class="settings-page">
+
+    <!-- =====================================================
+         PAGE HEADER
+         ===================================================== -->
+
+    <div class="settings-page-header">
+
+        <div class="settings-heading-content">
+
+            <div class="settings-eyebrow">
+                <i class="bi bi-sliders2"></i>
+                SYSTEM CONFIGURATION
+            </div>
+
+            <h2>Administration Settings</h2>
+
+            <p>
+                Manage system preferences, billing rules,
+                connection configuration and administrative controls.
+            </p>
+
+        </div>
+
+        <div class="settings-header-status">
+
+            <div class="settings-system-status">
+                <span class="settings-status-dot"></span>
+
+                <div>
+                    <strong>System Operational</strong>
+                    <small>NEXUS services are available</small>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SUCCESS / ERROR MESSAGES
+         ===================================================== -->
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="settings-alert settings-alert-success">
+
+            <div class="settings-alert-icon">
+                <i class="bi bi-check-circle-fill"></i>
+            </div>
+
+            <div>
+                <strong>Settings Updated</strong>
+                <span>@TempData["SuccessMessage"]</span>
+            </div>
+
+        </div>
+    }
+
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="settings-alert settings-alert-danger">
+
+            <div class="settings-alert-icon">
+                <i class="bi bi-exclamation-circle-fill"></i>
+            </div>
+
+            <div>
+                <strong>Unable to Save</strong>
+                <span>@TempData["ErrorMessage"]</span>
+            </div>
+
+        </div>
+    }
+
+
+    <!-- =====================================================
+         QUICK SYSTEM OVERVIEW
+         ===================================================== -->
+
+    <div class="settings-overview-grid">
+
+        <div class="settings-overview-card">
+
+            <div class="settings-overview-icon purple">
+                <i class="bi bi-hdd-stack"></i>
+            </div>
+
+            <div>
+                <span>Application</span>
+                <strong>@Model.ApplicationName</strong>
+                <small>ASP.NET Core MVC</small>
+            </div>
+
+        </div>
+
+
+        <div class="settings-overview-card">
+
+            <div class="settings-overview-icon blue">
+                <i class="bi bi-database"></i>
+            </div>
+
+            <div>
+                <span>Database</span>
+                <strong>SQL Server</strong>
+                <small>Entity Framework Core</small>
+            </div>
+
+        </div>
+
+
+        <div class="settings-overview-card">
+
+            <div class="settings-overview-icon green">
+                <i class="bi bi-shield-check"></i>
+            </div>
+
+            <div>
+                <span>Security</span>
+                <strong>Protected</strong>
+                <small>ASP.NET Core Identity</small>
+            </div>
+
+        </div>
+
+
+        <div class="settings-overview-card">
+
+            <div class="settings-overview-icon orange">
+                <i class="bi bi-percent"></i>
+            </div>
+
+            <div>
+                <span>Billing Tax</span>
+                <strong>@Model.TaxPercentage.ToString("0.##")%</strong>
+                <small>Current configuration</small>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SETTINGS FORM
+         ===================================================== -->
+
+    <form asp-controller="Settings"
+          asp-action="Save"
+          method="post"
+          id="settingsForm">
+
+        @Html.AntiForgeryToken()
+
+        <input asp-for="SystemSettingId" type="hidden" />
+
+
+        <div asp-validation-summary="ModelOnly"
+             class="settings-validation-summary">
+        </div>
+
+
+        <div class="settings-layout">
+
+            <!-- =================================================
+                 LEFT SIDE
+                 ================================================= -->
+
+            <div class="settings-main-column">
+
+
+                <!-- =============================================
+                     GENERAL SETTINGS
+                     ============================================= -->
+
+                <section class="settings-card">
+
+                    <div class="settings-card-header">
+
+                        <div class="settings-card-title">
+
+                            <div class="settings-card-icon purple">
+                                <i class="bi bi-building-gear"></i>
+                            </div>
+
+                            <div>
+                                <h3>General Settings</h3>
+
+                                <p>
+                                    Basic information displayed across
+                                    the NEXUS platform.
+                                </p>
+                            </div>
+
+                        </div>
+
+                        <span class="settings-section-badge">
+                            General
+                        </span>
+
+                    </div>
+
+
+                    <div class="settings-card-body">
+
+                        <div class="settings-form-grid">
+
+                            <div class="settings-form-group">
+
+                                <label asp-for="ApplicationName">
+                                    Application Name
+                                </label>
+
+                                <div class="settings-input-wrapper">
+
+                                    <i class="bi bi-grid-1x2"></i>
+
+                                    <input asp-for="ApplicationName"
+                                           class="settings-input"
+                                           placeholder="NEXUS" />
+
+                                </div>
+
+                                <span asp-validation-for="ApplicationName"
+                                      class="settings-field-error">
+                                </span>
+
+                            </div>
+
+
+                            <div class="settings-form-group">
+
+                                <label asp-for="SupportEmail">
+                                    Support Email
+                                </label>
+
+                                <div class="settings-input-wrapper">
+
+                                    <i class="bi bi-envelope"></i>
+
+                                    <input asp-for="SupportEmail"
+                                           type="email"
+                                           class="settings-input"
+                                           placeholder="support@nexus.com" />
+
+                                </div>
+
+                                <span asp-validation-for="SupportEmail"
+                                      class="settings-field-error">
+                                </span>
+
+                            </div>
+
+
+                            <div class="settings-form-group">
+
+                                <label asp-for="SupportPhone">
+                                    Support Phone
+                                </label>
+
+                                <div class="settings-input-wrapper">
+
+                                    <i class="bi bi-telephone"></i>
+
+                                    <input asp-for="SupportPhone"
+                                           class="settings-input"
+                                           placeholder="+92 300 0000000" />
+
+                                </div>
+
+                                <span asp-validation-for="SupportPhone"
+                                      class="settings-field-error">
+                                </span>
+
+                            </div>
+
+
+                            <div class="settings-form-group settings-form-full">
+
+                                <label asp-for="CompanyAddress">
+                                    Company Address
+                                </label>
+
+                                <div class="settings-input-wrapper settings-textarea-wrapper">
+
+                                    <i class="bi bi-geo-alt"></i>
+
+                                    <textarea asp-for="CompanyAddress"
+                                              class="settings-input settings-textarea"
+                                              rows="3"
+                                              placeholder="Enter NEXUS office or company address"></textarea>
+
+                                </div>
+
+                                <span asp-validation-for="CompanyAddress"
+                                      class="settings-field-error">
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =============================================
+                     BILLING SETTINGS
+                     ============================================= -->
+
+                <section class="settings-card">
+
+                    <div class="settings-card-header">
+
+                        <div class="settings-card-title">
+
+                            <div class="settings-card-icon green">
+                                <i class="bi bi-receipt-cutoff"></i>
+                            </div>
+
+                            <div>
+                                <h3>Billing Configuration</h3>
+
+                                <p>
+                                    Configure financial and invoice
+                                    defaults used by NEXUS.
+                                </p>
+                            </div>
+
+                        </div>
+
+                        <span class="settings-section-badge green">
+                            Finance
+                        </span>
+
+                    </div>
+
+
+                    <div class="settings-card-body">
+
+                        <div class="settings-form-grid settings-three-columns">
+
+                            <div class="settings-form-group">
+
+                                <label asp-for="TaxPercentage">
+                                    Tax Percentage
+                                </label>
+
+                                <div class="settings-input-wrapper">
+
+                                    <i class="bi bi-percent"></i>
+
+                                    <input asp-for="TaxPercentage"
+                                           type="number"
+                                           step="0.01"
+                                           min="0"
+                                           max="100"
+                                           class="settings-input" />
+
+                                </div>
+
+                                <small class="settings-help-text">
+                                    Tax applied during bill generation.
+                                </small>
+
+                                <span asp-validation-for="TaxPercentage"
+                                      class="settings-field-error">
+                                </span>
+
+                            </div>
+
+
+                            <div class="settings-form-group">
+
+                                <label asp-for="DefaultBillDueDays">
+                                    Bill Due Period
+                                </label>
+
+                                <div class="settings-input-wrapper">
+
+                                    <i class="bi bi-calendar2-week"></i>
+
+                                    <input asp-for="DefaultBillDueDays"
+                                           type="number"
+                                           min="1"
+                                           max="365"
+                                           class="settings-input" />
+
+                                </div>
+
+                                <small class="settings-help-text">
+                                    Number of days before a bill is due.
+                                </small>
+
+                                <span asp-validation-for="DefaultBillDueDays"
+                                      class="settings-field-error">
+                                </span>
+
+                            </div>
+
+
+                            <div class="settings-form-group">
+
+                                <label asp-for="Currency">
+                                    Currency
+                                </label>
+
+                                <div class="settings-input-wrapper">
+
+                                    <i class="bi bi-cash-stack"></i>
+
+                                    <input asp-for="Currency"
+                                           class="settings-input"
+                                           maxlength="10"
+                                           placeholder="PKR" />
+
+                                </div>
+
+                                <small class="settings-help-text">
+                                    Primary billing currency.
+                                </small>
+
+                                <span asp-validation-for="Currency"
+                                      class="settings-field-error">
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =============================================
+                     CONNECTION CONFIGURATION
+                     ============================================= -->
+
+                <section class="settings-card">
+
+                    <div class="settings-card-header">
+
+                        <div class="settings-card-title">
+
+                            <div class="settings-card-icon blue">
+                                <i class="bi bi-router"></i>
+                            </div>
+
+                            <div>
+                                <h3>Connection Configuration</h3>
+
+                                <p>
+                                    Configure identifiers used when
+                                    customer connections are created.
+                                </p>
+                            </div>
+
+                        </div>
+
+                        <span class="settings-section-badge blue">
+                            Network
+                        </span>
+
+                    </div>
+
+
+                    <div class="settings-card-body">
+
+                        <div class="settings-form-grid">
+
+                            <div class="settings-form-group">
+
+                                <label asp-for="CityCode">
+                                    Account City Code
+                                </label>
+
+                                <div class="settings-input-wrapper">
+
+                                    <i class="bi bi-buildings"></i>
+
+                                    <input asp-for="CityCode"
+                                           class="settings-input"
+                                           maxlength="10"
+                                           placeholder="101" />
+
+                                </div>
+
+                                <small class="settings-help-text">
+                                    Used inside generated connection Account IDs.
+                                </small>
+
+                                <span asp-validation-for="CityCode"
+                                      class="settings-field-error">
+                                </span>
+
+                            </div>
+
+
+                            <div class="settings-prefix-preview">
+
+                                <span>Account ID Preview</span>
+
+                                <strong id="accountPreview">
+                                    @($"{Model.BroadbandPrefix}{Model.CityCode}000000000001")
+                                </strong>
+
+                                <small>
+                                    Preview based on Broadband prefix.
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="settings-divider"></div>
+
+
+                        <div class="settings-subsection-heading">
+
+                            <div>
+                                <h4>Service Prefixes</h4>
+
+                                <p>
+                                    Prefixes identify the connection type
+                                    in generated orders and accounts.
+                                </p>
+                            </div>
+
+                        </div>
+
+
+                        <div class="settings-form-grid settings-three-columns">
+
+                            <div class="settings-form-group">
+
+                                <label asp-for="BroadbandPrefix">
+                                    Broadband
+                                </label>
+
+                                <div class="settings-input-wrapper">
+
+                                    <i class="bi bi-wifi"></i>
+
+                                    <input asp-for="BroadbandPrefix"
+                                           class="settings-input prefix-input"
+                                           maxlength="5"
+                                           placeholder="B" />
+
+                                </div>
+
+                                <span asp-validation-for="BroadbandPrefix"
+                                      class="settings-field-error">
+                                </span>
+
+                            </div>
+
+
+                            <div class="settings-form-group">
+
+                                <label asp-for="TelephonePrefix">
+                                    Telephone
+                                </label>
+
+                                <div class="settings-input-wrapper">
+
+                                    <i class="bi bi-telephone-forward"></i>
+
+                                    <input asp-for="TelephonePrefix"
+                                           class="settings-input"
+                                           maxlength="5"
+                                           placeholder="T" />
+
+                                </div>
+
+                                <span asp-validation-for="TelephonePrefix"
+                                      class="settings-field-error">
+                                </span>
+
+                            </div>
+
+
+                            <div class="settings-form-group">
+
+                                <label asp-for="DialUpPrefix">
+                                    Dial-Up
+                                </label>
+
+                                <div class="settings-input-wrapper">
+
+                                    <i class="bi bi-modem"></i>
+
+                                    <input asp-for="DialUpPrefix"
+                                           class="settings-input"
+                                           maxlength="5"
+                                           placeholder="D" />
+
+                                </div>
+
+                                <span asp-validation-for="DialUpPrefix"
+                                      class="settings-field-error">
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+
+            <!-- =================================================
+                 RIGHT SIDE
+                 ================================================= -->
+
+            <aside class="settings-side-column">
+
+
+                <!-- =============================================
+                     SYSTEM CONTROLS
+                     ============================================= -->
+
+                <section class="settings-card settings-control-card">
+
+                    <div class="settings-card-header">
+
+                        <div class="settings-card-title">
+
+                            <div class="settings-card-icon orange">
+                                <i class="bi bi-toggles"></i>
+                            </div>
+
+                            <div>
+                                <h3>System Controls</h3>
+
+                                <p>
+                                    Enable or restrict platform features.
+                                </p>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="settings-card-body">
+
+                        <!-- Customer Registration -->
+
+                        <label class="settings-toggle-row">
+
+                            <div class="settings-toggle-info">
+
+                                <div class="settings-toggle-icon purple">
+                                    <i class="bi bi-person-plus"></i>
+                                </div>
+
+                                <div>
+                                    <strong>Customer Registration</strong>
+
+                                    <span>
+                                        Allow new customers to register.
+                                    </span>
+                                </div>
+
+                            </div>
+
+                            <div class="settings-switch">
+
+                                <input asp-for="CustomerRegistrationEnabled"
+                                       type="checkbox" />
+
+                                <span class="settings-switch-slider"></span>
+
+                            </div>
+
+                        </label>
+
+
+                        <!-- Feedback -->
+
+                        <label class="settings-toggle-row">
+
+                            <div class="settings-toggle-info">
+
+                                <div class="settings-toggle-icon blue">
+                                    <i class="bi bi-chat-square-text"></i>
+                                </div>
+
+                                <div>
+                                    <strong>Customer Feedback</strong>
+
+                                    <span>
+                                        Allow customers to submit feedback.
+                                    </span>
+                                </div>
+
+                            </div>
+
+                            <div class="settings-switch">
+
+                                <input asp-for="FeedbackEnabled"
+                                       type="checkbox" />
+
+                                <span class="settings-switch-slider"></span>
+
+                            </div>
+
+                        </label>
+
+
+                        <!-- Maintenance -->
+
+                        <label class="settings-toggle-row settings-danger-toggle">
+
+                            <div class="settings-toggle-info">
+
+                                <div class="settings-toggle-icon red">
+                                    <i class="bi bi-cone-striped"></i>
+                                </div>
+
+                                <div>
+                                    <strong>Maintenance Mode</strong>
+
+                                    <span>
+                                        Mark the platform as under maintenance.
+                                    </span>
+                                </div>
+
+                            </div>
+
+                            <div class="settings-switch danger">
+
+                                <input asp-for="MaintenanceMode"
+                                       type="checkbox" />
+
+                                <span class="settings-switch-slider"></span>
+
+                            </div>
+
+                        </label>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =============================================
+                     SECURITY
+                     ============================================= -->
+
+                <section class="settings-card">
+
+                    <div class="settings-card-header">
+
+                        <div class="settings-card-title">
+
+                            <div class="settings-card-icon green">
+                                <i class="bi bi-shield-lock"></i>
+                            </div>
+
+                            <div>
+                                <h3>Security</h3>
+
+                                <p>Administrative protection status.</p>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="settings-card-body">
+
+                        <div class="settings-security-list">
+
+                            <div class="settings-security-item">
+
+                                <div>
+                                    <i class="bi bi-person-lock"></i>
+
+                                    <span>
+                                        <strong>Authentication</strong>
+                                        <small>ASP.NET Core Identity</small>
+                                    </span>
+                                </div>
+
+                                <span class="settings-security-state">
+                                    Enabled
+                                </span>
+
+                            </div>
+
+
+                            <div class="settings-security-item">
+
+                                <div>
+                                    <i class="bi bi-key"></i>
+
+                                    <span>
+                                        <strong>Access Control</strong>
+                                        <small>Role Based Authorization</small>
+                                    </span>
+                                </div>
+
+                                <span class="settings-security-state">
+                                    Active
+                                </span>
+
+                            </div>
+
+
+                            <div class="settings-security-item">
+
+                                <div>
+                                    <i class="bi bi-person-check"></i>
+
+                                    <span>
+                                        <strong>Admin Protection</strong>
+                                        <small>Administrator role required</small>
+                                    </span>
+                                </div>
+
+                                <span class="settings-security-state">
+                                    Protected
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =============================================
+                     SYSTEM INFORMATION
+                     ============================================= -->
+
+                <section class="settings-card">
+
+                    <div class="settings-card-header">
+
+                        <div class="settings-card-title">
+
+                            <div class="settings-card-icon blue">
+                                <i class="bi bi-info-circle"></i>
+                            </div>
+
+                            <div>
+                                <h3>System Information</h3>
+
+                                <p>Current application environment.</p>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="settings-card-body">
+
+                        <div class="settings-info-list">
+
+                            <div class="settings-info-row">
+                                <span>Platform</span>
+                                <strong>ASP.NET Core MVC</strong>
+                            </div>
+
+                            <div class="settings-info-row">
+                                <span>Database</span>
+                                <strong>Microsoft SQL Server</strong>
+                            </div>
+
+                            <div class="settings-info-row">
+                                <span>ORM</span>
+                                <strong>Entity Framework Core</strong>
+                            </div>
+
+                            <div class="settings-info-row">
+                                <span>Authentication</span>
+                                <strong>Identity</strong>
+                            </div>
+
+                            <div class="settings-info-row">
+                                <span>Configuration ID</span>
+                                <strong>#@Model.SystemSettingId</strong>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =============================================
+                     LAST UPDATED
+                     ============================================= -->
+
+                <section class="settings-update-card">
+
+                    <div class="settings-update-icon">
+                        <i class="bi bi-clock-history"></i>
+                    </div>
+
+                    <div>
+                        <span>Last configuration update</span>
+
+                        <strong>
+                            @Model.UpdatedAt.ToString("dd MMM yyyy, hh:mm tt")
+                        </strong>
+
+                        <small>
+                            Updated by
+                            @(string.IsNullOrWhiteSpace(Model.UpdatedBy)
+                                ? "Administrator"
+                                : Model.UpdatedBy)
+                        </small>
+                    </div>
+
+                </section>
+
+            </aside>
+
+        </div>
+
+
+        <!-- =====================================================
+             SAVE BAR
+             ===================================================== -->
+
+        <div class="settings-save-bar">
+
+            <div class="settings-save-info">
+
+                <i class="bi bi-shield-check"></i>
+
+                <div>
+                    <strong>Administrative Configuration</strong>
+
+                    <span>
+                        Changes are stored securely in the NEXUS database.
+                    </span>
+                </div>
+
+            </div>
+
+
+            <div class="settings-save-actions">
+
+                <button type="button"
+                        class="settings-reset-button"
+                        data-bs-toggle="modal"
+                        data-bs-target="#resetSettingsModal">
+
+                    <i class="bi bi-arrow-counterclockwise"></i>
+                    Reset Defaults
+
+                </button>
+
+
+                <button type="submit"
+                        class="settings-save-button">
+
+                    <i class="bi bi-floppy"></i>
+                    Save Changes
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+<!-- =========================================================
+     RESET SETTINGS MODAL
+     ========================================================= -->
+
+<div class="modal fade"
+     id="resetSettingsModal"
+     tabindex="-1"
+     aria-labelledby="resetSettingsModalLabel"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content settings-modal">
+
+            <div class="settings-modal-icon">
+                <i class="bi bi-arrow-counterclockwise"></i>
+            </div>
+
+            <div class="settings-modal-content">
+
+                <span class="settings-modal-eyebrow">
+                    RESET CONFIGURATION
+                </span>
+
+                <h4 id="resetSettingsModalLabel">
+                    Restore Default Settings?
+                </h4>
+
+                <p>
+                    General, billing, connection and system-control
+                    settings will be restored to their NEXUS defaults.
+                </p>
+
+            </div>
+
+
+            <div class="settings-modal-warning">
+
+                <i class="bi bi-exclamation-triangle"></i>
+
+                <span>
+                    This will overwrite the current configuration.
+                </span>
+
+            </div>
+
+
+            <div class="settings-modal-actions">
+
+                <button type="button"
+                        class="settings-modal-cancel"
+                        data-bs-dismiss="modal">
+
+                    Cancel
+
+                </button>
+
+
+                <form asp-controller="Settings"
+                      asp-action="Reset"
+                      method="post">
+
+                    @Html.AntiForgeryToken()
+
+                    <button type="submit"
+                            class="settings-modal-reset">
+
+                        <i class="bi bi-arrow-counterclockwise"></i>
+                        Reset Settings
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const cityCode =
+                document.getElementById("CityCode");
+
+            const broadbandPrefix =
+                document.getElementById("BroadbandPrefix");
+
+            const accountPreview =
+                document.getElementById("accountPreview");
+
+
+            function updateAccountPreview() {
+
+                if (!accountPreview) {
+                    return;
+                }
+
+                const prefix =
+                    broadbandPrefix &&
+                    broadbandPrefix.value.trim()
+                        ? broadbandPrefix.value
+                            .trim()
+                            .toUpperCase()
+                        : "B";
+
+                const city =
+                    cityCode &&
+                    cityCode.value.trim()
+                        ? cityCode.value.trim()
+                        : "101";
+
+                accountPreview.textContent =
+                    prefix +
+                    city +
+                    "000000000001";
+            }
+
+
+            if (cityCode) {
+
+                cityCode.addEventListener(
+                    "input",
+                    updateAccountPreview
+                );
+            }
+
+
+            if (broadbandPrefix) {
+
+                broadbandPrefix.addEventListener(
+                    "input",
+                    updateAccountPreview
+                );
+            }
+
+
+            updateAccountPreview();
+
+        });
+
+    </script>
+}

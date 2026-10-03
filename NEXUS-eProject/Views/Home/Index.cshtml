@@ -1,0 +1,960 @@
+﻿@{
+    Layout = "~/Views/Shared/_PublicLayout.cshtml";
+    ViewData["Title"] = "Home";
+}
+
+<!-- =========================
+     HERO CAROUSEL
+========================= -->
+
+<section class="nexus-hero">
+
+    <div id="nexusHeroCarousel"
+         class="carousel slide carousel-fade"
+         data-bs-ride="carousel"
+         data-bs-interval="5500">
+
+        <!-- Indicators -->
+        <div class="carousel-indicators nexus-carousel-indicators">
+
+            <button type="button"
+                    data-bs-target="#nexusHeroCarousel"
+                    data-bs-slide-to="0"
+                    class="active"
+                    aria-current="true"
+                    aria-label="Slide 1">
+            </button>
+
+            <button type="button"
+                    data-bs-target="#nexusHeroCarousel"
+                    data-bs-slide-to="1"
+                    aria-label="Slide 2">
+            </button>
+
+            <button type="button"
+                    data-bs-target="#nexusHeroCarousel"
+                    data-bs-slide-to="2"
+                    aria-label="Slide 3">
+            </button>
+
+        </div>
+
+        <div class="carousel-inner">
+
+            <!-- SLIDE 1 -->
+            <div class="carousel-item active">
+
+                <div class="hero-slide hero-slide-one">
+
+                    <div class="hero-overlay"></div>
+
+                    <div class="container hero-container">
+
+                        <div class="row align-items-center min-vh-100">
+
+                            <div class="col-lg-7">
+
+                                <div class="hero-content">
+
+                                    <div class="hero-badge">
+                                        <span class="pulse-dot"></span>
+                                        NEXT-GENERATION CONNECTIVITY
+                                    </div>
+
+                                    <h1>
+                                        Connecting
+                                        <span>Your World</span>
+                                        <br />
+                                        Without Limits.
+                                    </h1>
+
+                                    <p>
+                                        Experience reliable internet and communication
+                                        services built to keep your home, business and
+                                        community connected.
+                                    </p>
+
+                                    <div class="hero-buttons">
+
+                                        <a asp-controller="Home"
+                                           asp-action="Plans"
+                                           class="btn-nexus-primary btn-lg-nexus">
+                                            Explore Plans
+                                            <i class="bi bi-arrow-right"></i>
+                                        </a>
+
+                                        <a asp-controller="Home"
+                                           asp-action="Services"
+                                           class="btn-nexus-glass btn-lg-nexus">
+                                            Our Services
+                                            <i class="bi bi-play-circle"></i>
+                                        </a>
+
+                                    </div>
+
+                                    <div class="hero-trust">
+
+                                        <div class="trust-item">
+                                            <i class="bi bi-lightning-charge-fill"></i>
+                                            <span>Fast Connectivity</span>
+                                        </div>
+
+                                        <div class="trust-item">
+                                            <i class="bi bi-shield-check"></i>
+                                            <span>Reliable Service</span>
+                                        </div>
+
+                                        <div class="trust-item">
+                                            <i class="bi bi-headset"></i>
+                                            <span>Dedicated Support</span>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-lg-5 d-none d-lg-block">
+
+                                <div class="hero-network-card">
+
+                                    <div class="network-card-glow"></div>
+
+                                    <div class="network-card-header">
+                                        <span>
+                                            <i class="bi bi-activity"></i>
+                                            NETWORK STATUS
+                                        </span>
+
+                                        <span class="online-status">
+                                            <span></span>
+                                            ONLINE
+                                        </span>
+                                    </div>
+
+                                    <div class="network-visual">
+
+                                        <div class="network-ring ring-one"></div>
+                                        <div class="network-ring ring-two"></div>
+                                        <div class="network-ring ring-three"></div>
+
+                                        <div class="network-core">
+                                            <i class="bi bi-globe2"></i>
+                                        </div>
+
+                                        <div class="network-node node-one">
+                                            <i class="bi bi-phone"></i>
+                                        </div>
+
+                                        <div class="network-node node-two">
+                                            <i class="bi bi-laptop"></i>
+                                        </div>
+
+                                        <div class="network-node node-three">
+                                            <i class="bi bi-router"></i>
+                                        </div>
+
+                                        <div class="network-node node-four">
+                                            <i class="bi bi-cloud"></i>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="network-card-footer">
+
+                                        <div>
+                                            <small>Connection</small>
+                                            <strong>Stable</strong>
+                                        </div>
+
+                                        <div>
+                                            <small>Latency</small>
+                                            <strong>12ms</strong>
+                                        </div>
+
+                                        <div>
+                                            <small>Coverage</small>
+                                            <strong>98%</strong>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- SLIDE 2 -->
+            <div class="carousel-item">
+
+                <div class="hero-slide hero-slide-two">
+
+                    <div class="hero-overlay"></div>
+
+                    <div class="container hero-container">
+
+                        <div class="row align-items-center min-vh-100">
+
+                            <div class="col-lg-8">
+
+                                <div class="hero-content">
+
+                                    <div class="hero-badge">
+                                        <span class="pulse-dot"></span>
+                                        POWERING DIGITAL LIFESTYLES
+                                    </div>
+
+                                    <h1>
+                                        Speed That
+                                        <span>Keeps Up</span>
+                                        <br />
+                                        With You.
+                                    </h1>
+
+                                    <p>
+                                        Stream, work, learn and stay connected with
+                                        NEXUS broadband solutions designed for modern
+                                        digital life.
+                                    </p>
+
+                                    <div class="hero-buttons">
+
+                                        <a asp-controller="Home"
+                                           asp-action="Plans"
+                                           class="btn-nexus-primary btn-lg-nexus">
+                                            View Broadband Plans
+                                            <i class="bi bi-arrow-right"></i>
+                                        </a>
+
+                                        <a asp-controller="Home"
+                                           asp-action="Contact"
+                                           class="btn-nexus-glass btn-lg-nexus">
+                                            Talk To Us
+                                            <i class="bi bi-chat-dots"></i>
+                                        </a>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- SLIDE 3 -->
+            <div class="carousel-item">
+
+                <div class="hero-slide hero-slide-three">
+
+                    <div class="hero-overlay"></div>
+
+                    <div class="container hero-container">
+
+                        <div class="row align-items-center min-vh-100">
+
+                            <div class="col-lg-8">
+
+                                <div class="hero-content">
+
+                                    <div class="hero-badge">
+                                        <span class="pulse-dot"></span>
+                                        CONNECTED. SIMPLE. NEXUS.
+                                    </div>
+
+                                    <h1>
+                                        One Network.
+                                        <span>Multiple Ways</span>
+                                        <br />
+                                        To Stay Connected.
+                                    </h1>
+
+                                    <p>
+                                        Internet or telephone — choose the service
+                                        that fits your needs and let NEXUS handle
+                                        the connection.
+                                    </p>
+
+                                    <div class="hero-buttons">
+
+                                        <a asp-controller="Home"
+                                           asp-action="Services"
+                                           class="btn-nexus-primary btn-lg-nexus">
+                                            Discover Services
+                                            <i class="bi bi-arrow-right"></i>
+                                        </a>
+
+                                        <a asp-controller="Home"
+                                           asp-action="Contact"
+                                           class="btn-nexus-glass btn-lg-nexus">
+                                            Contact NEXUS
+                                            <i class="bi bi-telephone"></i>
+                                        </a>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Previous -->
+        <button class="carousel-control-prev nexus-carousel-control"
+                type="button"
+                data-bs-target="#nexusHeroCarousel"
+                data-bs-slide="prev">
+
+            <span class="carousel-control-icon">
+                <i class="bi bi-arrow-left"></i>
+            </span>
+
+            <span class="visually-hidden">
+                Previous
+            </span>
+
+        </button>
+
+
+        <!-- Next -->
+        <button class="carousel-control-next nexus-carousel-control"
+                type="button"
+                data-bs-target="#nexusHeroCarousel"
+                data-bs-slide="next">
+
+            <span class="carousel-control-icon">
+                <i class="bi bi-arrow-right"></i>
+            </span>
+
+            <span class="visually-hidden">
+                Next
+            </span>
+
+        </button>
+
+    </div>
+
+
+    <!-- Scroll indicator -->
+    <div class="hero-scroll">
+
+        <span>SCROLL TO EXPLORE</span>
+
+        <i class="bi bi-chevron-down"></i>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     SERVICES
+========================= -->
+
+<section class="nexus-section services-section">
+
+    <div class="container">
+
+        <div class="section-heading text-center">
+
+            <span class="section-eyebrow">
+                WHAT WE PROVIDE
+            </span>
+
+            <h2>
+                Connectivity Built
+                <span>For You.</span>
+            </h2>
+
+            <p>
+                Flexible communication services designed for homes,
+                businesses and everyday digital needs.
+            </p>
+
+        </div>
+
+
+        <div class="row g-4 mt-4">
+
+            <!-- Broadband -->
+            <div class="col-lg-4">
+
+                <div class="service-card">
+
+                    <div class="service-image broadband-image">
+
+                        <div class="service-image-overlay"></div>
+
+                        <div class="service-icon">
+                            <i class="bi bi-wifi"></i>
+                        </div>
+
+                    </div>
+
+                    <div class="service-content">
+
+                        <span class="service-number">
+                            01
+                        </span>
+
+                        <h3>
+                            Broadband Internet
+                        </h3>
+
+                        <p>
+                            Reliable high-speed connectivity for
+                            streaming, work, gaming, learning and more.
+                        </p>
+
+                        <a asp-controller="Home"
+                           asp-action="Services">
+                            Explore Service
+                            <i class="bi bi-arrow-up-right"></i>
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Dial Up -->
+            <div class="col-lg-4">
+
+                <div class="service-card">
+
+                    <div class="service-image dialup-image">
+
+                        <div class="service-image-overlay"></div>
+
+                        <div class="service-icon">
+                            <i class="bi bi-router"></i>
+                        </div>
+
+                    </div>
+
+                    <div class="service-content">
+
+                        <span class="service-number">
+                            02
+                        </span>
+
+                        <h3>
+                            Dial-Up Internet
+                        </h3>
+
+                        <p>
+                            A simple connectivity solution for users
+                            looking for traditional internet access.
+                        </p>
+
+                        <a asp-controller="Home"
+                           asp-action="Services">
+                            Explore Service
+                            <i class="bi bi-arrow-up-right"></i>
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Telephone -->
+            <div class="col-lg-4">
+
+                <div class="service-card">
+
+                    <div class="service-image telephone-image">
+
+                        <div class="service-image-overlay"></div>
+
+                        <div class="service-icon">
+                            <i class="bi bi-telephone"></i>
+                        </div>
+
+                    </div>
+
+                    <div class="service-content">
+
+                        <span class="service-number">
+                            03
+                        </span>
+
+                        <h3>
+                            Telephone / Landline
+                        </h3>
+
+                        <p>
+                            Stay connected with dependable telephone
+                            and landline communication services.
+                        </p>
+
+                        <a asp-controller="Home"
+                           asp-action="Services">
+                            Explore Service
+                            <i class="bi bi-arrow-up-right"></i>
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     WHY NEXUS
+========================= -->
+
+<section class="nexus-section why-section">
+
+    <div class="container">
+
+        <div class="row align-items-center g-5">
+
+            <div class="col-lg-6">
+
+                <div class="why-visual">
+
+                    <div class="why-image"></div>
+
+                    <div class="floating-stat floating-stat-one">
+
+                        <i class="bi bi-lightning-charge-fill"></i>
+
+                        <div>
+                            <strong>Fast</strong>
+                            <span>Connectivity</span>
+                        </div>
+
+                    </div>
+
+                    <div class="floating-stat floating-stat-two">
+
+                        <i class="bi bi-shield-check"></i>
+
+                        <div>
+                            <strong>Reliable</strong>
+                            <span>Network</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-lg-6">
+
+                <div class="section-heading section-heading-left">
+
+                    <span class="section-eyebrow">
+                        WHY NEXUS
+                    </span>
+
+                    <h2>
+                        More Than
+                        <span>Internet.</span>
+                    </h2>
+
+                    <p>
+                        NEXUS is built around one simple idea:
+                        making connectivity easier, more reliable
+                        and accessible.
+                    </p>
+
+                </div>
+
+
+                <div class="feature-list">
+
+                    <div class="feature-item">
+
+                        <div class="feature-icon">
+                            <i class="bi bi-speedometer2"></i>
+                        </div>
+
+                        <div>
+                            <h4>Reliable Connectivity</h4>
+                            <p>
+                                Services designed to keep your
+                                connection dependable.
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="feature-item">
+
+                        <div class="feature-icon">
+                            <i class="bi bi-headset"></i>
+                        </div>
+
+                        <div>
+                            <h4>Customer Support</h4>
+                            <p>
+                                Assistance when you need help
+                                with your service.
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="feature-item">
+
+                        <div class="feature-icon">
+                            <i class="bi bi-diagram-3"></i>
+                        </div>
+
+                        <div>
+                            <h4>Connected Infrastructure</h4>
+                            <p>
+                                A structured network approach
+                                for better connectivity.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     STATS
+========================= -->
+
+<section class="nexus-stats">
+
+    <div class="container">
+
+        <div class="row g-4">
+
+            <div class="col-6 col-lg-3">
+
+                <div class="stat-box">
+
+                    <i class="bi bi-people"></i>
+
+                    <strong>
+                        <span class="counter"
+                              data-target="5000">
+                            0
+                        </span>+
+                    </strong>
+
+                    <span>Customers</span>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-6 col-lg-3">
+
+                <div class="stat-box">
+
+                    <i class="bi bi-broadcast-pin"></i>
+
+                    <strong>
+                        <span class="counter"
+                              data-target="98">
+                            0
+                        </span>%
+                    </strong>
+
+                    <span>Network Coverage</span>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-6 col-lg-3">
+
+                <div class="stat-box">
+
+                    <i class="bi bi-clock-history"></i>
+
+                    <strong>
+                        <span class="counter"
+                              data-target="24">
+                            0
+                        </span>/7
+                    </strong>
+
+                    <span>Connectivity</span>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-6 col-lg-3">
+
+                <div class="stat-box">
+
+                    <i class="bi bi-geo-alt"></i>
+
+                    <strong>
+                        <span class="counter"
+                              data-target="25">
+                            0
+                        </span>+
+                    </strong>
+
+                    <span>Service Areas</span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     HOW IT WORKS
+========================= -->
+
+<section class="nexus-section process-section">
+
+    <div class="container">
+
+        <div class="section-heading text-center">
+
+            <span class="section-eyebrow">
+                SIMPLE PROCESS
+            </span>
+
+            <h2>
+                Get Connected In
+                <span>Four Steps.</span>
+            </h2>
+
+            <p>
+                Getting started with NEXUS is simple.
+            </p>
+
+        </div>
+
+
+        <div class="process-wrapper">
+
+            <div class="process-line"></div>
+
+            <div class="row g-4">
+
+                <div class="col-lg-3 col-6">
+
+                    <div class="process-card">
+
+                        <div class="process-number">
+                            01
+                        </div>
+
+                        <div class="process-icon">
+                            <i class="bi bi-person-plus"></i>
+                        </div>
+
+                        <h4>Apply</h4>
+
+                        <p>
+                            Choose a service and submit
+                            your connection application.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-lg-3 col-6">
+
+                    <div class="process-card">
+
+                        <div class="process-number">
+                            02
+                        </div>
+
+                        <div class="process-icon">
+                            <i class="bi bi-search"></i>
+                        </div>
+
+                        <h4>Feasibility</h4>
+
+                        <p>
+                            Our technical team checks
+                            service availability in your area.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-lg-3 col-6">
+
+                    <div class="process-card">
+
+                        <div class="process-number">
+                            03
+                        </div>
+
+                        <div class="process-icon">
+                            <i class="bi bi-tools"></i>
+                        </div>
+
+                        <h4>Installation</h4>
+
+                        <p>
+                            Required equipment and connection
+                            setup are arranged.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-lg-3 col-6">
+
+                    <div class="process-card">
+
+                        <div class="process-number">
+                            04
+                        </div>
+
+                        <div class="process-icon">
+                            <i class="bi bi-check2-circle"></i>
+                        </div>
+
+                        <h4>Connect</h4>
+
+                        <p>
+                            Your NEXUS connection is activated
+                            and ready to use.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     CTA
+========================= -->
+
+<section class="nexus-cta">
+
+    <div class="cta-glow"></div>
+
+    <div class="container">
+
+        <div class="cta-box">
+
+            <div class="cta-content">
+
+                <span class="section-eyebrow">
+                    READY TO CONNECT?
+                </span>
+
+                <h2>
+                    Your World.
+                    <span>Our Network.</span>
+                </h2>
+
+                <p>
+                    Start your NEXUS journey today and discover
+                    connectivity designed around your needs.
+                </p>
+
+                <div class="cta-buttons">
+
+                    <a asp-controller="Home"
+                       asp-action="Plans"
+                       class="btn-nexus-primary btn-lg-nexus">
+
+                        View Plans
+                        <i class="bi bi-arrow-right"></i>
+
+                    </a>
+
+                    <a asp-controller="Home"
+                       asp-action="Contact"
+                       class="btn-nexus-glass btn-lg-nexus">
+
+                        Contact Us
+                        <i class="bi bi-chat"></i>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+            <div class="cta-icon">
+
+                <i class="bi bi-globe-americas"></i>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>

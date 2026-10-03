@@ -1,0 +1,419 @@
+﻿@model IEnumerable<NEXUS_eProject.Models.Bill>
+
+@{
+    Layout = "_PublicLayout";
+    ViewData["Title"] = "My Bills";
+
+    var bills = Model?.ToList()
+        ?? new List<NEXUS_eProject.Models.Bill>();
+
+    var totalBills = bills.Count;
+
+    var unpaidBills = bills.Count(b =>
+        !string.Equals(
+            b.Status,
+            "Paid",
+            StringComparison.OrdinalIgnoreCase));
+
+    var outstandingAmount = bills
+        .Where(b =>
+            !string.Equals(
+                b.Status,
+                "Paid",
+                StringComparison.OrdinalIgnoreCase))
+        .Sum(b => b.TotalAmount);
+}
+
+<div class="customer-bills-page">
+
+    <div class="container">
+
+        <!-- HEADER -->
+        <div class="customer-page-header">
+
+            <div>
+
+                <span class="portal-eyebrow">
+                    <i class="bi bi-receipt"></i>
+                    CUSTOMER PORTAL
+                </span>
+
+                <h1>My Bills</h1>
+
+                <p>
+                    View your NEXUS bills, charges, due dates and
+                    payment status.
+                </p>
+
+            </div>
+
+
+            @if (unpaidBills > 0)
+            {
+                <a asp-controller="CustomerPortal"
+                   asp-action="Payment"
+                   class="btn-nexus-primary">
+
+                    <i class="bi bi-credit-card"></i>
+                    Make Payment
+
+                </a>
+            }
+
+        </div>
+
+
+        <!-- BACK -->
+        <div class="application-back-wrapper">
+
+            <a asp-controller="CustomerPortal"
+               asp-action="Index"
+               class="portal-back-link">
+
+                <i class="bi bi-arrow-left"></i>
+                Back to My Account
+
+            </a>
+
+        </div>
+
+
+        @if (bills.Any())
+        {
+            <!-- BILL SUMMARY -->
+            <div class="bills-summary-grid">
+
+                <!-- TOTAL BILLS -->
+                <div class="bill-summary-card">
+
+                    <div class="bill-summary-icon">
+                        <i class="bi bi-receipt"></i>
+                    </div>
+
+                    <div>
+
+                        <span>
+                            TOTAL BILLS
+                        </span>
+
+                        <strong>
+                            @totalBills
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- UNPAID BILLS -->
+                <div class="bill-summary-card">
+
+                    <div class="bill-summary-icon pending">
+                        <i class="bi bi-clock-history"></i>
+                    </div>
+
+                    <div>
+
+                        <span>
+                            UNPAID BILLS
+                        </span>
+
+                        <strong>
+                            @unpaidBills
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- OUTSTANDING -->
+                <div class="bill-summary-card">
+
+                    <div class="bill-summary-icon amount">
+                        <i class="bi bi-cash-stack"></i>
+                    </div>
+
+                    <div>
+
+                        <span>
+                            OUTSTANDING
+                        </span>
+
+                        <strong>
+                            Rs. @outstandingAmount.ToString("N2")
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- BILLS LIST -->
+            <div class="customer-bills-list">
+
+                @foreach (var bill in bills)
+                {
+                    var isPaid =
+                        string.Equals(
+                            bill.Status,
+                            "Paid",
+                            StringComparison.OrdinalIgnoreCase);
+
+                    <div class="customer-bill-card">
+
+                        <!-- TOP -->
+                        <div class="customer-bill-top">
+
+                            <div>
+
+                                <span>
+                                    BILL NUMBER
+                                </span>
+
+                                <strong>
+                                    @bill.BillNumber
+                                </strong>
+
+                            </div>
+
+
+                            <div class="bill-status @(isPaid ? "paid" : "unpaid")">
+
+                                <span></span>
+
+                                @bill.Status
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- TOTAL AMOUNT -->
+                        <div class="customer-bill-amount">
+
+                            <span>
+                                TOTAL AMOUNT
+                            </span>
+
+                            <strong>
+                                Rs. @bill.TotalAmount.ToString("N2")
+                            </strong>
+
+                        </div>
+
+
+                        <!-- DETAILS -->
+                        <div class="customer-bill-details">
+
+                            <!-- ACCOUNT ID -->
+                            <div>
+
+                                <span>
+                                    <i class="bi bi-person-vcard"></i>
+                                    ACCOUNT ID
+                                </span>
+
+                                <strong>
+                                    @bill.AccountId
+                                </strong>
+
+                            </div>
+
+
+                            <!-- BILL DATE -->
+                            <div>
+
+                                <span>
+                                    <i class="bi bi-calendar3"></i>
+                                    BILL DATE
+                                </span>
+
+                                <strong>
+                                    @bill.BillingDate.ToString("dd MMM yyyy")
+                                </strong>
+
+                            </div>
+
+
+                            <!-- DUE DATE -->
+                            <div>
+
+                                <span>
+                                    <i class="bi bi-calendar-x"></i>
+                                    DUE DATE
+                                </span>
+
+                                <strong>
+                                    @bill.DueDate.ToString("dd MMM yyyy")
+                                </strong>
+
+                            </div>
+
+
+                            <!-- PLAN -->
+                            <div>
+
+                                <span>
+                                    <i class="bi bi-speedometer2"></i>
+                                    PLAN
+                                </span>
+
+                                <strong>
+                                    @(bill.Connection?.Plan?.PlanName ?? "N/A")
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- CHARGES -->
+                        <div class="customer-bill-charges">
+
+                            <div>
+
+                                <span>
+                                    Plan
+                                </span>
+
+                                <strong>
+                                    Rs. @bill.PlanAmount.ToString("N2")
+                                </strong>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    Equipment
+                                </span>
+
+                                <strong>
+                                    Rs. @bill.EquipmentAmount.ToString("N2")
+                                </strong>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    Previous Due
+                                </span>
+
+                                <strong>
+                                    Rs. @bill.PreviousDue.ToString("N2")
+                                </strong>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    Discount
+                                </span>
+
+                                <strong>
+                                    Rs. @bill.Discount.ToString("N2")
+                                </strong>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    Tax
+                                </span>
+
+                                <strong>
+                                    Rs. @bill.Tax.ToString("N2")
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- FOOTER -->
+                        <div class="customer-bill-footer">
+
+                            <span>
+
+                                <i class="bi bi-info-circle"></i>
+
+                                Bill generated by NEXUS Accounts
+
+                            </span>
+
+
+                            @if (!isPaid)
+                            {
+                                <a asp-controller="CustomerPortal"
+                                   asp-action="Payment"
+                                   asp-route-billId="@bill.BillId"
+                                   class="application-view-btn">
+
+                                    Pay Now
+
+                                    <i class="bi bi-arrow-right"></i>
+
+                                </a>
+                            }
+                            else
+                            {
+                                <span class="bill-paid-label">
+
+                                    <i class="bi bi-check-circle-fill"></i>
+
+                                    Payment Completed
+
+                                </span>
+                            }
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+        }
+        else
+        {
+            <!-- EMPTY STATE -->
+            <div class="bills-empty">
+
+                <div class="bills-empty-icon">
+                    <i class="bi bi-receipt-cutoff"></i>
+                </div>
+
+                <h2>
+                    No Bills Available
+                </h2>
+
+                <p>
+                    You don't have any bills available yet.
+                    Your bills will appear here once your NEXUS
+                    connection has been activated and billing begins.
+                </p>
+
+                <a asp-controller="CustomerPortal"
+                   asp-action="Connection"
+                   class="btn-nexus-outline">
+
+                    <i class="bi bi-router"></i>
+                    View Connection
+
+                </a>
+
+            </div>
+        }
+
+    </div>
+
+</div>

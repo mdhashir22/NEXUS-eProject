@@ -1,0 +1,1241 @@
+﻿@model NEXUS_eProject.Models.Payment
+
+@{
+    ViewData["Title"] = "Payment Review";
+    ViewData["PageTitle"] = "Payment Review";
+    Layout = "~/Views/Shared/_AccountsLayout.cshtml";
+
+    // =========================================================
+    // PAYMENT CALCULATIONS
+    // =========================================================
+
+    decimal verifiedAmount =
+        ViewBag.VerifiedAmount != null
+            ? Convert.ToDecimal(ViewBag.VerifiedAmount)
+            : 0m;
+
+    decimal billTotal =
+        Model.Bill?.TotalAmount ?? 0m;
+
+    decimal currentAmount =
+        Model.Amount;
+
+    decimal outstandingBefore =
+        billTotal - verifiedAmount;
+
+    if (outstandingBefore < 0)
+    {
+        outstandingBefore = 0;
+    }
+
+    decimal totalAfterVerification =
+        verifiedAmount + currentAmount;
+
+    decimal outstandingAfter =
+        billTotal - totalAfterVerification;
+
+    if (outstandingAfter < 0)
+    {
+        outstandingAfter = 0;
+    }
+
+    // =========================================================
+    // STATUS
+    // =========================================================
+
+    bool isPending =
+        string.Equals(
+            Model.Status,
+            "Pending Verification",
+            StringComparison.OrdinalIgnoreCase
+        )
+        ||
+        string.Equals(
+            Model.Status,
+            "Pending",
+            StringComparison.OrdinalIgnoreCase
+        );
+
+    bool isPaid =
+        string.Equals(
+            Model.Status,
+            "Paid",
+            StringComparison.OrdinalIgnoreCase
+        );
+
+    bool isRejected =
+        string.Equals(
+            Model.Status,
+            "Rejected",
+            StringComparison.OrdinalIgnoreCase
+        );
+
+    // =========================================================
+    // PAYMENT RESULT
+    // =========================================================
+
+    bool willFullyPayBill =
+        billTotal > 0 &&
+        totalAfterVerification >= billTotal;
+
+    bool paymentExceedsOutstanding =
+        billTotal > 0 &&
+        currentAmount > outstandingBefore;
+
+    string statusClass =
+        isPaid
+            ? "ap-status-paid"
+            : isRejected
+                ? "ap-status-rejected"
+                : "ap-status-pending";
+
+    string statusIcon =
+        isPaid
+            ? "bi-check-circle-fill"
+            : isRejected
+                ? "bi-x-circle-fill"
+                : "bi-clock-fill";
+}
+
+
+<div class="apd-page">
+
+    <!-- =========================================================
+         PAGE HEADER
+    ========================================================== -->
+
+    <div class="ap-page-header">
+
+        <div>
+
+            <div class="ap-eyebrow">
+                <i class="bi bi-shield-check"></i>
+                PAYMENT REVIEW
+            </div>
+
+            <h2>
+                @Model.PaymentNumber
+            </h2>
+
+            <p>
+                Review customer payment information before
+                verification.
+            </p>
+
+        </div>
+
+        <a asp-controller="AccountsPayment"
+           asp-action="Pending"
+           class="ap-btn ap-btn-secondary">
+
+            <i class="bi bi-arrow-left"></i>
+            Back
+
+        </a>
+
+    </div>
+
+
+    <!-- =========================================================
+         SUCCESS MESSAGE
+    ========================================================== -->
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="ap-alert ap-alert-success">
+
+            <i class="bi bi-check-circle-fill"></i>
+
+            <span>
+                @TempData["Success"]
+            </span>
+
+        </div>
+    }
+
+
+    <!-- =========================================================
+         ERROR MESSAGE
+    ========================================================== -->
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="ap-alert ap-alert-error">
+
+            <i class="bi bi-exclamation-circle-fill"></i>
+
+            <span>
+                @TempData["Error"]
+            </span>
+
+        </div>
+    }
+
+
+    <!-- =========================================================
+         MAIN LAYOUT
+    ========================================================== -->
+
+    <div class="apd-layout">
+
+
+        <!-- =====================================================
+             LEFT SIDE
+        ====================================================== -->
+
+        <div class="apd-left">
+
+
+            <!-- =================================================
+                 CUSTOMER INFORMATION
+            ================================================== -->
+
+            <div class="apd-card">
+
+                <div class="apd-card-header">
+
+                    <div class="apd-card-icon">
+                        <i class="bi bi-person"></i>
+                    </div>
+
+                    <div>
+
+                        <h4>
+                            Customer Information
+                        </h4>
+
+                        <p>
+                            Customer and account details
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="apd-info-grid">
+
+                    <div class="apd-info">
+
+                        <span>
+                            Customer Name
+                        </span>
+
+                        <strong>
+                            @(Model.Customer?.FullName ?? "-")
+                        </strong>
+
+                    </div>
+
+
+                    <div class="apd-info">
+
+                        <span>
+                            Phone Number
+                        </span>
+
+                        <strong>
+                            @(Model.Customer?.Phone ?? "-")
+                        </strong>
+
+                    </div>
+
+
+                    <div class="apd-info">
+
+                        <span>
+                            Account ID
+                        </span>
+
+                        <strong class="ap-purple">
+                            @Model.AccountId
+                        </strong>
+
+                    </div>
+
+
+                    <div class="apd-info">
+
+                        <span>
+                            Bill Number
+                        </span>
+
+                        <strong>
+                            @(Model.Bill?.BillNumber ?? "-")
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 PAYMENT INFORMATION
+            ================================================== -->
+
+            <div class="apd-card">
+
+                <div class="apd-card-header">
+
+                    <div class="apd-card-icon">
+                        <i class="bi bi-credit-card"></i>
+                    </div>
+
+                    <div>
+
+                        <h4>
+                            Payment Information
+                        </h4>
+
+                        <p>
+                            Payment submitted by customer
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="apd-info-grid">
+
+                    <div class="apd-info">
+
+                        <span>
+                            Payment Number
+                        </span>
+
+                        <strong>
+                            @Model.PaymentNumber
+                        </strong>
+
+                    </div>
+
+
+                    <div class="apd-info">
+
+                        <span>
+                            Payment Amount
+                        </span>
+
+                        <strong class="ap-money-large">
+                            Rs. @Model.Amount.ToString("N2")
+                        </strong>
+
+                    </div>
+
+
+                    <div class="apd-info">
+
+                        <span>
+                            Payment Method
+                        </span>
+
+                        <strong>
+                            @Model.PaymentMethod
+                        </strong>
+
+                    </div>
+
+
+                    <div class="apd-info">
+
+                        <span>
+                            Payment Date
+                        </span>
+
+                        <strong>
+                            @Model.PaymentDate.ToString("dd MMM yyyy, hh:mm tt")
+                        </strong>
+
+                    </div>
+
+
+                    <div class="apd-info">
+
+                        <span>
+                            Payment Status
+                        </span>
+
+                        <div>
+
+                            <span class="ap-status @statusClass">
+
+                                <i class="bi @statusIcon"></i>
+
+                                @Model.Status
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="apd-info">
+
+                        <span>
+                            Remarks
+                        </span>
+
+                        <strong>
+                            @(string.IsNullOrWhiteSpace(Model.Remarks)
+                                ? "-"
+                                : Model.Remarks)
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 CONNECTION INFORMATION
+            ================================================== -->
+
+            @if (Model.Bill?.Connection != null)
+            {
+                <div class="apd-card">
+
+                    <div class="apd-card-header">
+
+                        <div class="apd-card-icon">
+                            <i class="bi bi-router"></i>
+                        </div>
+
+                        <div>
+
+                            <h4>
+                                Connection Information
+                            </h4>
+
+                            <p>
+                                Linked NEXUS connection
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="apd-info-grid">
+
+                        <div class="apd-info">
+
+                            <span>
+                                Connection Type
+                            </span>
+
+                            <strong>
+                                @Model.Bill.Connection.ConnectionType
+                            </strong>
+
+                        </div>
+
+
+                        <div class="apd-info">
+
+                            <span>
+                                Plan
+                            </span>
+
+                            <strong>
+                                @(Model.Bill.Connection.Plan?.PlanName ?? "-")
+                            </strong>
+
+                        </div>
+
+
+                        <div class="apd-info">
+
+                            <span>
+                                Speed
+                            </span>
+
+                            <strong>
+                                @(Model.Bill.Connection.Plan?.Speed ?? "-")
+                            </strong>
+
+                        </div>
+
+
+                        <div class="apd-info">
+
+                            <span>
+                                Order Status
+                            </span>
+
+                            <strong class="ap-purple">
+                                @(Model.Bill.Connection.Order?.Status ?? "-")
+                            </strong>
+
+                        </div>
+
+
+                        <div class="apd-info">
+
+                            <span>
+                                Connection Status
+                            </span>
+
+                            <strong class="ap-purple">
+                                @Model.Bill.Connection.Status
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            }
+
+        </div>
+
+
+        <!-- =====================================================
+             RIGHT SIDE
+        ====================================================== -->
+
+        <div class="apd-right">
+
+
+            <!-- =================================================
+                 BILL SUMMARY
+            ================================================== -->
+
+            <div class="apd-summary">
+
+                <div class="apd-summary-header">
+
+                    <div class="apd-summary-icon">
+                        <i class="bi bi-receipt"></i>
+                    </div>
+
+                    <div>
+
+                        <h4>
+                            Bill Summary
+                        </h4>
+
+                        <span>
+                            @(Model.Bill?.BillNumber ?? "-")
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- BILL TOTAL -->
+
+                <div class="apd-summary-row">
+
+                    <span>
+                        Bill Total
+                    </span>
+
+                    <strong>
+                        Rs. @billTotal.ToString("N2")
+                    </strong>
+
+                </div>
+
+
+                <!-- PREVIOUSLY VERIFIED -->
+
+                <div class="apd-summary-row">
+
+                    <span>
+                        Previously Verified
+                    </span>
+
+                    <strong class="ap-success-text">
+                        Rs. @verifiedAmount.ToString("N2")
+                    </strong>
+
+                </div>
+
+
+                <!-- CURRENT PAYMENT -->
+
+                <div class="apd-summary-row">
+
+                    <span>
+                        Current Payment
+                    </span>
+
+                    <strong class="ap-purple">
+                        Rs. @currentAmount.ToString("N2")
+                    </strong>
+
+                </div>
+
+
+                <!-- OUTSTANDING BEFORE -->
+
+                <div class="apd-summary-row">
+
+                    <span>
+                        Outstanding Before
+                    </span>
+
+                    <strong>
+                        Rs. @outstandingBefore.ToString("N2")
+                    </strong>
+
+                </div>
+
+
+                <!-- =================================================
+                     PENDING PAYMENT
+                ================================================== -->
+
+                @if (isPending)
+                {
+                    <div class="apd-result">
+
+                        <span>
+                            Outstanding After Verification
+                        </span>
+
+                        <strong>
+                            Rs. @outstandingAfter.ToString("N2")
+                        </strong>
+
+                    </div>
+
+
+                    @if (paymentExceedsOutstanding)
+                    {
+                        <div class="apd-notice apd-notice-error">
+
+                            <i class="bi bi-exclamation-triangle"></i>
+
+                            <div>
+
+                                <strong>
+                                    Invalid Payment Amount
+                                </strong>
+
+                                <span>
+                                    This payment exceeds the remaining
+                                    bill balance and cannot be verified.
+                                </span>
+
+                            </div>
+
+                        </div>
+                    }
+                    else if (willFullyPayBill)
+                    {
+                        <div class="apd-notice apd-notice-success">
+
+                            <i class="bi bi-check-circle"></i>
+
+                            <div>
+
+                                <strong>
+                                    Full Payment
+                                </strong>
+
+                                <span>
+                                    Verifying this payment will mark
+                                    the bill as Paid and send the order
+                                    to Technical for installation.
+                                </span>
+
+                            </div>
+
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="apd-notice">
+
+                            <i class="bi bi-info-circle"></i>
+
+                            <div>
+
+                                <strong>
+                                    Partial Payment
+                                </strong>
+
+                                <span>
+                                    The bill will remain partially paid
+                                    after verification.
+                                </span>
+
+                            </div>
+
+                        </div>
+                    }
+
+
+                    <!-- =============================================
+                         VERIFY PAYMENT
+                    ============================================== -->
+
+                    <form asp-controller="AccountsPayment"
+                          asp-action="Verify"
+                          method="post"
+                          id="verifyPaymentForm"
+                          class="apd-action-form">
+
+                        @Html.AntiForgeryToken()
+
+                        <input type="hidden"
+                               name="id"
+                               value="@Model.PaymentId" />
+
+                        @if (paymentExceedsOutstanding)
+                        {
+                            <button type="submit"
+                                    class="apd-verify-btn"
+                                    disabled>
+
+                                <i class="bi bi-exclamation-triangle"></i>
+
+                                Cannot Verify Payment
+
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="button"
+                                    id="openVerifyModal"
+                                    class="apd-verify-btn">
+
+                                <i class="bi bi-check-circle-fill"></i>
+
+                                Verify Payment
+
+                            </button>
+                        }
+
+                    </form>
+
+
+                    <!-- =============================================
+                         REJECT BUTTON
+                    ============================================== -->
+
+                    <button type="button"
+                            id="showRejectForm"
+                            class="apd-reject-btn">
+
+                        <i class="bi bi-x-circle"></i>
+
+                        Reject Payment
+
+                    </button>
+
+
+                    <!-- =============================================
+                         REJECTION FORM
+                    ============================================== -->
+
+                    <form asp-controller="AccountsPayment"
+                          asp-action="Reject"
+                          method="post"
+                          id="rejectPaymentForm"
+                          class="apd-rejection-form">
+
+                        @Html.AntiForgeryToken()
+
+                        <input type="hidden"
+                               name="id"
+                               value="@Model.PaymentId" />
+
+
+                        <div class="apd-form-group">
+
+                            <label>
+
+                                Rejection Reason
+
+                                <span>*</span>
+
+                            </label>
+
+                            <textarea name="rejectionReason"
+                                      rows="4"
+                                      required
+                                      placeholder="Explain why this payment is being rejected..."></textarea>
+
+                        </div>
+
+
+                        <div class="apd-rejection-actions">
+
+                            <button type="button"
+                                    id="cancelReject"
+                                    class="ap-btn ap-btn-secondary">
+
+                                Cancel
+
+                            </button>
+
+
+                            <button type="button"
+                                    id="openRejectModal"
+                                    class="apd-confirm-reject">
+
+                                <i class="bi bi-x-lg"></i>
+
+                                Confirm Rejection
+
+                            </button>
+
+                        </div>
+
+                    </form>
+                }
+                else
+                {
+                    <div class="apd-processed @statusClass">
+
+                        @if (isPaid)
+                        {
+                            <i class="bi bi-check-circle-fill"></i>
+
+                            <div>
+
+                                <strong>
+                                    Payment Verified
+                                </strong>
+
+                                <span>
+                                    This customer payment has already
+                                    been verified.
+                                </span>
+
+                            </div>
+                        }
+                        else if (isRejected)
+                        {
+                            <i class="bi bi-x-circle-fill"></i>
+
+                            <div>
+
+                                <strong>
+                                    Payment Rejected
+                                </strong>
+
+                                <span>
+                                    This customer payment has been
+                                    rejected.
+                                </span>
+
+                            </div>
+                        }
+                        else
+                        {
+                            <i class="bi bi-info-circle-fill"></i>
+
+                            <div>
+
+                                <strong>
+                                    Payment Processed
+                                </strong>
+
+                                <span>
+                                    This payment has already been
+                                    processed.
+                                </span>
+
+                            </div>
+                        }
+
+                    </div>
+                }
+
+            </div>
+
+
+            <!-- =================================================
+                 VIEW COMPLETE BILL
+            ================================================== -->
+
+            @if (Model.Bill != null)
+            {
+                <a asp-controller="AccountsBill"
+                   asp-action="Details"
+                   asp-route-id="@Model.BillId"
+                   class="apd-view-bill">
+
+                    <i class="bi bi-receipt"></i>
+
+                    View Complete Bill
+
+                    <i class="bi bi-arrow-right"></i>
+
+                </a>
+            }
+
+        </div>
+
+    </div>
+
+</div>
+
+@if (isPending)
+{
+    <div id="paymentConfirmModal"
+         class="apd-modal"
+         aria-hidden="true">
+
+        <div class="apd-modal-backdrop" data-modal-close></div>
+
+        <div class="apd-modal-card"
+             role="dialog"
+             aria-modal="true"
+             aria-labelledby="paymentConfirmTitle">
+
+            <button type="button"
+                    class="apd-modal-close"
+                    id="closePaymentModal"
+                    aria-label="Close">
+                <i class="bi bi-x-lg"></i>
+            </button>
+
+            <div id="paymentModalIcon"
+                 class="apd-modal-icon verify">
+                <i class="bi bi-shield-check"></i>
+            </div>
+
+            <div class="apd-modal-content">
+                <span id="paymentModalEyebrow"
+                      class="apd-modal-eyebrow">
+                    PAYMENT VERIFICATION
+                </span>
+
+                <h3 id="paymentConfirmTitle">
+                    Verify this payment?
+                </h3>
+
+                <p id="paymentConfirmText">
+                    You are about to verify payment
+                    <strong>@Model.PaymentNumber</strong>
+                    for
+                    <strong>Rs. @Model.Amount.ToString("N2")</strong>.
+                </p>
+
+                <div class="apd-modal-payment">
+                    <div>
+                        <span>Payment</span>
+                        <strong>@Model.PaymentNumber</strong>
+                    </div>
+
+                    <div>
+                        <span>Amount</span>
+                        <strong>Rs. @Model.Amount.ToString("N2")</strong>
+                    </div>
+                </div>
+
+                <div class="apd-modal-actions">
+                    <button type="button"
+                            id="cancelPaymentModal"
+                            class="apd-modal-btn apd-modal-cancel">
+                        Cancel
+                    </button>
+
+                    <button type="button"
+                            id="confirmPaymentAction"
+                            class="apd-modal-btn apd-modal-confirm verify">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>Verify Payment</span>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+}
+
+
+@section Scripts
+{
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const showRejectButton =
+                document.getElementById("showRejectForm");
+
+            const cancelRejectButton =
+                document.getElementById("cancelReject");
+
+            const rejectForm =
+                document.getElementById("rejectPaymentForm");
+
+            const verifyForm =
+                document.getElementById("verifyPaymentForm");
+
+            const openVerifyModalButton =
+                document.getElementById("openVerifyModal");
+
+            const openRejectModalButton =
+                document.getElementById("openRejectModal");
+
+            const modal =
+                document.getElementById("paymentConfirmModal");
+
+            const modalCard =
+                modal?.querySelector(".apd-modal-card");
+
+            const closeModalButton =
+                document.getElementById("closePaymentModal");
+
+            const cancelModalButton =
+                document.getElementById("cancelPaymentModal");
+
+            const confirmActionButton =
+                document.getElementById("confirmPaymentAction");
+
+            const modalIcon =
+                document.getElementById("paymentModalIcon");
+
+            const modalEyebrow =
+                document.getElementById("paymentModalEyebrow");
+
+            const modalTitle =
+                document.getElementById("paymentConfirmTitle");
+
+            const modalText =
+                document.getElementById("paymentConfirmText");
+
+            let pendingAction = null;
+
+            if (showRejectButton && rejectForm) {
+                showRejectButton.addEventListener("click", function () {
+                    rejectForm.classList.add("show");
+                    showRejectButton.style.display = "none";
+
+                    const textarea =
+                        rejectForm.querySelector('textarea[name="rejectionReason"]');
+
+                    if (textarea) {
+                        setTimeout(function () {
+                            textarea.focus();
+                        }, 80);
+                    }
+                });
+            }
+
+            if (cancelRejectButton && rejectForm) {
+                cancelRejectButton.addEventListener("click", function () {
+                    rejectForm.classList.remove("show");
+
+                    if (showRejectButton) {
+                        showRejectButton.style.display = "flex";
+                    }
+                });
+            }
+
+            function openModal(type) {
+
+                if (!modal) {
+                    return;
+                }
+
+                pendingAction = type;
+
+                const isVerify = type === "verify";
+
+                modal.classList.toggle("reject-mode", !isVerify);
+
+                modalIcon?.classList.toggle("verify", isVerify);
+                modalIcon?.classList.toggle("reject", !isVerify);
+
+                if (modalIcon) {
+                    modalIcon.innerHTML = isVerify
+                        ? '<i class="bi bi-shield-check"></i>'
+                        : '<i class="bi bi-x-octagon"></i>';
+                }
+
+                if (modalEyebrow) {
+                    modalEyebrow.textContent = isVerify
+                        ? "PAYMENT VERIFICATION"
+                        : "PAYMENT REJECTION";
+                }
+
+                if (modalTitle) {
+                    modalTitle.textContent = isVerify
+                        ? "Verify this payment?"
+                        : "Reject this payment?";
+                }
+
+                if (modalText) {
+                    modalText.innerHTML = isVerify
+                        ? 'You are about to verify payment <strong>@Model.PaymentNumber</strong> for <strong>Rs. @Model.Amount.ToString("N2")</strong>. Once verified, the payment will be processed against this bill.'
+                        : 'You are about to reject payment <strong>@Model.PaymentNumber</strong>. The customer payment will remain unverified and the rejection reason will be recorded.';
+                }
+
+                if (confirmActionButton) {
+
+                    confirmActionButton.classList.toggle(
+                        "verify",
+                        isVerify
+                    );
+
+                    confirmActionButton.classList.toggle(
+                        "reject",
+                        !isVerify
+                    );
+
+                    confirmActionButton.innerHTML = isVerify
+                        ? '<i class="bi bi-check-circle-fill"></i><span>Verify Payment</span>'
+                        : '<i class="bi bi-x-circle-fill"></i><span>Reject Payment</span>';
+                }
+
+                modal.classList.add("show");
+                modal.setAttribute("aria-hidden", "false");
+                document.body.classList.add("apd-modal-open");
+
+                setTimeout(function () {
+                    confirmActionButton?.focus();
+                }, 120);
+            }
+
+            function closeModal() {
+
+                if (!modal) {
+                    return;
+                }
+
+                modal.classList.remove("show");
+                modal.setAttribute("aria-hidden", "true");
+                document.body.classList.remove("apd-modal-open");
+
+                pendingAction = null;
+            }
+
+            if (openVerifyModalButton) {
+                openVerifyModalButton.addEventListener(
+                    "click",
+                    function () {
+                        openModal("verify");
+                    }
+                );
+            }
+
+            if (openRejectModalButton && rejectForm) {
+                openRejectModalButton.addEventListener(
+                    "click",
+                    function () {
+
+                        const textarea =
+                            rejectForm.querySelector(
+                                'textarea[name="rejectionReason"]'
+                            );
+
+                        if (!textarea ||
+                            textarea.value.trim().length === 0) {
+
+                            textarea?.focus();
+                            textarea?.classList.add("apd-field-error");
+
+                            return;
+                        }
+
+                        textarea.classList.remove("apd-field-error");
+
+                        openModal("reject");
+                    }
+                );
+            }
+
+            if (rejectForm) {
+
+                const textarea =
+                    rejectForm.querySelector(
+                        'textarea[name="rejectionReason"]'
+                    );
+
+                textarea?.addEventListener("input", function () {
+                    this.classList.remove("apd-field-error");
+                });
+            }
+
+            closeModalButton?.addEventListener(
+                "click",
+                closeModal
+            );
+
+            cancelModalButton?.addEventListener(
+                "click",
+                closeModal
+            );
+
+            modal?.querySelectorAll("[data-modal-close]")
+                .forEach(function (element) {
+
+                    element.addEventListener(
+                        "click",
+                        closeModal
+                    );
+
+                });
+
+            confirmActionButton?.addEventListener(
+                "click",
+                function () {
+
+                    if (pendingAction === "verify" && verifyForm) {
+
+                        confirmActionButton.disabled = true;
+
+                        confirmActionButton.innerHTML =
+                            '<span class="apd-modal-spinner"></span><span>Verifying...</span>';
+
+                        verifyForm.submit();
+
+                        return;
+                    }
+
+                    if (pendingAction === "reject" && rejectForm) {
+
+                        const textarea =
+                            rejectForm.querySelector(
+                                'textarea[name="rejectionReason"]'
+                            );
+
+                        if (!textarea ||
+                            textarea.value.trim().length === 0) {
+
+                            closeModal();
+
+                            textarea?.focus();
+                            textarea?.classList.add(
+                                "apd-field-error"
+                            );
+
+                            return;
+                        }
+
+                        confirmActionButton.disabled = true;
+
+                        confirmActionButton.innerHTML =
+                            '<span class="apd-modal-spinner"></span><span>Rejecting...</span>';
+
+                        rejectForm.submit();
+                    }
+                }
+            );
+
+            document.addEventListener(
+                "keydown",
+                function (event) {
+
+                    if (event.key === "Escape" &&
+                        modal?.classList.contains("show")) {
+
+                        closeModal();
+                    }
+                }
+            );
+        });
+    </script>
+}

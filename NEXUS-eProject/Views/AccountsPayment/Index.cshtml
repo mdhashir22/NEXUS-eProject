@@ -1,0 +1,300 @@
+﻿@model IEnumerable<NEXUS_eProject.Models.Payment>
+
+@{
+    ViewData["Title"] = "All Payments";
+    ViewData["PageTitle"] = "All Payments";
+    Layout = "~/Views/Shared/_AccountsLayout.cshtml";
+
+    string currentStatus =
+        Convert.ToString(ViewBag.Status) ?? "All";
+
+    string currentSearch =
+        Convert.ToString(ViewBag.Search) ?? "";
+}
+
+<div class="ap-page">
+
+    <div class="ap-page-header">
+        <div>
+            <div class="ap-eyebrow">
+                <i class="bi bi-wallet2"></i>
+                PAYMENT RECORDS
+            </div>
+
+            <h2>All Payments</h2>
+
+            <p>
+                View complete customer payment history and
+                verification status.
+            </p>
+        </div>
+
+        <div class="ap-header-count">
+            <div class="ap-header-count-icon">
+                <i class="bi bi-receipt"></i>
+            </div>
+
+            <div>
+                <span>TOTAL</span>
+                <strong>@Model.Count()</strong>
+            </div>
+        </div>
+    </div>
+
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="ap-alert ap-alert-success">
+            <i class="bi bi-check-circle-fill"></i>
+            <span>@TempData["Success"]</span>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="ap-alert ap-alert-error">
+            <i class="bi bi-exclamation-circle-fill"></i>
+            <span>@TempData["Error"]</span>
+        </div>
+    }
+
+
+    <div class="ap-panel">
+
+        <div class="ap-toolbar">
+
+            <form asp-controller="AccountsPayment"
+                  asp-action="Index"
+                  method="get"
+                  class="ap-filter-form">
+
+                <div class="ap-search-box">
+                    <i class="bi bi-search"></i>
+
+                    <input type="text"
+                           name="search"
+                           value="@currentSearch"
+                           placeholder="Search payment, bill, account or customer..." />
+                </div>
+
+
+                <select name="status"
+                        class="ap-select">
+
+                    @if (currentStatus == "All" ||
+                         string.IsNullOrWhiteSpace(currentStatus))
+                    {
+                        <option value="All" selected>
+                            All Status
+                        </option>
+                    }
+                    else
+                    {
+                        <option value="All">
+                            All Status
+                        </option>
+                    }
+
+
+                    @if (currentStatus == "Pending Verification")
+                    {
+                        <option value="Pending Verification" selected>
+                            Pending Verification
+                        </option>
+                    }
+                    else
+                    {
+                        <option value="Pending Verification">
+                            Pending Verification
+                        </option>
+                    }
+
+
+                    @if (currentStatus == "Paid")
+                    {
+                        <option value="Paid" selected>
+                            Verified / Paid
+                        </option>
+                    }
+                    else
+                    {
+                        <option value="Paid">
+                            Verified / Paid
+                        </option>
+                    }
+
+
+                    @if (currentStatus == "Rejected")
+                    {
+                        <option value="Rejected" selected>
+                            Rejected
+                        </option>
+                    }
+                    else
+                    {
+                        <option value="Rejected">
+                            Rejected
+                        </option>
+                    }
+
+                </select>
+
+
+                <button type="submit"
+                        class="ap-btn ap-btn-primary">
+                    <i class="bi bi-funnel"></i>
+                    Filter
+                </button>
+
+
+                <a asp-controller="AccountsPayment"
+                   asp-action="Index"
+                   class="ap-btn ap-btn-secondary">
+                    <i class="bi bi-arrow-counterclockwise"></i>
+                    Reset
+                </a>
+
+            </form>
+
+        </div>
+
+
+        @if (Model.Any())
+        {
+            <div class="ap-table-wrap">
+
+                <table class="ap-table">
+
+                    <thead>
+                        <tr>
+                            <th>PAYMENT ID</th>
+                            <th>BILL</th>
+                            <th>CUSTOMER</th>
+                            <th>ACCOUNT</th>
+                            <th>AMOUNT</th>
+                            <th>METHOD</th>
+                            <th>DATE</th>
+                            <th>STATUS</th>
+                            <th>ACTION</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var payment in Model)
+                        {
+                            string statusClass =
+                                payment.Status == "Paid"
+                                    ? "ap-status-paid"
+                                    : payment.Status == "Rejected"
+                                        ? "ap-status-rejected"
+                                        : "ap-status-pending";
+
+                            string statusIcon =
+                                payment.Status == "Paid"
+                                    ? "bi-check-circle-fill"
+                                    : payment.Status == "Rejected"
+                                        ? "bi-x-circle-fill"
+                                        : "bi-clock-fill";
+
+                            <tr>
+
+                                <td>
+                                    <span class="ap-code">
+                                        @payment.PaymentNumber
+                                    </span>
+                                </td>
+
+                                <td>
+                                    @(payment.Bill?.BillNumber ?? "-")
+                                </td>
+
+                                <td>
+                                    <div class="ap-customer">
+                                        <strong>
+                                            @(payment.Customer?.FullName ?? "-")
+                                        </strong>
+
+                                        <span>
+                                            @(payment.Customer?.Phone ?? "-")
+                                        </span>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <span class="ap-account">
+                                        @payment.AccountId
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <strong class="ap-money">
+                                        Rs. @payment.Amount.ToString("N2")
+                                    </strong>
+                                </td>
+
+                                <td>
+                                    <span class="ap-method">
+                                        <i class="bi bi-wallet2"></i>
+                                        @payment.PaymentMethod
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <div class="ap-date">
+                                        <strong>
+                                            @payment.PaymentDate.ToString("dd MMM yyyy")
+                                        </strong>
+
+                                        <span>
+                                            @payment.PaymentDate.ToString("hh:mm tt")
+                                        </span>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <span class="ap-status @statusClass">
+                                        <i class="bi @statusIcon"></i>
+                                        @payment.Status
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <a asp-controller="AccountsPayment"
+                                       asp-action="Details"
+                                       asp-route-id="@payment.PaymentId"
+                                       class="ap-action-icon"
+                                       title="View Payment">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+        else
+        {
+            <div class="ap-empty-state">
+
+                <div class="ap-empty-icon">
+                    <i class="bi bi-wallet2"></i>
+                </div>
+
+                <h4>No Payments Found</h4>
+
+                <p>
+                    No payment records match the selected filters.
+                </p>
+
+            </div>
+        }
+
+    </div>
+
+</div>

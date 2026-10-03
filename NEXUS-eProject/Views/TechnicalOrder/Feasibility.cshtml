@@ -1,0 +1,210 @@
+﻿@model IEnumerable<NEXUS_eProject.Models.Order>
+
+@{
+    ViewData["Title"] = "Feasibility Checks";
+    ViewData["PageTitle"] = "Feasibility";
+    Layout = "~/Views/Shared/_TechnicalLayout.cshtml";
+
+    var search = ViewBag.Search as string;
+    var connectionType = ViewBag.ConnectionType as string;
+}
+
+<div class="tp-page">
+
+    <div class="tp-header">
+
+        <div>
+            <span class="tp-eyebrow">
+                <i class="bi bi-clipboard-check"></i>
+                TECHNICAL OPERATIONS
+            </span>
+
+            <h2>Feasibility Checks</h2>
+
+            <p>
+                Verify service availability before creating
+                customer connections.
+            </p>
+        </div>
+
+        <div class="tp-count">
+            <span>REQUIRES CHECK</span>
+            <strong>@Model.Count()</strong>
+        </div>
+
+    </div>
+
+    <div class="tp-filter-card">
+
+        <form method="get"
+              asp-controller="TechnicalOrder"
+              asp-action="Feasibility"
+              class="tp-filter-form">
+
+            <div class="tp-search">
+                <i class="bi bi-search"></i>
+
+                <input type="text"
+                       name="search"
+                       value="@search"
+                       placeholder="Search order, customer or phone..." />
+            </div>
+
+            <select name="connectionType"
+                    class="tp-select">
+
+                <option value="">All Connection Types</option>
+
+                <option value="Broadband"
+                        selected="@(connectionType == "Broadband")">
+                    Broadband
+                </option>
+
+                <option value="Dial-Up"
+                        selected="@(connectionType == "Dial-Up")">
+                    Dial-Up
+                </option>
+
+                <option value="Telephone/Landline"
+                        selected="@(connectionType == "Telephone/Landline")">
+                    Telephone / Landline
+                </option>
+
+            </select>
+
+            <button type="submit"
+                    class="tp-filter-btn">
+
+                <i class="bi bi-funnel"></i>
+                Filter
+
+            </button>
+
+        </form>
+
+    </div>
+
+    <div class="tp-card">
+
+        <div class="tp-card-header">
+            <div>
+                <h5>
+                    <i class="bi bi-clipboard-data"></i>
+                    Feasibility Queue
+                </h5>
+
+                <span>
+                    Orders requiring technical verification
+                </span>
+            </div>
+        </div>
+
+        @if (Model.Any())
+        {
+            <div class="tp-table-wrap">
+
+                <table class="tp-table">
+
+                    <thead>
+                        <tr>
+                            <th>ORDER</th>
+                            <th>CUSTOMER</th>
+                            <th>AREA</th>
+                            <th>TYPE</th>
+                            <th>PLAN</th>
+                            <th>STATUS</th>
+                            <th>ACTION</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var order in Model)
+                        {
+                            <tr>
+
+                                <td>
+                                    <strong class="tp-order">
+                                        @order.OrderNumber
+                                    </strong>
+                                </td>
+
+                                <td>
+                                    <div class="tp-customer">
+                                        <strong>
+                                            @(order.Customer?.FullName ?? "-")
+                                        </strong>
+
+                                        <span>
+                                            @(order.Customer?.Phone ?? "-")
+                                        </span>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    @(order.Customer?.City ?? "-")
+                                </td>
+
+                                <td>
+                                    @(order.ConnectionType ?? "-")
+                                </td>
+
+                                <td>
+                                    <div class="tp-customer">
+                                        <strong>
+                                            @(order.Plan?.PlanName ?? "-")
+                                        </strong>
+
+                                        <span>
+                                            @(order.Plan?.Speed ?? "-")
+                                        </span>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <span class="tp-status">
+                                        <i class="bi bi-circle-fill"></i>
+                                        Pending Check
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <a asp-controller="TechnicalOrder"
+                                       asp-action="CheckFeasibility"
+                                       asp-route-id="@order.OrderId"
+                                       class="tp-process-btn">
+
+                                        <i class="bi bi-clipboard-check"></i>
+                                        Start Check
+
+                                    </a>
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+        else
+        {
+            <div class="tp-empty">
+
+                <i class="bi bi-clipboard-check"></i>
+
+                <h5>Feasibility Queue Clear</h5>
+
+                <p>
+                    No applications currently require
+                    feasibility checking.
+                </p>
+
+            </div>
+        }
+
+    </div>
+
+</div>

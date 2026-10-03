@@ -1,0 +1,708 @@
+﻿@model NEXUS_eProject.Models.Order
+
+@{
+    ViewData["Title"] = "Order Details";
+    Layout = "~/Views/Shared/_RetailLayout.cshtml";
+
+    var status = Model.Status ?? "Pending";
+
+    var statusClass = status switch
+    {
+        "Retail Accepted" => "ro-detail-status-approved",
+        "Active" => "ro-detail-status-active",
+        "Payment Verified" => "ro-detail-status-active",
+        "Payment Pending" => "ro-detail-status-pending",
+        "Billing Pending" => "ro-detail-status-pending",
+        "Installation Pending" => "ro-detail-status-pending",
+        "Retail Rejected" => "ro-detail-status-rejected",
+        _ => "ro-detail-status-neutral"
+    };
+
+    var connectionClass = Model.ConnectionType switch
+    {
+        "Broadband" => "ro-detail-connection-blue",
+        "Telephone" => "ro-detail-connection-green",
+        "Landline" => "ro-detail-connection-green",
+        "Dial-Up" => "ro-detail-connection-purple",
+        _ => "ro-detail-connection-neutral"
+    };
+
+    var currentStep = status switch
+    {
+        "Retail Accepted" => 2,
+        "Feasible" => 3,
+        "Connection Created" => 4,
+        "Billing Pending" => 5,
+        "Payment Pending" => 6,
+        "Payment Verified" => 7,
+        "Installation Pending" => 8,
+        "Active" => 9,
+        _ => 1
+    };
+}
+
+<div class="retail-page ro-details-page">
+
+    <!-- =====================================================
+         PAGE HEADER
+    ====================================================== -->
+
+    <div class="retail-page-header ro-details-header">
+
+        <div>
+            <div class="retail-page-eyebrow">
+                <i class="bi bi-receipt-cutoff"></i>
+                RETAIL OPERATIONS
+            </div>
+
+            <h1>Order Details</h1>
+
+            <p>
+                Complete information and current workflow status
+                for this customer order.
+            </p>
+        </div>
+
+        <div class="ro-details-header-actions">
+
+            <a asp-controller="RetailOrders"
+               asp-action="Index"
+               class="retail-secondary-btn">
+                <i class="bi bi-arrow-left"></i>
+                Back to Orders
+            </a>
+
+            <a asp-controller="RetailOrder"
+               asp-action="Status"
+               asp-route-id="@Model.OrderId"
+               class="retail-secondary-btn">
+                <i class="bi bi-activity"></i>
+                View Status
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         ALERTS
+    ====================================================== -->
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="ro-detail-alert ro-detail-alert-success">
+            <i class="bi bi-check-circle-fill"></i>
+            <span>@TempData["Success"]</span>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="ro-detail-alert ro-detail-alert-error">
+            <i class="bi bi-exclamation-circle-fill"></i>
+            <span>@TempData["Error"]</span>
+        </div>
+    }
+
+
+    <!-- =====================================================
+         ORDER SUMMARY
+    ====================================================== -->
+
+    <div class="ro-detail-summary-grid">
+
+        <div class="ro-detail-summary-card">
+
+            <div class="ro-detail-summary-icon purple">
+                <i class="bi bi-receipt"></i>
+            </div>
+
+            <div>
+                <span>ORDER NUMBER</span>
+                <strong>@Model.OrderNumber</strong>
+            </div>
+
+        </div>
+
+
+        <div class="ro-detail-summary-card">
+
+            <div class="ro-detail-summary-icon blue">
+                <i class="bi bi-router"></i>
+            </div>
+
+            <div>
+                <span>CONNECTION</span>
+                <strong>@Model.ConnectionType</strong>
+            </div>
+
+        </div>
+
+
+        <div class="ro-detail-summary-card">
+
+            <div class="ro-detail-summary-icon green">
+                <i class="bi bi-person-check"></i>
+            </div>
+
+            <div>
+                <span>CUSTOMER</span>
+                <strong>
+                    @(Model.Customer?.FullName ?? "N/A")
+                </strong>
+            </div>
+
+        </div>
+
+
+        <div class="ro-detail-summary-card">
+
+            <div class="ro-detail-summary-icon yellow">
+                <i class="bi bi-clock-history"></i>
+            </div>
+
+            <div>
+                <span>STATUS</span>
+
+                <strong class="@statusClass ro-detail-summary-status">
+                    @status
+                </strong>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         WORKFLOW
+    ====================================================== -->
+
+    <div class="retail-card ro-detail-card">
+
+        <div class="retail-card-header">
+
+            <div class="retail-card-title">
+                <div class="retail-card-icon">
+                    <i class="bi bi-diagram-3"></i>
+                </div>
+
+                <div>
+                    <h3>Order Workflow</h3>
+                    <span>Current progress of this order</span>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="retail-card-body">
+
+            <div class="ro-detail-workflow">
+
+                <div class="ro-workflow-line"></div>
+
+
+                <!-- 1 -->
+
+                <div class="ro-workflow-step @(currentStep >= 1 ? "completed" : "")">
+
+                    <div class="ro-workflow-icon">
+                        <i class="bi bi-send"></i>
+                    </div>
+
+                    <div class="ro-workflow-content">
+                        <strong>Application Submitted</strong>
+                        <span>Customer application received</span>
+                    </div>
+
+                </div>
+
+
+                <!-- 2 -->
+
+                <div class="ro-workflow-step @(currentStep >= 2 ? "completed" : "")">
+
+                    <div class="ro-workflow-icon">
+                        <i class="bi bi-person-check"></i>
+                    </div>
+
+                    <div class="ro-workflow-content">
+                        <strong>Retail Accepted</strong>
+                        <span>Application accepted by retail</span>
+                    </div>
+
+                </div>
+
+
+                <!-- 3 -->
+
+                <div class="ro-workflow-step @(currentStep >= 3 ? "completed" : "")">
+
+                    <div class="ro-workflow-icon">
+                        <i class="bi bi-search"></i>
+                    </div>
+
+                    <div class="ro-workflow-content">
+                        <strong>Technical Feasibility</strong>
+                        <span>Technical team checks service feasibility</span>
+                    </div>
+
+                </div>
+
+
+                <!-- 4 -->
+
+                <div class="ro-workflow-step @(currentStep >= 4 ? "completed" : "")">
+
+                    <div class="ro-workflow-icon">
+                        <i class="bi bi-hdd-network"></i>
+                    </div>
+
+                    <div class="ro-workflow-content">
+                        <strong>Connection Created</strong>
+                        <span>Customer connection account created</span>
+                    </div>
+
+                </div>
+
+
+                <!-- 5 -->
+
+                <div class="ro-workflow-step @(currentStep >= 5 ? "completed" : "")">
+
+                    <div class="ro-workflow-icon">
+                        <i class="bi bi-receipt"></i>
+                    </div>
+
+                    <div class="ro-workflow-content">
+                        <strong>Billing</strong>
+                        <span>Bill generated for customer</span>
+                    </div>
+
+                </div>
+
+
+                <!-- 6 -->
+
+                <div class="ro-workflow-step @(currentStep >= 6 ? "completed" : "")">
+
+                    <div class="ro-workflow-icon">
+                        <i class="bi bi-credit-card"></i>
+                    </div>
+
+                    <div class="ro-workflow-content">
+                        <strong>Payment</strong>
+                        <span>Customer payment processing</span>
+                    </div>
+
+                </div>
+
+
+                <!-- 7 -->
+
+                <div class="ro-workflow-step @(currentStep >= 7 ? "completed" : "")">
+
+                    <div class="ro-workflow-icon">
+                        <i class="bi bi-patch-check"></i>
+                    </div>
+
+                    <div class="ro-workflow-content">
+                        <strong>Payment Verified</strong>
+                        <span>Payment verified by accounts</span>
+                    </div>
+
+                </div>
+
+
+                <!-- 8 -->
+
+                <div class="ro-workflow-step @(currentStep >= 8 ? "completed" : "")">
+
+                    <div class="ro-workflow-icon">
+                        <i class="bi bi-tools"></i>
+                    </div>
+
+                    <div class="ro-workflow-content">
+                        <strong>Installation</strong>
+                        <span>Technical team installs the connection</span>
+                    </div>
+
+                </div>
+
+
+                <!-- 9 -->
+
+                <div class="ro-workflow-step @(currentStep >= 9 ? "completed" : "")">
+
+                    <div class="ro-workflow-icon">
+                        <i class="bi bi-wifi"></i>
+                    </div>
+
+                    <div class="ro-workflow-content">
+                        <strong>Connection Active</strong>
+                        <span>Customer service is activated</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         CUSTOMER + ORDER INFORMATION
+    ====================================================== -->
+
+    <div class="ro-detail-two-column">
+
+
+        <!-- CUSTOMER INFORMATION -->
+
+        <div class="retail-card ro-detail-card">
+
+            <div class="retail-card-header">
+
+                <div class="retail-card-title">
+
+                    <div class="retail-card-icon">
+                        <i class="bi bi-person"></i>
+                    </div>
+
+                    <div>
+                        <h3>Customer Information</h3>
+                        <span>Customer details associated with this order</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="retail-card-body">
+
+                <div class="ro-detail-info-grid">
+
+                    <div class="ro-detail-info-item">
+
+                        <span>FULL NAME</span>
+
+                        <strong>
+                            @(Model.Customer?.FullName ?? "N/A")
+                        </strong>
+
+                    </div>
+
+
+                    <div class="ro-detail-info-item">
+
+                        <span>FATHER NAME</span>
+
+                        <strong>
+                            @(Model.Customer?.FatherName ?? "N/A")
+                        </strong>
+
+                    </div>
+
+
+                    <div class="ro-detail-info-item">
+
+                        <span>PHONE</span>
+
+                        <strong>
+                            @(Model.Customer?.Phone ?? "N/A")
+                        </strong>
+
+                    </div>
+
+
+                    <div class="ro-detail-info-item">
+
+                        <span>EMAIL</span>
+
+                        <strong>
+                            @(Model.Customer?.Email ?? "N/A")
+                        </strong>
+
+                    </div>
+
+
+                    <div class="ro-detail-info-item">
+
+                        <span>CITY</span>
+
+                        <strong>
+                            @(Model.Customer?.City ?? "N/A")
+                        </strong>
+
+                    </div>
+
+
+                    <div class="ro-detail-info-item ro-detail-info-full">
+
+                        <span>ADDRESS</span>
+
+                        <strong>
+                            @(Model.Customer?.Address ?? "N/A")
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ORDER INFORMATION -->
+
+        <div class="retail-card ro-detail-card">
+
+            <div class="retail-card-header">
+
+                <div class="retail-card-title">
+
+                    <div class="retail-card-icon">
+                        <i class="bi bi-box-seam"></i>
+                    </div>
+
+                    <div>
+                        <h3>Order Information</h3>
+                        <span>Plan and service details</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="retail-card-body">
+
+                <div class="ro-detail-info-grid">
+
+                    <div class="ro-detail-info-item">
+
+                        <span>ORDER NUMBER</span>
+
+                        <strong>
+                            @Model.OrderNumber
+                        </strong>
+
+                    </div>
+
+
+                    <div class="ro-detail-info-item">
+
+                        <span>CONNECTION TYPE</span>
+
+                        <strong class="ro-detail-connection @connectionClass">
+                            @Model.ConnectionType
+                        </strong>
+
+                    </div>
+
+
+                    <div class="ro-detail-info-item">
+
+                        <span>PLAN</span>
+
+                        <strong class="ro-detail-plan-name">
+                            @(Model.Plan?.PlanName ?? "N/A")
+                        </strong>
+
+                    </div>
+
+
+                    <div class="ro-detail-info-item">
+
+                        <span>SPEED</span>
+
+                        <strong>
+                            @(Model.Plan?.Speed ?? "N/A")
+                        </strong>
+
+                    </div>
+
+
+                    <div class="ro-detail-info-item">
+
+                        <span>PLAN PRICE</span>
+
+                        <strong class="ro-detail-price">
+                            @(Model.Plan != null
+                                ? Model.Plan.Price.ToString("N2")
+                                : "0.00")
+                        </strong>
+
+                    </div>
+
+
+                    <div class="ro-detail-info-item">
+
+                        <span>EQUIPMENT</span>
+
+                        <strong>
+                            @(string.IsNullOrWhiteSpace(Model.Equipment)
+                                ? "Not specified"
+                                : Model.Equipment)
+                        </strong>
+
+                    </div>
+
+
+                    <div class="ro-detail-info-item ro-detail-info-full">
+
+                        <span>ADDITIONAL INFORMATION</span>
+
+                        <strong class="ro-detail-additional-info">
+                            @(string.IsNullOrWhiteSpace(Model.AdditionalInfo)
+                                ? "No additional information provided."
+                                : Model.AdditionalInfo)
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         ORDER TIMING
+    ====================================================== -->
+
+    <div class="retail-card ro-detail-card">
+
+        <div class="retail-card-header">
+
+            <div class="retail-card-title">
+
+                <div class="retail-card-icon">
+                    <i class="bi bi-calendar3"></i>
+                </div>
+
+                <div>
+                    <h3>Order Timeline</h3>
+                    <span>Application creation and latest update</span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="retail-card-body">
+
+            <div class="ro-detail-timeline-grid">
+
+                <div class="ro-detail-timeline-item">
+
+                    <div class="ro-detail-timeline-icon">
+                        <i class="bi bi-calendar-plus"></i>
+                    </div>
+
+                    <div>
+                        <span>CREATED</span>
+
+                        <strong>
+                            @Model.CreatedAt.ToString("dd MMM yyyy")
+                        </strong>
+
+                        <small>
+                            @Model.CreatedAt.ToString("hh:mm tt")
+                        </small>
+                    </div>
+
+                </div>
+
+
+                <div class="ro-detail-timeline-item">
+
+                    <div class="ro-detail-timeline-icon updated">
+                        <i class="bi bi-arrow-repeat"></i>
+                    </div>
+
+                    <div>
+                        <span>LAST UPDATED</span>
+
+                        <strong>
+                            @(Model.UpdatedAt.HasValue
+                                ? Model.UpdatedAt.Value.ToString("dd MMM yyyy")
+                                : "Not updated")
+                        </strong>
+
+                        @if (Model.UpdatedAt.HasValue)
+                        {
+                            <small>
+                                @Model.UpdatedAt.Value.ToString("hh:mm tt")
+                            </small>
+                        }
+                        else
+                        {
+                            <small>
+                                No update recorded
+                            </small>
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <div class="ro-detail-timeline-item">
+
+                    <div class="ro-detail-timeline-icon status">
+                        <i class="bi bi-flag"></i>
+                    </div>
+
+                    <div>
+                        <span>CURRENT STATUS</span>
+
+                        <strong class="@statusClass">
+                            @status
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         FOOTER ACTIONS
+    ====================================================== -->
+
+    <div class="ro-detail-footer-actions">
+
+        <a asp-controller="RetailOrders"
+           asp-action="Index"
+           class="retail-secondary-btn">
+            <i class="bi bi-arrow-left"></i>
+            Back to Orders
+        </a>
+
+        <a asp-controller="RetailOrder"
+           asp-action="Status"
+           asp-route-id="@Model.OrderId"
+           class="retail-primary-btn">
+            <i class="bi bi-activity"></i>
+            Track Order Status
+        </a>
+
+    </div>
+
+</div>

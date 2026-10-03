@@ -1,0 +1,556 @@
+﻿@model NEXUS_eProject.Models.Customer
+
+@using NEXUS_eProject.Models
+
+@{
+    ViewData["Title"] = "Customer Details";
+    ViewData["PageTitle"] = "Customer Details";
+    Layout = "~/Views/Shared/_AccountsLayout.cshtml";
+
+    var connections =
+        ViewBag.Connections as List<Connection>
+        ?? new List<Connection>();
+
+    var bills =
+        ViewBag.Bills as List<Bill>
+        ?? new List<Bill>();
+
+    var payments =
+        ViewBag.Payments as List<Payment>
+        ?? new List<Payment>();
+
+    decimal totalBilled =
+        ViewBag.TotalBilled != null
+            ? Convert.ToDecimal(ViewBag.TotalBilled)
+            : 0m;
+
+    decimal totalPaid =
+        ViewBag.TotalPaid != null
+            ? Convert.ToDecimal(ViewBag.TotalPaid)
+            : 0m;
+
+    decimal outstanding =
+        ViewBag.Outstanding != null
+            ? Convert.ToDecimal(ViewBag.Outstanding)
+            : 0m;
+}
+
+<div class="acd-page">
+
+    <div class="ac-header">
+
+        <div>
+
+            <div class="ac-eyebrow">
+                <i class="bi bi-person-lines-fill"></i>
+                CUSTOMER ACCOUNT
+            </div>
+
+            <h2>@Model.FullName</h2>
+
+            <p>
+                Customer account, connection and
+                financial information.
+            </p>
+
+        </div>
+
+
+        <a asp-controller="AccountsCustomer"
+           asp-action="Index"
+           class="ac-btn secondary">
+
+            <i class="bi bi-arrow-left"></i>
+            Back to Customers
+
+        </a>
+
+    </div>
+
+
+    <!-- SUMMARY -->
+
+    <div class="acd-stats">
+
+        <div class="acd-stat">
+
+            <div class="acd-stat-icon purple">
+                <i class="bi bi-router"></i>
+            </div>
+
+            <div>
+                <span>CONNECTIONS</span>
+                <strong>@connections.Count</strong>
+            </div>
+
+        </div>
+
+
+        <div class="acd-stat">
+
+            <div class="acd-stat-icon blue">
+                <i class="bi bi-receipt"></i>
+            </div>
+
+            <div>
+                <span>TOTAL BILLED</span>
+
+                <strong>
+                    Rs. @totalBilled.ToString("N2")
+                </strong>
+            </div>
+
+        </div>
+
+
+        <div class="acd-stat">
+
+            <div class="acd-stat-icon green">
+                <i class="bi bi-check-circle"></i>
+            </div>
+
+            <div>
+                <span>TOTAL PAID</span>
+
+                <strong>
+                    Rs. @totalPaid.ToString("N2")
+                </strong>
+            </div>
+
+        </div>
+
+
+        <div class="acd-stat">
+
+            <div class="acd-stat-icon red">
+                <i class="bi bi-exclamation-circle"></i>
+            </div>
+
+            <div>
+                <span>OUTSTANDING</span>
+
+                <strong>
+                    Rs. @outstanding.ToString("N2")
+                </strong>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- CUSTOMER INFO -->
+
+    <div class="acd-card">
+
+        <div class="acd-card-header">
+
+            <div>
+                <i class="bi bi-person"></i>
+
+                <span>Customer Information</span>
+            </div>
+
+
+            @if (Model.IsActive)
+            {
+                <span class="ac-status active">
+                    <i class="bi bi-circle-fill"></i>
+                    Active
+                </span>
+            }
+            else
+            {
+                <span class="ac-status inactive">
+                    <i class="bi bi-circle-fill"></i>
+                    Inactive
+                </span>
+            }
+
+        </div>
+
+
+        <div class="acd-info-grid">
+
+            <div class="acd-info">
+                <span>Customer ID</span>
+
+                <strong>
+                    #@Model.CustomerId.ToString("D5")
+                </strong>
+            </div>
+
+
+            <div class="acd-info">
+                <span>Full Name</span>
+
+                <strong>
+                    @Model.FullName
+                </strong>
+            </div>
+
+
+            <div class="acd-info">
+                <span>Father Name</span>
+
+                <strong>
+                    @Model.FatherName
+                </strong>
+            </div>
+
+
+            <div class="acd-info">
+                <span>Phone</span>
+
+                <strong>
+                    @Model.Phone
+                </strong>
+            </div>
+
+
+            <div class="acd-info">
+                <span>Email</span>
+
+                <strong>
+                    @Model.Email
+                </strong>
+            </div>
+
+
+            <div class="acd-info">
+                <span>City</span>
+
+                <strong>
+                    @Model.City
+                </strong>
+            </div>
+
+
+            <div class="acd-info wide">
+                <span>Address</span>
+
+                <strong>
+                    @Model.Address
+                </strong>
+            </div>
+
+
+            <div class="acd-info">
+                <span>Registered</span>
+
+                <strong>
+                    @Model.CreatedAt.ToString(
+                        "dd MMM yyyy")
+                </strong>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- CONNECTIONS -->
+
+    <div class="acd-card">
+
+        <div class="acd-card-header">
+
+            <div>
+                <i class="bi bi-router"></i>
+                <span>Connections</span>
+            </div>
+
+            <span class="acd-count">
+                @connections.Count
+            </span>
+
+        </div>
+
+
+        @if (connections.Any())
+        {
+            <div class="ac-table-wrap">
+
+                <table class="ac-table">
+
+                    <thead>
+                        <tr>
+                            <th>ACCOUNT ID</th>
+                            <th>TYPE</th>
+                            <th>PLAN</th>
+                            <th>SPEED</th>
+                            <th>STATUS</th>
+                            <th>ACTION</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var connection in connections)
+                        {
+                            <tr>
+
+                                <td>
+                                    <span class="ac-id">
+                                        @connection.AccountId
+                                    </span>
+                                </td>
+
+                                <td>
+                                    @connection.ConnectionType
+                                </td>
+
+                                <td>
+                                    @(connection.Plan?.PlanName ?? "-")
+                                </td>
+
+                                <td>
+                                    @(connection.Plan?.Speed ?? "-")
+                                </td>
+
+                                <td>
+                                    <span class="acd-workflow">
+                                        @connection.Status
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <a asp-controller="AccountsConnection"
+                                       asp-action="Details"
+                                       asp-route-id="@connection.ConnectionId"
+                                       class="ac-view">
+
+                                        <i class="bi bi-eye"></i>
+                                        View
+
+                                    </a>
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+        else
+        {
+            <div class="acd-small-empty">
+                No connections found for this customer.
+            </div>
+        }
+
+    </div>
+
+
+    <!-- BILLS -->
+
+    <div class="acd-card">
+
+        <div class="acd-card-header">
+
+            <div>
+                <i class="bi bi-receipt"></i>
+                <span>Billing History</span>
+            </div>
+
+            <span class="acd-count">
+                @bills.Count
+            </span>
+
+        </div>
+
+
+        @if (bills.Any())
+        {
+            <div class="ac-table-wrap">
+
+                <table class="ac-table">
+
+                    <thead>
+                        <tr>
+                            <th>BILL</th>
+                            <th>ACCOUNT</th>
+                            <th>DATE</th>
+                            <th>DUE DATE</th>
+                            <th>AMOUNT</th>
+                            <th>STATUS</th>
+                            <th>ACTION</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var bill in bills)
+                        {
+                            <tr>
+
+                                <td>
+                                    <span class="ac-id">
+                                        @bill.BillNumber
+                                    </span>
+                                </td>
+
+                                <td>
+                                    @bill.AccountId
+                                </td>
+
+                                <td>
+                                    @bill.BillingDate.ToString(
+                                        "dd MMM yyyy")
+                                </td>
+
+                                <td>
+                                    @bill.DueDate.ToString(
+                                        "dd MMM yyyy")
+                                </td>
+
+                                <td>
+                                    <strong>
+                                        Rs. @bill.TotalAmount.ToString("N2")
+                                    </strong>
+                                </td>
+
+                                <td>
+                                    <span class="acd-workflow">
+                                        @bill.Status
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <a asp-controller="AccountsBill"
+                                       asp-action="Details"
+                                       asp-route-id="@bill.BillId"
+                                       class="ac-view">
+
+                                        <i class="bi bi-eye"></i>
+                                        View
+
+                                    </a>
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+        else
+        {
+            <div class="acd-small-empty">
+                No billing records found for this customer.
+            </div>
+        }
+
+    </div>
+
+
+    <!-- PAYMENTS -->
+
+    <div class="acd-card">
+
+        <div class="acd-card-header">
+
+            <div>
+                <i class="bi bi-credit-card"></i>
+                <span>Payment History</span>
+            </div>
+
+            <span class="acd-count">
+                @payments.Count
+            </span>
+
+        </div>
+
+
+        @if (payments.Any())
+        {
+            <div class="ac-table-wrap">
+
+                <table class="ac-table">
+
+                    <thead>
+                        <tr>
+                            <th>PAYMENT</th>
+                            <th>BILL</th>
+                            <th>AMOUNT</th>
+                            <th>METHOD</th>
+                            <th>DATE</th>
+                            <th>STATUS</th>
+                            <th>ACTION</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var payment in payments)
+                        {
+                            <tr>
+
+                                <td>
+                                    <span class="ac-id">
+                                        @payment.PaymentNumber
+                                    </span>
+                                </td>
+
+                                <td>
+                                    @(payment.Bill?.BillNumber ?? "-")
+                                </td>
+
+                                <td>
+                                    <strong>
+                                        Rs. @payment.Amount.ToString("N2")
+                                    </strong>
+                                </td>
+
+                                <td>
+                                    @payment.PaymentMethod
+                                </td>
+
+                                <td>
+                                    @payment.PaymentDate.ToString(
+                                        "dd MMM yyyy")
+                                </td>
+
+                                <td>
+                                    <span class="acd-workflow">
+                                        @payment.Status
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <a asp-controller="AccountsPayment"
+                                       asp-action="Details"
+                                       asp-route-id="@payment.PaymentId"
+                                       class="ac-view">
+
+                                        <i class="bi bi-eye"></i>
+                                        View
+
+                                    </a>
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+        else
+        {
+            <div class="acd-small-empty">
+                No payment records found for this customer.
+            </div>
+        }
+
+    </div>
+
+</div>

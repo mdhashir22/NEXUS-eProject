@@ -1,0 +1,503 @@
+﻿@model NEXUS_eProject.Models.Order
+
+@{
+    ViewData["Title"] = "Feasibility Check";
+    ViewData["PageTitle"] = "Feasibility Check";
+    ViewData["PageSubtitle"] = "Technical Operations";
+    Layout = "~/Views/Shared/_TechnicalLayout.cshtml";
+
+    var customerName =
+        Model.Customer?.FullName ?? "Unknown Customer";
+
+    var customerInitial =
+        string.IsNullOrWhiteSpace(customerName)
+            ? "?"
+            : customerName.Substring(0, 1).ToUpper();
+}
+
+<div class="technical-feasibility-page">
+
+    <!-- HEADER -->
+    <div class="tf-page-header">
+
+        <div class="tf-header-left">
+
+            <a asp-controller="TechnicalOrder"
+               asp-action="Details"
+               asp-route-id="@Model.OrderId"
+               class="tf-back-btn">
+
+                <i class="bi bi-arrow-left"></i>
+
+            </a>
+
+            <div>
+
+                <div class="tf-breadcrumb">
+
+                    <span>Technical Orders</span>
+
+                    <i class="bi bi-chevron-right"></i>
+
+                    <span>Order Details</span>
+
+                    <i class="bi bi-chevron-right"></i>
+
+                    <strong>Feasibility</strong>
+
+                </div>
+
+                <h2>Technical Feasibility Check</h2>
+
+                <p>
+                    Verify technical availability before approving
+                    this customer application.
+                </p>
+
+            </div>
+
+        </div>
+
+        <span class="tf-order-badge">
+
+            <i class="bi bi-hash"></i>
+
+            @(Model.OrderNumber ?? "-")
+
+        </span>
+
+    </div>
+
+
+    <!-- CUSTOMER / ORDER -->
+    <div class="tf-overview-grid">
+
+        <div class="tf-overview-card">
+
+            <div class="tf-overview-icon purple">
+                <i class="bi bi-person"></i>
+            </div>
+
+            <div>
+                <span>CUSTOMER</span>
+                <strong>@customerName</strong>
+            </div>
+
+        </div>
+
+
+        <div class="tf-overview-card">
+
+            <div class="tf-overview-icon blue">
+                <i class="bi bi-wifi"></i>
+            </div>
+
+            <div>
+                <span>CONNECTION</span>
+                <strong>
+                    @(Model.ConnectionType ?? "-")
+                </strong>
+            </div>
+
+        </div>
+
+
+        <div class="tf-overview-card">
+
+            <div class="tf-overview-icon green">
+                <i class="bi bi-speedometer2"></i>
+            </div>
+
+            <div>
+                <span>PLAN</span>
+                <strong>
+                    @(Model.Plan?.PlanName ?? "-")
+                </strong>
+            </div>
+
+        </div>
+
+
+        <div class="tf-overview-card">
+
+            <div class="tf-overview-icon orange">
+                <i class="bi bi-geo-alt"></i>
+            </div>
+
+            <div>
+                <span>CITY</span>
+                <strong>
+                    @(Model.Customer?.City ?? "-")
+                </strong>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="tf-main-grid">
+
+        <!-- CHECKLIST -->
+        <div class="tf-card">
+
+            <div class="tf-card-header">
+
+                <div>
+
+                    <h5>
+                        <i class="bi bi-clipboard-check"></i>
+                        Technical Checklist
+                    </h5>
+
+                    <span>
+                        Verify every requirement before approving.
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="tf-checklist">
+
+                <label class="tf-check-item">
+
+                    <input type="checkbox"
+                           class="tf-check"
+                           id="areaCheck" />
+
+                    <span class="tf-custom-check">
+                        <i class="bi bi-check"></i>
+                    </span>
+
+                    <span class="tf-check-content">
+
+                        <strong>Area Availability</strong>
+
+                        <small>
+                            Confirm that NEXUS service is available
+                            in the customer's requested area.
+                        </small>
+
+                    </span>
+
+                </label>
+
+
+                <label class="tf-check-item">
+
+                    <input type="checkbox"
+                           class="tf-check"
+                           id="serverCheck" />
+
+                    <span class="tf-custom-check">
+                        <i class="bi bi-check"></i>
+                    </span>
+
+                    <span class="tf-check-content">
+
+                        <strong>Server Availability</strong>
+
+                        <small>
+                            Confirm that the required server/network
+                            capacity is available.
+                        </small>
+
+                    </span>
+
+                </label>
+
+
+                <label class="tf-check-item">
+
+                    <input type="checkbox"
+                           class="tf-check"
+                           id="infrastructureCheck" />
+
+                    <span class="tf-custom-check">
+                        <i class="bi bi-check"></i>
+                    </span>
+
+                    <span class="tf-check-content">
+
+                        <strong>Infrastructure Availability</strong>
+
+                        <small>
+                            Verify required infrastructure and
+                            network equipment are available.
+                        </small>
+
+                    </span>
+
+                </label>
+
+
+                <label class="tf-check-item">
+
+                    <input type="checkbox"
+                           class="tf-check"
+                           id="distanceCheck" />
+
+                    <span class="tf-custom-check">
+                        <i class="bi bi-check"></i>
+                    </span>
+
+                    <span class="tf-check-content">
+
+                        <strong>Distance / Line Feasibility</strong>
+
+                        <small>
+                            Verify distance and physical connectivity
+                            requirements for installation.
+                        </small>
+
+                    </span>
+
+                </label>
+
+            </div>
+
+
+            <div class="tf-check-note">
+
+                <i class="bi bi-info-circle"></i>
+
+                <span>
+                    All technical requirements should be verified
+                    before marking the order feasible.
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- APPLICATION SUMMARY -->
+        <div class="tf-card">
+
+            <div class="tf-card-header">
+
+                <div>
+
+                    <h5>
+                        <i class="bi bi-file-earmark-text"></i>
+                        Application Summary
+                    </h5>
+
+                    <span>
+                        Customer-submitted information.
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="tf-customer-box">
+
+                <div class="tf-avatar">
+                    @customerInitial
+                </div>
+
+                <div>
+
+                    <strong>@customerName</strong>
+
+                    <span>
+                        @(Model.Customer?.Phone ?? "No phone")
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="tf-details">
+
+                <div>
+                    <span>Father Name</span>
+                    <strong>
+                        @(Model.Customer?.FatherName ?? "-")
+                    </strong>
+                </div>
+
+                <div>
+                    <span>City</span>
+                    <strong>
+                        @(Model.Customer?.City ?? "-")
+                    </strong>
+                </div>
+
+                <div class="full">
+                    <span>Address</span>
+                    <strong>
+                        @(Model.Customer?.Address ?? "-")
+                    </strong>
+                </div>
+
+                <div>
+                    <span>Plan</span>
+                    <strong>
+                        @(Model.Plan?.PlanName ?? "-")
+                    </strong>
+                </div>
+
+                <div>
+                    <span>Speed</span>
+                    <strong>
+                        @(Model.Plan?.Speed ?? "-")
+                    </strong>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- DECISION -->
+    <div class="tf-decision-grid">
+
+        <!-- FEASIBLE -->
+        <div class="tf-decision-card feasible">
+
+            <div class="tf-decision-icon">
+
+                <i class="bi bi-check-circle"></i>
+
+            </div>
+
+            <div class="tf-decision-content">
+
+                <h5>Mark as Feasible</h5>
+
+                <p>
+                    Use this when all technical requirements
+                    have been successfully verified.
+                </p>
+
+                <form asp-controller="TechnicalOrder"
+                      asp-action="MarkFeasible"
+                      asp-route-id="@Model.OrderId"
+                      method="post"
+                      class="tf-action-form"
+                      id="feasibleForm">
+
+                    @Html.AntiForgeryToken()
+
+                    <button type="submit"
+                            class="tf-feasible-btn"
+                            id="feasibleBtn"
+                            disabled>
+
+                        <i class="bi bi-check2-circle"></i>
+
+                        Mark Feasible
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+
+        <!-- REJECT -->
+        <div class="tf-decision-card reject">
+
+            <div class="tf-decision-icon">
+
+                <i class="bi bi-x-circle"></i>
+
+            </div>
+
+            <div class="tf-decision-content">
+
+                <h5>Reject Application</h5>
+
+                <p>
+                    Use this when technical requirements
+                    cannot be fulfilled.
+                </p>
+
+                <form asp-controller="TechnicalOrder"
+                      asp-action="RejectTechnical"
+                      asp-route-id="@Model.OrderId"
+                      method="post"
+                      class="tf-action-form">
+
+                    @Html.AntiForgeryToken()
+
+                    <textarea name="reason"
+                              class="tf-rejection-input"
+                              rows="3"
+                              placeholder="Enter technical rejection reason..."
+                              required></textarea>
+
+                    <button type="submit"
+                            class="tf-reject-btn">
+
+                        <i class="bi bi-x-lg"></i>
+
+                        Reject Application
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const checks =
+            document.querySelectorAll(".tf-check");
+
+        const feasibleBtn =
+            document.getElementById("feasibleBtn");
+
+        function updateButton() {
+
+            let allChecked = true;
+
+            checks.forEach(function (check) {
+
+                if (!check.checked) {
+                    allChecked = false;
+                }
+
+            });
+
+            feasibleBtn.disabled = !allChecked;
+
+        }
+
+        checks.forEach(function (check) {
+
+            check.addEventListener(
+                "change",
+                updateButton
+            );
+
+        });
+
+        updateButton();
+
+    });
+
+</script>
+
+}

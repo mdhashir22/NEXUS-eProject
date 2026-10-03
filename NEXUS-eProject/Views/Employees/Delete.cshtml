@@ -1,0 +1,84 @@
+﻿@model NEXUS_eProject.Models.Employee
+
+@{
+    ViewData["Title"] = "Delete Employee";
+    ViewData["PageTitle"] = "Delete Employee";
+    ViewData["PageSubtitle"] = "Remove employee";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="page-heading">
+
+    <div>
+        <h2>Delete Employee</h2>
+        <p>Confirm employee removal.</p>
+    </div>
+
+    <a asp-action="Index"
+       class="secondary-action">
+        <i class="bi bi-arrow-left"></i>
+        Back
+    </a>
+
+</div>
+
+
+<div class="form-card delete-card">
+
+    <div class="delete-icon">
+        <i class="bi bi-exclamation-triangle"></i>
+    </div>
+
+    <h3>Delete this employee?</h3>
+
+    <p>
+        You are about to delete
+        <strong>@Model.FullName</strong>.
+        This action cannot be undone.
+    </p>
+
+
+    <div class="delete-info">
+
+        <div>
+            <span>Name</span>
+            <strong>@Model.FullName</strong>
+        </div>
+
+        <div>
+            <span>Email</span>
+            <strong>@Model.Email</strong>
+        </div>
+
+        <div>
+            <span>Role</span>
+            <strong>@Model.Role</strong>
+        </div>
+
+    </div>
+
+
+    <form asp-action="Delete"
+          method="post">
+
+        <input type="hidden"
+               asp-for="EmployeeId" />
+
+        <div class="form-footer">
+
+            <a asp-action="Index"
+               class="secondary-action">
+                Cancel
+            </a>
+
+            <button type="submit"
+                    class="delete-button">
+                <i class="bi bi-trash"></i>
+                Delete Employee
+            </button>
+
+        </div>
+
+    </form>
+
+</div>

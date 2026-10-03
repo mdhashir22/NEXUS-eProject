@@ -1,0 +1,639 @@
+﻿@model IEnumerable<NEXUS_eProject.Models.Order>
+
+@{
+    ViewData["Title"] = "Orders";
+    ViewData["PageTitle"] = "Orders";
+    Layout = "~/Views/Shared/_RetailLayout.cshtml";
+
+    var orders = Model?.ToList() ?? new List<NEXUS_eProject.Models.Order>();
+}
+
+<div class="retail-page ro-page">
+
+    <!-- =====================================================
+         PAGE HEADER
+    ====================================================== -->
+
+    <div class="retail-page-header ro-page-header">
+
+        <div>
+
+            <div class="retail-page-eyebrow">
+                <i class="bi bi-cart3"></i>
+                RETAIL OPERATIONS
+            </div>
+
+            <h1>
+                Customer Orders
+            </h1>
+
+            <p>
+                Track accepted customer orders throughout the service workflow.
+            </p>
+
+        </div>
+
+        <a asp-controller="RetailOrder"
+           asp-action="Index"
+           class="retail-secondary-btn">
+
+            <i class="bi bi-file-earmark-text"></i>
+            Applications
+
+        </a>
+
+    </div>
+
+
+    <!-- =====================================================
+         STATS
+    ====================================================== -->
+
+    <div class="ro-order-stats">
+
+        <div class="ro-order-stat">
+
+            <div class="ro-order-stat-icon">
+                <i class="bi bi-cart-check"></i>
+            </div>
+
+            <div>
+
+                <span>
+                    Total Orders
+                </span>
+
+                <strong>
+                    @orders.Count
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="ro-order-stat">
+
+            <div class="ro-order-stat-icon ro-stat-green">
+                <i class="bi bi-check-circle"></i>
+            </div>
+
+            <div>
+
+                <span>
+                    Active
+                </span>
+
+                <strong>
+                    @orders.Count(o => o.Status == "Active")
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="ro-order-stat">
+
+            <div class="ro-order-stat-icon ro-stat-yellow">
+                <i class="bi bi-hourglass-split"></i>
+            </div>
+
+            <div>
+
+                <span>
+                    In Progress
+                </span>
+
+                <strong>
+                    @orders.Count(o => o.Status != "Active")
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="ro-order-stat">
+
+            <div class="ro-order-stat-icon ro-stat-blue">
+                <i class="bi bi-wifi"></i>
+            </div>
+
+            <div>
+
+                <span>
+                    Broadband
+                </span>
+
+                <strong>
+                    @orders.Count(o => o.ConnectionType == "Broadband")
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         FILTER CARD
+    ====================================================== -->
+
+    <div class="retail-card ro-filter-card">
+
+        <div class="retail-card-header">
+
+            <div class="retail-card-title">
+
+                <div class="retail-card-icon">
+                    <i class="bi bi-funnel"></i>
+                </div>
+
+                <div>
+
+                    <h3>
+                        Order Filters
+                    </h3>
+
+                    <span>
+                        Search and filter customer orders
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="retail-card-body">
+
+            <form asp-controller="RetailOrders"
+                  asp-action="Index"
+                  method="get"
+                  class="ro-filter-form">
+
+                <div class="ro-filter-search">
+
+                    <label class="ro-form-label">
+                        Search
+                    </label>
+
+                    <div class="ro-input-wrapper">
+
+                        <i class="bi bi-search"></i>
+
+                        <input type="text"
+                               name="search"
+                               value="@ViewBag.Search"
+                               class="form-control"
+                               placeholder="Order number, customer name or phone..." />
+
+                    </div>
+
+                </div>
+
+
+                <div>
+
+                    <label class="ro-form-label">
+                        Status
+                    </label>
+
+                    <select name="status"
+                            class="form-select">
+
+                        <option value=""
+                                selected="@(string.IsNullOrEmpty(ViewBag.Status) ? "selected" : null)">
+                            All Statuses
+                        </option>
+
+                        <option value="Retail Accepted"
+                                selected="@(ViewBag.Status == "Retail Accepted" ? "selected" : null)">
+                            Retail Accepted
+                        </option>
+
+                        <option value="Feasible"
+                                selected="@(ViewBag.Status == "Feasible" ? "selected" : null)">
+                            Feasible
+                        </option>
+
+                        <option value="Connection Created"
+                                selected="@(ViewBag.Status == "Connection Created" ? "selected" : null)">
+                            Connection Created
+                        </option>
+
+                        <option value="Billing Pending"
+                                selected="@(ViewBag.Status == "Billing Pending" ? "selected" : null)">
+                            Billing Pending
+                        </option>
+
+                        <option value="Payment Pending"
+                                selected="@(ViewBag.Status == "Payment Pending" ? "selected" : null)">
+                            Payment Pending
+                        </option>
+
+                        <option value="Payment Verified"
+                                selected="@(ViewBag.Status == "Payment Verified" ? "selected" : null)">
+                            Payment Verified
+                        </option>
+
+                        <option value="Installation Pending"
+                                selected="@(ViewBag.Status == "Installation Pending" ? "selected" : null)">
+                            Installation Pending
+                        </option>
+
+                        <option value="Active"
+                                selected="@(ViewBag.Status == "Active" ? "selected" : null)">
+                            Active
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div>
+
+                    <label class="ro-form-label">
+                        Connection
+                    </label>
+
+                    <select name="connectionType"
+                            class="form-select">
+
+                        <option value=""
+                                selected="@(string.IsNullOrWhiteSpace(ViewBag.ConnectionType) ? "selected" : null)">
+                            All Types
+                        </option>
+
+                        <option value="Broadband"
+                                selected="@(ViewBag.ConnectionType == "Broadband" ? "selected" : null)">
+                            Broadband
+                        </option>
+
+                        <option value="Telephone"
+                                selected="@(ViewBag.ConnectionType == "Telephone" ? "selected" : null)">
+                            Telephone
+                        </option>
+
+                        <option value="Dial-Up"
+                                selected="@(ViewBag.ConnectionType == "Dial-Up" ? "selected" : null)">
+                            Dial-Up
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div>
+
+                    <label class="ro-form-label ro-label-hidden">
+                        Action
+                    </label>
+
+                    <button type="submit"
+                            class="retail-primary-btn ro-search-btn">
+
+                        <i class="bi bi-search"></i>
+                        Search
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         ORDERS TABLE
+    ====================================================== -->
+
+    <div class="retail-card ro-applications-card">
+
+        <div class="retail-card-header">
+
+            <div class="retail-card-title">
+
+                <div class="retail-card-icon">
+                    <i class="bi bi-cart-check"></i>
+                </div>
+
+                <div>
+
+                    <h3>
+                        Customer Orders
+                    </h3>
+
+                    <span>
+                        @orders.Count order(s) found
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="retail-card-body p-0">
+
+            @if (orders.Any())
+            {
+                <div class="ro-table-wrapper">
+
+                    <table class="table ro-applications-table ro-orders-table align-middle mb-0">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Order
+                                </th>
+
+                                <th>
+                                    Customer
+                                </th>
+
+                                <th>
+                                    Connection
+                                </th>
+
+                                <th>
+                                    Plan
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                                <th>
+                                    Date
+                                </th>
+
+                                <th class="text-end">
+                                    Action
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            @foreach (var order in orders)
+                            {
+                                var statusClass = order.Status switch
+                                {
+                                    "Retail Accepted" => "ro-status-approved",
+                                    "Feasible" => "ro-status-approved",
+                                    "Payment Verified" => "ro-status-approved",
+                                    "Active" => "ro-status-active",
+
+                                    "Billing Pending" => "ro-status-pending",
+                                    "Payment Pending" => "ro-status-pending",
+                                    "Installation Pending" => "ro-status-pending",
+
+                                    "Connection Created" => "ro-status-neutral",
+
+                                    _ => "ro-status-neutral"
+                                };
+
+                                <tr>
+
+                                    <!-- ORDER -->
+
+                                    <td>
+
+                                        <div class="ro-order-cell">
+
+                                            <strong>
+                                                #@order.OrderNumber
+                                            </strong>
+
+                                            <span>
+                                                ID: @order.OrderId
+                                            </span>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <!-- CUSTOMER -->
+
+                                    <td>
+
+                                        <div class="ro-customer-cell">
+
+                                            <div class="ro-avatar">
+
+                                                @(string.IsNullOrWhiteSpace(order.Customer?.FullName)
+                                                    ? "?"
+                                                    : order.Customer.FullName.Substring(0, 1).ToUpper())
+
+                                            </div>
+
+                                            <div class="ro-customer-info">
+
+                                                <strong>
+                                                    @(order.Customer?.FullName ?? "Unknown Customer")
+                                                </strong>
+
+                                                <span>
+                                                    @(order.Customer?.Phone ?? "No phone")
+                                                </span>
+
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <!-- CONNECTION -->
+
+                                    <td>
+
+                                        <span class="ro-connection-badge">
+
+                                            @if (order.ConnectionType == "Broadband")
+                                            {
+                                                <i class="bi bi-wifi"></i>
+                                            }
+                                            else if (order.ConnectionType == "Telephone")
+                                            {
+                                                <i class="bi bi-telephone"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="bi bi-globe"></i>
+                                            }
+
+                                            @order.ConnectionType
+
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- PLAN -->
+
+                                    <td>
+
+                                        <div class="ro-plan-cell">
+
+                                            <strong class="ro-plan-name">
+
+                                                @(order.Plan?.PlanName ?? "N/A")
+
+                                            </strong>
+
+                                            @if (order.Plan != null)
+                                            {
+                                                <span class="ro-plan-speed">
+                                                    @order.Plan.Speed
+                                                </span>
+                                            }
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <!-- STATUS -->
+
+                                    <td>
+
+                                        <span class="ro-status @statusClass">
+
+                                            @if (order.Status == "Active")
+                                            {
+                                                <i class="bi bi-check-circle"></i>
+                                            }
+                                            else if (
+                                                order.Status == "Retail Accepted" ||
+                                                order.Status == "Feasible" ||
+                                                order.Status == "Payment Verified")
+                                            {
+                                                <i class="bi bi-check2-circle"></i>
+                                            }
+                                            else if (
+                                                order.Status == "Billing Pending" ||
+                                                order.Status == "Payment Pending" ||
+                                                order.Status == "Installation Pending")
+                                            {
+                                                <i class="bi bi-clock"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="bi bi-arrow-repeat"></i>
+                                            }
+
+                                            @order.Status
+
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- DATE -->
+
+                                    <td>
+
+                                        <div class="ro-date-cell">
+
+                                            <strong>
+                                                @order.CreatedAt.ToString("dd MMM yyyy")
+                                            </strong>
+
+                                            <span>
+                                                @order.CreatedAt.ToString("hh:mm tt")
+                                            </span>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <!-- ACTION -->
+
+                                    <td class="text-end">
+
+                                        <div class="ro-action-buttons">
+
+                                            <a asp-controller="RetailOrders"
+                                               asp-action="Details"
+                                               asp-route-id="@order.OrderId"
+                                               class="ro-icon-btn"
+                                               title="View Details">
+
+                                                <i class="bi bi-eye"></i>
+
+                                            </a>
+
+                                            <a asp-controller="RetailOrder"
+                                               asp-action="Status"
+                                               asp-route-id="@order.OrderId"
+                                               class="ro-icon-btn"
+                                               title="Track Status">
+
+                                                <i class="bi bi-activity"></i>
+
+                                            </a>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+            else
+            {
+                <div class="ro-empty-state">
+
+                    <div class="ro-empty-icon">
+                        <i class="bi bi-cart-x"></i>
+                    </div>
+
+                    <h4>
+                        No Orders Found
+                    </h4>
+
+                    <p>
+                        There are no accepted customer orders matching your filters.
+                    </p>
+
+                    <a asp-controller="RetailOrders"
+                       asp-action="Index"
+                       class="retail-secondary-btn">
+
+                        <i class="bi bi-arrow-clockwise"></i>
+                        Clear Filters
+
+                    </a>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>

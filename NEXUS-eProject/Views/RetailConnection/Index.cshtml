@@ -1,0 +1,729 @@
+﻿@model IEnumerable<NEXUS_eProject.Models.Connection>
+
+@{
+    ViewData["Title"] = "Connections";
+    Layout = "~/Views/Shared/_RetailLayout.cshtml";
+
+    var connections = Model?.ToList()
+        ?? new List<NEXUS_eProject.Models.Connection>();
+
+    var totalConnections = connections.Count;
+
+    var activeConnections = connections.Count(c =>
+        string.Equals(
+            c.Status,
+            "Active",
+            StringComparison.OrdinalIgnoreCase));
+
+    var pendingConnections = connections.Count(c =>
+        string.Equals(
+            c.Status,
+            "Pending",
+            StringComparison.OrdinalIgnoreCase) ||
+        string.Equals(
+            c.Status,
+            "Installation Pending",
+            StringComparison.OrdinalIgnoreCase));
+
+    var broadbandConnections = connections.Count(c =>
+        !string.IsNullOrWhiteSpace(c.ConnectionType) &&
+        c.ConnectionType.Contains(
+            "Broadband",
+            StringComparison.OrdinalIgnoreCase));
+}
+
+<div class="retail-page">
+
+    <!-- =====================================================
+         PAGE HEADER
+    ====================================================== -->
+
+    <div class="retail-page-header ro-page-header">
+
+        <div>
+
+            <div class="retail-page-eyebrow">
+                <i class="bi bi-diagram-3"></i>
+                RETAIL OPERATIONS
+            </div>
+
+            <h1>
+                Connections
+            </h1>
+
+            <p>
+                Track customer connections and current service status.
+            </p>
+
+        </div>
+
+        <a asp-controller="RetailOrders"
+           asp-action="Index"
+           class="retail-secondary-btn">
+
+            <i class="bi bi-receipt"></i>
+            Orders
+
+        </a>
+
+    </div>
+
+
+    <!-- =====================================================
+         STATISTICS
+    ====================================================== -->
+
+    <div class="ro-order-stats">
+
+        <!-- TOTAL CONNECTIONS -->
+
+        <div class="ro-order-stat">
+
+            <div class="ro-order-stat-icon">
+                <i class="bi bi-diagram-3"></i>
+            </div>
+
+            <div>
+
+                <span>
+                    TOTAL CONNECTIONS
+                </span>
+
+                <strong>
+                    @totalConnections
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- ACTIVE -->
+
+        <div class="ro-order-stat">
+
+            <div class="ro-order-stat-icon ro-stat-green">
+                <i class="bi bi-wifi"></i>
+            </div>
+
+            <div>
+
+                <span>
+                    ACTIVE
+                </span>
+
+                <strong>
+                    @activeConnections
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- PENDING -->
+
+        <div class="ro-order-stat">
+
+            <div class="ro-order-stat-icon ro-stat-yellow">
+                <i class="bi bi-clock"></i>
+            </div>
+
+            <div>
+
+                <span>
+                    PENDING
+                </span>
+
+                <strong>
+                    @pendingConnections
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- BROADBAND -->
+
+        <div class="ro-order-stat">
+
+            <div class="ro-order-stat-icon ro-stat-blue">
+                <i class="bi bi-router"></i>
+            </div>
+
+            <div>
+
+                <span>
+                    BROADBAND
+                </span>
+
+                <strong>
+                    @broadbandConnections
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         FILTERS
+    ====================================================== -->
+
+    <div class="retail-card ro-detail-card">
+
+        <div class="retail-card-body">
+
+            <form asp-action="Index"
+                  method="get"
+                  class="ro-filter-form">
+
+                <!-- SEARCH -->
+
+                <div class="ro-filter-search">
+
+                    <label class="ro-form-label">
+                        Search
+                    </label>
+
+                    <div class="ro-input-wrapper">
+
+                        <i class="bi bi-search"></i>
+
+                        <input type="text"
+                               name="search"
+                               value="@ViewBag.Search"
+                               class="form-control"
+                               placeholder="Account ID, customer or phone..." />
+
+                    </div>
+
+                </div>
+
+
+                <!-- STATUS -->
+
+                <div>
+
+                    <label class="ro-form-label">
+                        Status
+                    </label>
+
+                    <select name="status"
+                            class="form-select">
+
+                        <option value="">
+                            All Statuses
+                        </option>
+
+                        @if (ViewBag.Status == "Active")
+                        {
+                            <option value="Active" selected>
+                                Active
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="Active">
+                                Active
+                            </option>
+                        }
+
+                        @if (ViewBag.Status == "Pending")
+                        {
+                            <option value="Pending" selected>
+                                Pending
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="Pending">
+                                Pending
+                            </option>
+                        }
+
+                        @if (ViewBag.Status == "Installation Pending")
+                        {
+                            <option value="Installation Pending" selected>
+                                Installation Pending
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="Installation Pending">
+                                Installation Pending
+                            </option>
+                        }
+
+                    </select>
+
+                </div>
+
+
+                <!-- CONNECTION TYPE -->
+
+                <div>
+
+                    <label class="ro-form-label">
+                        Connection
+                    </label>
+
+                    <select name="connectionType"
+                            class="form-select">
+
+                        <option value="">
+                            All Connections
+                        </option>
+
+                        @if (ViewBag.ConnectionType == "Broadband")
+                        {
+                            <option value="Broadband" selected>
+                                Broadband
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="Broadband">
+                                Broadband
+                            </option>
+                        }
+
+                        @if (ViewBag.ConnectionType == "Telephone")
+                        {
+                            <option value="Telephone" selected>
+                                Telephone
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="Telephone">
+                                Telephone
+                            </option>
+                        }
+
+                        @if (ViewBag.ConnectionType == "Landline")
+                        {
+                            <option value="Landline" selected>
+                                Landline
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="Landline">
+                                Landline
+                            </option>
+                        }
+
+                        @if (ViewBag.ConnectionType == "Dial-Up")
+                        {
+                            <option value="Dial-Up" selected>
+                                Dial-Up
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="Dial-Up">
+                                Dial-Up
+                            </option>
+                        }
+
+                    </select>
+
+                </div>
+
+
+                <!-- SEARCH BUTTON -->
+
+                <button type="submit"
+                        class="ro-search-btn">
+
+                    <i class="bi bi-search"></i>
+                    Search
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         CONNECTIONS TABLE
+    ====================================================== -->
+
+    <div class="retail-card">
+
+        <!-- CARD HEADER -->
+
+        <div class="retail-card-header">
+
+            <div class="retail-card-title">
+
+                <div class="retail-card-icon">
+                    <i class="bi bi-diagram-3"></i>
+                </div>
+
+                <div>
+
+                    <h3>
+                        Customer Connections
+                    </h3>
+
+                    <span>
+                        @connections.Count connection(s) found
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             CARD BODY
+        ================================================== -->
+
+        <div class="retail-card-body p-0">
+
+            @if (connections.Any())
+            {
+                <!-- IMPORTANT:
+                     These class names match existing retail.css
+                -->
+
+                <div class="rc-table-wrapper">
+
+                    <table class="table rc-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    ACCOUNT
+                                </th>
+
+                                <th>
+                                    CUSTOMER
+                                </th>
+
+                                <th>
+                                    CONNECTION
+                                </th>
+
+                                <th>
+                                    PLAN
+                                </th>
+
+                                <th>
+                                    STATUS
+                                </th>
+
+                                <th>
+                                    INSTALLATION
+                                </th>
+
+                                <th class="text-center">
+                                    ACTION
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            @foreach (var connection in connections)
+                            {
+                                var customerInitial = "?";
+
+                                if (!string.IsNullOrWhiteSpace(
+                                    connection.Customer?.FullName))
+                                {
+                                    customerInitial =
+                                        connection.Customer.FullName
+                                            .Substring(0, 1)
+                                            .ToUpper();
+                                }
+
+
+                                var installationDate =
+                                    connection.InstallationDate.HasValue
+                                        ? connection.InstallationDate.Value
+                                            .ToString("dd MMM yyyy")
+                                        : null;
+
+
+                                var statusClass =
+                                    string.Equals(
+                                        connection.Status,
+                                        "Active",
+                                        StringComparison.OrdinalIgnoreCase)
+                                        ? "rc-status-active"
+
+                                        : string.Equals(
+                                            connection.Status,
+                                            "Pending",
+                                            StringComparison.OrdinalIgnoreCase) ||
+
+                                          string.Equals(
+                                              connection.Status,
+                                              "Installation Pending",
+                                              StringComparison.OrdinalIgnoreCase)
+                                            ? "rc-status-pending"
+
+                                            : string.Equals(
+                                                connection.Status,
+                                                "Inactive",
+                                                StringComparison.OrdinalIgnoreCase)
+                                                ? "rc-status-inactive"
+
+                                                : "rc-status-neutral";
+
+
+                                <tr>
+
+                                    <!-- =====================================
+                                         ACCOUNT
+                                    ====================================== -->
+
+                                    <td>
+
+                                        <div class="rc-date">
+
+                                            <strong>
+                                                @(string.IsNullOrWhiteSpace(
+                                                    connection.AccountId)
+                                                    ? "N/A"
+                                                    : connection.AccountId)
+                                            </strong>
+
+                                            <span>
+                                                Connection #@connection.ConnectionId
+                                            </span>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <!-- =====================================
+                                         CUSTOMER
+                                    ====================================== -->
+
+                                    <td>
+
+                                        <div class="rc-customer">
+
+                                            <div class="rc-avatar">
+                                                @customerInitial
+                                            </div>
+
+
+                                            <div class="rc-customer-info">
+
+                                                <strong>
+                                                    @(connection.Customer?.FullName
+                                                        ?? "N/A")
+                                                </strong>
+
+                                                <span>
+                                                    @(connection.Customer?.Phone
+                                                        ?? "N/A")
+                                                </span>
+
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <!-- =====================================
+                                         CONNECTION
+                                    ====================================== -->
+
+                                    <td>
+
+                                        <span class="rc-text">
+
+                                            @(string.IsNullOrWhiteSpace(
+                                                connection.ConnectionType)
+                                                ? "N/A"
+                                                : connection.ConnectionType)
+
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- =====================================
+                                         PLAN
+                                    ====================================== -->
+
+                                    <td>
+
+                                        <div class="rc-date">
+
+                                            <strong>
+                                                @(connection.Plan?.PlanName
+                                                    ?? "N/A")
+                                            </strong>
+
+                                            <span>
+                                                @(connection.Plan?.Speed
+                                                    ?? "N/A")
+                                            </span>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <!-- =====================================
+                                         STATUS
+                                    ====================================== -->
+
+                                    <td>
+
+                                        <span class="rc-status @statusClass">
+
+                                            @if (string.Equals(
+                                                connection.Status,
+                                                "Active",
+                                                StringComparison.OrdinalIgnoreCase))
+                                            {
+                                                <i class="bi bi-check-circle-fill"></i>
+                                            }
+                                            else if (
+                                                string.Equals(
+                                                    connection.Status,
+                                                    "Pending",
+                                                    StringComparison.OrdinalIgnoreCase) ||
+                                                string.Equals(
+                                                    connection.Status,
+                                                    "Installation Pending",
+                                                    StringComparison.OrdinalIgnoreCase))
+                                            {
+                                                <i class="bi bi-clock-fill"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="bi bi-circle-fill"></i>
+                                            }
+
+                                            @(string.IsNullOrWhiteSpace(
+                                                connection.Status)
+                                                ? "Pending"
+                                                : connection.Status)
+
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- =====================================
+                                         INSTALLATION
+                                    ====================================== -->
+
+                                    <td>
+
+                                        <div class="rc-date">
+
+                                            @if (installationDate != null)
+                                            {
+                                                <strong>
+                                                    @installationDate
+                                                </strong>
+
+                                                <span>
+                                                    Installed
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <strong>
+                                                    —
+                                                </strong>
+
+                                                <span>
+                                                    Not Installed
+                                                </span>
+                                            }
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <!-- =====================================
+                                         ACTION
+                                    ====================================== -->
+
+                                    <td class="text-center">
+
+                                        <a asp-action="Details"
+                                           asp-route-id="@connection.ConnectionId"
+                                           class="rc-view-btn"
+                                           title="View Details">
+
+                                            <i class="bi bi-eye"></i>
+
+                                        </a>
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+            else
+            {
+                <!-- =========================================
+                     EMPTY STATE
+                ========================================== -->
+
+                <div class="rc-empty">
+
+                    <div class="rc-empty-icon">
+
+                        <i class="bi bi-diagram-3"></i>
+
+                    </div>
+
+                    <h4>
+                        No Connections Found
+                    </h4>
+
+                    <p>
+                        No customer connections match your current filters.
+                    </p>
+
+                    <a asp-action="Index"
+                       class="retail-secondary-btn">
+
+                        <i class="bi bi-arrow-clockwise"></i>
+                        Reset Filters
+
+                    </a>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>

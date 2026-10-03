@@ -1,0 +1,210 @@
+﻿@model IEnumerable<NEXUS_eProject.Models.Vendor>
+
+@{
+    ViewData["Title"] = "Vendors";
+    ViewData["PageTitle"] = "Vendors";
+    ViewData["PageSubtitle"] = "Manage Nexus vendors";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="page-heading">
+
+    <div>
+        <h2>Vendors</h2>
+        <p>Manage all vendors and supplier information.</p>
+    </div>
+
+    <a asp-action="Create" class="nexus-btn">
+        <i class="bi bi-plus-lg"></i>
+        Add Vendor
+    </a>
+
+</div>
+
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="success-alert">
+        <i class="bi bi-check-circle-fill"></i>
+        <span>@TempData["SuccessMessage"]</span>
+    </div>
+}
+
+
+<div class="dashboard-card">
+
+    <div class="card-header">
+
+        <div>
+            <h5>Vendor List</h5>
+
+            <span>
+                @Model.Count() vendors registered
+            </span>
+        </div>
+
+    </div>
+
+
+    <div class="table-responsive">
+
+        <table class="nexus-table">
+
+            <thead>
+
+                <tr>
+                    <th>ID</th>
+                    <th>VENDOR</th>
+                    <th>CONTACT PERSON</th>
+                    <th>PHONE</th>
+                    <th>EMAIL</th>
+                    <th>ADDRESS</th>
+                    <th>STATUS</th>
+                    <th>ACTIONS</th>
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                @if (Model.Any())
+                {
+                    foreach (var vendor in Model)
+                    {
+                        <tr>
+
+                            <td>
+                                #@vendor.VendorId
+                            </td>
+
+
+                            <td>
+
+                                <div class="employee-cell">
+
+                                    <div class="employee-avatar">
+                                        @vendor.VendorName.Substring(0, 1).ToUpper()
+                                    </div>
+
+                                    <div>
+
+                                        <strong>
+                                            @vendor.VendorName
+                                        </strong>
+
+                                        <small>
+                                            @vendor.CreatedAt.ToString("dd MMM yyyy")
+                                        </small>
+
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+
+                            <td>
+                                @(string.IsNullOrWhiteSpace(vendor.ContactPerson)
+                                    ? "N/A"
+                                    : vendor.ContactPerson)
+                            </td>
+
+
+                            <td>
+                                @(string.IsNullOrWhiteSpace(vendor.Phone)
+                                    ? "N/A"
+                                    : vendor.Phone)
+                            </td>
+
+
+                            <td>
+                                @(string.IsNullOrWhiteSpace(vendor.Email)
+                                    ? "N/A"
+                                    : vendor.Email)
+                            </td>
+
+
+                            <td>
+                                @(string.IsNullOrWhiteSpace(vendor.Address)
+                                    ? "N/A"
+                                    : vendor.Address)
+                            </td>
+
+
+                            <td>
+
+                                @if (vendor.IsActive)
+                                {
+                                    <span class="status-badge active">
+                                        Active
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="status-badge inactive">
+                                        Inactive
+                                    </span>
+                                }
+
+                            </td>
+
+
+                            <td>
+
+                                <div class="table-actions">
+
+                                    <a asp-action="Edit"
+                                       asp-route-id="@vendor.VendorId"
+                                       class="table-action edit"
+                                       title="Edit">
+
+                                        <i class="bi bi-pencil"></i>
+
+                                    </a>
+
+
+                                    <a asp-action="Delete"
+                                       asp-route-id="@vendor.VendorId"
+                                       class="table-action delete"
+                                       title="Delete">
+
+                                        <i class="bi bi-trash"></i>
+
+                                    </a>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+
+                        <td colspan="8" class="empty-state">
+
+                            <i class="bi bi-truck"></i>
+
+                            <div>
+                                No vendors found.
+                            </div>
+
+                            <a asp-action="Create">
+                                Add your first vendor
+                            </a>
+
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>

@@ -1,0 +1,160 @@
+﻿@model NEXUS_eProject.Models.Shop
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    ViewData["Title"] = "Edit Shop";
+    ViewData["PageTitle"] = "Edit Shop";
+    ViewData["PageSubtitle"] = "Update shop information";
+}
+
+<div class="page-heading">
+
+    <div>
+        <h2>Edit Shop</h2>
+        <p>Update the selected shop details.</p>
+    </div>
+
+    <a asp-action="Index" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left"></i>
+        Back
+    </a>
+
+</div>
+
+
+<div class="form-card">
+
+    <form asp-action="Edit"
+          asp-route-id="@Model.ShopId"
+          method="post">
+
+        <div asp-validation-summary="ModelOnly"
+             class="text-danger mb-3">
+        </div>
+
+
+        <input type="hidden"
+               asp-for="ShopId" />
+
+        <input type="hidden"
+               asp-for="CreatedAt" />
+
+
+        <div class="form-grid">
+
+            <div class="form-group">
+
+                <label asp-for="ShopName">
+                    Shop Name
+                </label>
+
+                <input asp-for="ShopName"
+                       class="form-control nexus-input" />
+
+                <span asp-validation-for="ShopName"
+                      class="text-danger">
+                </span>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label asp-for="City">
+                    City
+                </label>
+
+                <input asp-for="City"
+                       class="form-control nexus-input" />
+
+                <span asp-validation-for="City"
+                      class="text-danger">
+                </span>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label asp-for="ContactNumber">
+                    Contact Number
+                </label>
+
+                <input asp-for="ContactNumber"
+                       class="form-control nexus-input" />
+
+                <span asp-validation-for="ContactNumber"
+                      class="text-danger">
+                </span>
+
+            </div>
+
+
+            <div class="form-group full-width">
+
+                <label asp-for="Address">
+                    Address
+                </label>
+
+                <textarea asp-for="Address"
+                          class="form-control nexus-input"
+                          rows="3">
+                </textarea>
+
+                <span asp-validation-for="Address"
+                      class="text-danger">
+                </span>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label asp-for="IsActive">
+                    Status
+                </label>
+
+                <select asp-for="IsActive"
+                        class="form-select nexus-input">
+
+                    <option value="true">
+                        Active
+                    </option>
+
+                    <option value="false">
+                        Inactive
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <div class="form-footer">
+
+            <a asp-action="Index"
+               class="btn btn-outline-secondary">
+                Cancel
+            </a>
+
+            <button type="submit"
+                    class="btn nexus-btn">
+
+                <i class="bi bi-check-lg"></i>
+                Update Shop
+
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

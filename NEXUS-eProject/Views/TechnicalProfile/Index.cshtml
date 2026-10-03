@@ -1,0 +1,224 @@
+﻿@model NEXUS_eProject.Models.TechnicalProfileViewModel
+
+@{
+    ViewData["Title"] = "Profile";
+    ViewData["PageTitle"] = "Profile";
+    Layout = "~/Views/Shared/_TechnicalLayout.cshtml";
+}
+
+<div class="tpf-page">
+
+    <div class="tpf-header">
+        <span>
+            <i class="bi bi-person-circle"></i>
+            ACCOUNT
+        </span>
+
+        <h2>Technical Profile</h2>
+
+        <p>
+            Your NEXUS Technical Portal account information.
+        </p>
+    </div>
+
+
+    <div class="tpf-grid">
+
+        <!-- LEFT PROFILE CARD -->
+        <div class="tpf-profile-card">
+
+            <div class="tpf-avatar">
+                @Model.Initial
+            </div>
+
+            <h3>
+                @(string.IsNullOrWhiteSpace(Model.FullName)
+                    ? "Technical Employee"
+                    : Model.FullName)
+            </h3>
+
+            <span class="tpf-role">
+                @Model.Role
+            </span>
+
+            <p>
+                @(string.IsNullOrWhiteSpace(Model.Email)
+                    ? "-"
+                    : Model.Email)
+            </p>
+
+            <div class="tpf-security">
+                <i class="bi bi-shield-check"></i>
+
+                <span>
+                    Role Protected Account
+                </span>
+            </div>
+
+        </div>
+
+
+        <!-- RIGHT INFORMATION CARD -->
+        <div class="tpf-info-card">
+
+            <div class="tpf-card-header">
+                <h5>
+                    <i class="bi bi-person-lines-fill"></i>
+                    Employee Information
+                </h5>
+
+                <span>
+                    NEXUS employee and account details
+                </span>
+            </div>
+
+
+            <div class="tpf-info-grid">
+
+                <!-- FULL NAME -->
+                <div>
+                    <span>Full Name</span>
+
+                    <strong>
+                        @(string.IsNullOrWhiteSpace(Model.FullName)
+                            ? "-"
+                            : Model.FullName)
+                    </strong>
+                </div>
+
+
+                <!-- EMPLOYEE ID -->
+                <div>
+                    <span>Employee ID</span>
+
+                    <strong>
+                        @(Model.EmployeeId.HasValue
+                            ? $"EMP-{Model.EmployeeId.Value:D4}"
+                            : "-")
+                    </strong>
+                </div>
+
+
+                <!-- EMAIL -->
+                <div>
+                    <span>Email Address</span>
+
+                    <strong>
+                        @(string.IsNullOrWhiteSpace(Model.Email)
+                            ? "-"
+                            : Model.Email)
+                    </strong>
+                </div>
+
+
+                <!-- PHONE -->
+                <div>
+                    <span>Phone Number</span>
+
+                    <strong>
+                        @(string.IsNullOrWhiteSpace(Model.PhoneNumber)
+                            ? "Not Provided"
+                            : Model.PhoneNumber)
+                    </strong>
+                </div>
+
+
+                <!-- DEPARTMENT -->
+                <div>
+                    <span>Department</span>
+
+                    <strong>
+                        @(string.IsNullOrWhiteSpace(Model.Department)
+                            ? "Technical"
+                            : Model.Department)
+                    </strong>
+                </div>
+
+
+                <!-- ROLE -->
+                <div>
+                    <span>System Role</span>
+
+                    <strong class="tpf-highlight">
+                        @Model.Role
+                    </strong>
+                </div>
+
+
+                <!-- STATUS -->
+                <div>
+                    <span>Employee Status</span>
+
+                    @if (Model.IsActive)
+                    {
+                        <strong style="color: var(--technical-green);">
+                            <i class="bi bi-check-circle-fill"></i>
+                            Active
+                        </strong>
+                    }
+                    else
+                    {
+                        <strong style="color: var(--technical-red);">
+                            <i class="bi bi-x-circle-fill"></i>
+                            Inactive
+                        </strong>
+                    }
+                </div>
+
+
+                <!-- USERNAME -->
+                <div>
+                    <span>Login Username</span>
+
+                    <strong>
+                        @(string.IsNullOrWhiteSpace(Model.UserName)
+                            ? "-"
+                            : Model.UserName)
+                    </strong>
+                </div>
+
+
+                <!-- ADDRESS -->
+                <div class="full">
+                    <span>Address</span>
+
+                    <strong>
+                        @(string.IsNullOrWhiteSpace(Model.Address)
+                            ? "Not Provided"
+                            : Model.Address)
+                    </strong>
+                </div>
+
+
+                <!-- IDENTITY ID -->
+                <div class="full">
+                    <span>Identity Account ID</span>
+
+                    <strong class="tpf-user-id">
+                        @Model.UserId
+                    </strong>
+                </div>
+
+            </div>
+
+
+            <div class="tpf-note">
+
+                <i class="bi bi-info-circle-fill"></i>
+
+                <div>
+                    <strong>Account Management</strong>
+
+                    <p>
+                        Employee information and role permissions are
+                        managed through the NEXUS Administrator panel.
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

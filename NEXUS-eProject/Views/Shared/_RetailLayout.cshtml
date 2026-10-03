@@ -1,0 +1,635 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> UserManager
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewData["Title"] - NEXUS Retail</title>
+
+
+    <!-- ================================================= -->
+    <!-- BOOTSTRAP -->
+    <!-- ================================================= -->
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+
+
+    <!-- ================================================= -->
+    <!-- BOOTSTRAP ICONS -->
+    <!-- ================================================= -->
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+
+
+    <!-- ================================================= -->
+    <!-- NEXUS RETAIL CSS -->
+    <!-- ================================================= -->
+
+    <link rel="stylesheet"
+          href="~/css/retail.css"
+          asp-append-version="true" />
+
+</head>
+
+
+<body>
+
+    @{
+
+        var currentController =
+            ViewContext.RouteData.Values["controller"]?.ToString();
+
+        var currentAction =
+            ViewContext.RouteData.Values["action"]?.ToString();
+
+        var currentUser =
+            await UserManager.GetUserAsync(User);
+
+        var userEmail =
+            currentUser?.Email ?? "Retail Employee";
+
+        var userInitial =
+            string.IsNullOrWhiteSpace(userEmail)
+                ? "R"
+                : userEmail.Substring(0, 1).ToUpper();
+
+    }
+
+
+    <!-- ================================================= -->
+    <!-- RETAIL WRAPPER -->
+    <!-- ================================================= -->
+
+    <div class="retail-wrapper">
+
+
+        <!-- ================================================= -->
+        <!-- SIDEBAR -->
+        <!-- ================================================= -->
+
+        <aside class="retail-sidebar"
+               id="retailSidebar">
+
+
+            <!-- ================================================= -->
+            <!-- BRAND -->
+            <!-- ================================================= -->
+
+            <div class="retail-brand">
+
+                <div class="retail-brand-icon">
+
+                    <i class="bi bi-grid-1x2-fill"></i>
+
+                </div>
+
+                <div class="retail-brand-text">
+
+                    <h4>
+                        NEXUS
+                    </h4>
+
+                    <span>
+                        Retail Portal
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- SIDEBAR MENU -->
+            <!-- ================================================= -->
+
+            <nav class="retail-sidebar-menu">
+
+
+                <!-- ================================================= -->
+                <!-- MAIN MENU -->
+                <!-- ================================================= -->
+
+                <div class="retail-menu-title">
+                    MAIN MENU
+                </div>
+
+
+                <!-- Dashboard -->
+
+                <a asp-controller="Retail"
+                   asp-action="Dashboard"
+                   class="retail-menu-item @(currentController == "Retail" && currentAction == "Dashboard" ? "active" : "")">
+
+                    <i class="bi bi-grid-1x2"></i>
+
+                    <span>
+                        Dashboard
+                    </span>
+
+                </a>
+
+
+                <!-- ================================================= -->
+                <!-- APPLICATIONS -->
+                <!-- ================================================= -->
+
+                <div class="retail-menu-title">
+                    APPLICATIONS
+                </div>
+
+
+                <!-- All Applications -->
+
+                <a asp-controller="RetailOrder"
+                   asp-action="Index"
+                   class="retail-menu-item @(currentController == "RetailOrder" && currentAction == "Index" && string.IsNullOrEmpty(Context.Request.Query["status"]) ? "active" : "")">
+
+                    <i class="bi bi-file-earmark-text"></i>
+
+                    <span>
+                        Applications
+                    </span>
+
+                </a>
+
+
+                <!-- Pending -->
+
+                <a asp-controller="RetailOrder"
+                   asp-action="Pending"
+                   class="retail-menu-item @(currentController == "RetailOrder" && currentAction == "Pending" ? "active" : "")">
+
+                    <i class="bi bi-hourglass-split"></i>
+
+                    <span>
+                        Pending 
+                    </span>
+
+                </a>
+
+
+                <!-- Accepted -->
+
+                <a asp-controller="RetailOrder"
+                   asp-action="AcceptedOrders"
+                   class="retail-menu-item @(currentController == "RetailOrder" && currentAction == "AcceptedOrders" ? "active" : "")">
+
+                    <i class="bi bi-check-circle"></i>
+
+                    <span>
+                        Accepted
+                    </span>
+
+                </a>
+
+
+                <!-- Rejected -->
+
+                <a asp-controller="RetailOrder"
+                   asp-action="Rejected"
+                   class="retail-menu-item @(currentController == "RetailOrder" && currentAction == "Rejected" ? "active" : "")">
+
+                    <i class="bi bi-x-circle"></i>
+
+                    <span>
+                        Rejected
+                    </span>
+
+                </a>
+
+
+                <!-- ================================================= -->
+                <!-- CUSTOMERS -->
+                <!-- ================================================= -->
+
+                <div class="retail-menu-title">
+                    CUSTOMERS
+                </div>
+
+
+                <a asp-controller="RetailCustomer"
+                   asp-action="Index"
+                   class="retail-menu-item @(currentController == "RetailCustomer" ? "active" : "")">
+
+                    <i class="bi bi-people"></i>
+
+                    <span>
+                        Customers
+                    </span>
+
+                </a>
+
+
+                <!-- ================================================= -->
+                <!-- OPERATIONS -->
+                <!-- ================================================= -->
+
+                <div class="retail-menu-title">
+                    OPERATIONS
+                </div>
+
+
+                <!-- Orders -->
+
+                <a asp-controller="RetailOrders"
+                   asp-action="Index"
+                   class="retail-menu-item @(currentController == "RetailOrders" ? "active" : "")">
+                    <i class="bi bi-cart3"></i>
+                    <span>Orders</span>
+                </a>
+
+
+                <!-- Connections -->
+
+                <a asp-controller="RetailConnection"
+                   asp-action="Index"
+                   class="retail-menu-item @(currentController == "RetailConnection" ? "active" : "")">
+                    <i class="bi bi-diagram-3"></i>
+                    <span>Connections</span>
+                </a>
+
+
+                <!-- Bills -->
+
+                <a asp-controller="RetailBill"
+                   asp-action="Index"
+                   class="retail-menu-item @(currentController == "RetailBill" ? "active" : "")">
+                
+                    <i class="bi bi-receipt"></i>
+                
+                    <span>
+                        Bills
+                    </span>
+                
+                </a>
+
+
+                <!-- Payments -->
+
+                <a asp-controller="RetailPayment"
+                   asp-action="Index"
+                   class="retail-menu-item @(currentController == "RetailPayment" ? "active" : "")">
+                
+                    <i class="bi bi-credit-card"></i>
+                
+                    <span>
+                        Payments
+                    </span>
+                
+                </a>
+
+
+                <!-- ================================================= -->
+                <!-- ACCOUNT -->
+                <!-- ================================================= -->
+
+                <div class="retail-menu-title">
+                    ACCOUNT
+                </div>
+
+
+                <!-- Profile -->
+
+                <a asp-controller="RetailProfile"
+                   asp-action="Index"
+                   class="retail-menu-item @(currentController == "RetailProfile" ? "active" : "")">
+                
+                    <i class="bi bi-person-circle"></i>
+                
+                    <span>
+                        Profile
+                    </span>
+                
+                </a>
+
+
+                <!-- Logout -->
+
+                <form asp-controller="Account"
+                      asp-action="Logout"
+                      method="post"
+                      class="retail-logout-form">
+
+                    @Html.AntiForgeryToken()
+
+                    <button type="submit"
+                            class="retail-menu-item retail-logout">
+
+                        <i class="bi bi-box-arrow-right"></i>
+
+                        <span>
+                            Logout
+                        </span>
+
+                    </button>
+
+                </form>
+
+
+            </nav>
+
+
+            <!-- ================================================= -->
+            <!-- SIDEBAR BOTTOM -->
+            <!-- ================================================= -->
+
+            <div class="retail-sidebar-bottom">
+
+
+                <!-- Support -->
+
+                <div class="retail-sidebar-footer">
+
+                    <div class="retail-support-icon">
+
+                        <i class="bi bi-headset"></i>
+
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Retail Support
+                        </strong>
+
+                        <span>
+                            NEXUS Management
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </aside>
+
+
+        <!-- ================================================= -->
+        <!-- MOBILE OVERLAY -->
+        <!-- ================================================= -->
+
+        <div class="retail-overlay"
+             id="retailOverlay">
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- MAIN CONTENT -->
+        <!-- ================================================= -->
+
+        <main class="retail-main">
+
+
+            <!-- ================================================= -->
+            <!-- TOPBAR -->
+            <!-- ================================================= -->
+
+            <header class="retail-topbar">
+
+
+                <!-- TOPBAR LEFT -->
+
+                <div class="retail-topbar-left">
+
+
+                    <!-- Mobile Sidebar Toggle -->
+
+                    <button class="retail-mobile-toggle"
+                            id="retailSidebarToggle"
+                            type="button">
+
+                        <i class="bi bi-list"></i>
+
+                    </button>
+
+
+                    <!-- Page Heading -->
+
+                    <div class="retail-topbar-heading">
+
+                        <span>
+                            RETAIL PORTAL
+                        </span>
+
+                        <strong>
+                            @(ViewData["PageTitle"] ?? ViewData["Title"] ?? "Dashboard")
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ================================================= -->
+                <!-- TOPBAR RIGHT -->
+                <!-- ================================================= -->
+
+                <div class="retail-topbar-right">
+
+
+                    <!-- Search -->
+
+                    <div class="retail-search-box">
+
+                        <i class="bi bi-search"></i>
+
+                        <input type="text"
+                               placeholder="Search..." />
+
+                    </div>
+
+
+                    <!-- Notifications -->
+
+                    <button class="retail-icon-button"
+                            type="button"
+                            title="Notifications">
+
+                        <i class="bi bi-bell"></i>
+
+                        <span class="retail-notification-dot"></span>
+
+                    </button>
+
+
+                    <!-- ================================================= -->
+                    <!-- PROFILE -->
+                    <!-- ================================================= -->
+
+                    <div class="retail-profile">
+
+                        <div class="retail-profile-avatar">
+
+                            @userInitial
+
+                        </div>
+
+
+                        <div class="retail-profile-info">
+
+                            <strong>
+                                Retail Employee
+                            </strong>
+
+                            <span>
+                                @userEmail
+                            </span>
+
+                        </div>
+
+
+                        <i class="bi bi-chevron-down retail-profile-arrow"></i>
+
+                    </div>
+
+
+                </div>
+
+
+            </header>
+
+
+            <!-- ================================================= -->
+            <!-- PAGE CONTENT -->
+            <!-- ================================================= -->
+
+            <section class="retail-content">
+
+                @RenderBody()
+
+            </section>
+
+
+        </main>
+
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- BOOTSTRAP JS -->
+    <!-- ================================================= -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
+    <!-- ================================================= -->
+    <!-- RETAIL SIDEBAR JS -->
+    <!-- ================================================= -->
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const sidebar =
+                document.getElementById("retailSidebar");
+
+            const toggle =
+                document.getElementById("retailSidebarToggle");
+
+            const overlay =
+                document.getElementById("retailOverlay");
+
+
+            /* =========================================
+               OPEN / CLOSE SIDEBAR
+               ========================================= */
+
+            if (toggle && sidebar) {
+
+                toggle.addEventListener("click", function () {
+
+                    sidebar.classList.toggle("show");
+
+                    if (overlay) {
+                        overlay.classList.toggle("show");
+                    }
+
+                });
+
+            }
+
+
+            /* =========================================
+               CLOSE USING OVERLAY
+               ========================================= */
+
+            if (overlay && sidebar) {
+
+                overlay.addEventListener("click", function () {
+
+                    sidebar.classList.remove("show");
+
+                    overlay.classList.remove("show");
+
+                });
+
+            }
+
+
+            /* =========================================
+               CLOSE AFTER MENU CLICK
+               ========================================= */
+
+            document
+                .querySelectorAll(".retail-menu-item")
+                .forEach(function (item) {
+
+                    item.addEventListener("click", function () {
+
+                        if (window.innerWidth <= 991) {
+
+                            sidebar?.classList.remove("show");
+
+                            overlay?.classList.remove("show");
+
+                        }
+
+                    });
+
+                });
+
+
+            /* =========================================
+               RESET MOBILE SIDEBAR ON RESIZE
+               ========================================= */
+
+            window.addEventListener("resize", function () {
+
+                if (window.innerWidth > 991) {
+
+                    sidebar?.classList.remove("show");
+
+                    overlay?.classList.remove("show");
+
+                }
+
+            });
+
+        });
+
+    </script>
+
+
+    <!-- ================================================= -->
+    <!-- PAGE SCRIPTS -->
+    <!-- ================================================= -->
+
+    @await RenderSectionAsync(
+        "Scripts",
+        required: false)
+
+</body>
+
+</html>

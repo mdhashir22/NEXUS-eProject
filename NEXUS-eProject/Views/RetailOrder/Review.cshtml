@@ -1,0 +1,574 @@
+﻿@model NEXUS_eProject.Models.RetailApplicationViewModel
+
+@{
+    ViewData["Title"] = "Review Application";
+    Layout = "~/Views/Shared/_RetailLayout.cshtml";
+}
+
+<div class="retail-page">
+
+    <!-- HEADER -->
+    <div class="retail-page-header">
+        <div>
+            <div class="retail-page-eyebrow">
+                <i class="bi bi-clipboard-check"></i>
+                APPLICATION REVIEW
+            </div>
+
+            <h1>Review Application</h1>
+
+            <p>
+                Review the customer application before accepting or rejecting it.
+            </p>
+        </div>
+
+        <a asp-action="Details"
+           asp-route-id="@Model.OrderId"
+           class="retail-secondary-btn">
+
+            <i class="bi bi-arrow-left"></i>
+            Back to Details
+
+        </a>
+    </div>
+
+
+    <!-- ALERTS -->
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success retail-alert">
+            <i class="bi bi-check-circle-fill"></i>
+            <span>@TempData["Success"]</span>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger retail-alert">
+            <i class="bi bi-exclamation-circle-fill"></i>
+            <span>@TempData["Error"]</span>
+        </div>
+    }
+
+
+    <div class="row g-4">
+
+        <!-- =====================================================
+             CUSTOMER INFORMATION
+             ===================================================== -->
+
+        <div class="col-xl-6">
+
+            <div class="retail-card h-100">
+
+                <div class="retail-card-header">
+
+                    <div class="retail-card-title">
+
+                        <div class="retail-card-icon">
+                            <i class="bi bi-person"></i>
+                        </div>
+
+                        <div>
+                            <h3>Customer Information</h3>
+                            <span>Applicant details</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="retail-card-body">
+
+                    <div class="row g-4">
+
+                        <div class="col-md-6">
+
+                            <div class="retail-detail-item">
+
+                                <span class="retail-detail-label">
+                                    Customer Name
+                                </span>
+
+                                <strong>
+                                    @(Model.CustomerName ?? "N/A")
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <div class="retail-detail-item">
+
+                                <span class="retail-detail-label">
+                                    Father Name
+                                </span>
+
+                                <strong>
+                                    @(Model.FatherName ?? "N/A")
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <div class="retail-detail-item">
+
+                                <span class="retail-detail-label">
+                                    Phone
+                                </span>
+
+                                <strong>
+                                    @(Model.Phone ?? "N/A")
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <div class="retail-detail-item">
+
+                                <span class="retail-detail-label">
+                                    Email
+                                </span>
+
+                                <strong>
+                                    @(Model.Email ?? "N/A")
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <div class="retail-detail-item">
+
+                                <span class="retail-detail-label">
+                                    City
+                                </span>
+
+                                <strong>
+                                    @(Model.City ?? "N/A")
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <div class="retail-detail-item">
+
+                                <span class="retail-detail-label">
+                                    Customer ID
+                                </span>
+
+                                <strong>
+                                    #@Model.CustomerId
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-12">
+
+                            <div class="retail-detail-item">
+
+                                <span class="retail-detail-label">
+                                    Address
+                                </span>
+
+                                <strong>
+                                    @(Model.Address ?? "N/A")
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             SERVICE INFORMATION
+             ===================================================== -->
+
+        <div class="col-xl-6">
+
+            <div class="retail-card h-100">
+
+                <div class="retail-card-header">
+
+                    <div class="retail-card-title">
+
+                        <div class="retail-card-icon">
+                            <i class="bi bi-wifi"></i>
+                        </div>
+
+                        <div>
+                            <h3>Requested Service</h3>
+                            <span>Connection and plan details</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="retail-card-body">
+
+                    <div class="row g-4">
+
+                        <div class="col-md-6">
+
+                            <div class="retail-detail-item">
+
+                                <span class="retail-detail-label">
+                                    Order Number
+                                </span>
+
+                                <strong>
+                                    #@Model.OrderNumber
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <div class="retail-detail-item">
+
+                                <span class="retail-detail-label">
+                                    Connection Type
+                                </span>
+
+                                <strong>
+                                    @Model.ConnectionType
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <div class="retail-detail-item">
+
+                                <span class="retail-detail-label">
+                                    Plan
+                                </span>
+
+                                <strong>
+                                    @(Model.PlanName ?? "N/A")
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <div class="retail-detail-item">
+
+                                <span class="retail-detail-label">
+                                    Speed
+                                </span>
+
+                                <strong>
+                                    @(Model.PlanSpeed ?? "N/A")
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <div class="retail-detail-item">
+
+                                <span class="retail-detail-label">
+                                    Plan Price
+                                </span>
+
+                                <strong>
+                                    Rs. @Model.PlanPrice.ToString("N2")
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <div class="retail-detail-item">
+
+                                <span class="retail-detail-label">
+                                    Equipment
+                                </span>
+
+                                <strong>
+                                    @(string.IsNullOrWhiteSpace(Model.Equipment)
+                                        ? "Not specified"
+                                        : Model.Equipment)
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-12">
+
+                            <div class="retail-detail-item">
+
+                                <span class="retail-detail-label">
+                                    Additional Information
+                                </span>
+
+                                @if (string.IsNullOrWhiteSpace(Model.AdditionalInfo))
+                                {
+                                    <strong class="text-muted">
+                                        No additional information provided.
+                                    </strong>
+                                }
+                                else
+                                {
+                                    <strong style="white-space: pre-line;">
+                                        @Model.AdditionalInfo
+                                    </strong>
+                                }
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             REVIEW ACTION
+             ===================================================== -->
+
+        <div class="col-12">
+
+            <div class="retail-card">
+
+                <div class="retail-card-header">
+
+                    <div class="retail-card-title">
+
+                        <div class="retail-card-icon">
+                            <i class="bi bi-check2-square"></i>
+                        </div>
+
+                        <div>
+                            <h3>Retail Decision</h3>
+                            <span>
+                                Choose whether this application should proceed to Technical.
+                            </span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="retail-card-body">
+
+                    @if (Model.Status == "Submitted")
+                    {
+                        <div class="row g-4">
+
+                            <!-- ACCEPT -->
+
+                            <div class="col-lg-6">
+
+                                <div class="border rounded-3 p-4 h-100">
+
+                                    <div class="d-flex align-items-center gap-3 mb-3">
+
+                                        <div class="retail-card-icon"
+                                             style="background: rgba(25,135,84,.12); color:#198754;">
+
+                                            <i class="bi bi-check-circle"></i>
+
+                                        </div>
+
+                                        <div>
+                                            <h5 class="mb-1">
+                                                Accept Application
+                                            </h5>
+
+                                            <small class="text-muted">
+                                                Forward the application to Technical for feasibility.
+                                            </small>
+                                        </div>
+
+                                    </div>
+
+
+                                    <form asp-action="Accept"
+                                          asp-route-id="@Model.OrderId"
+                                          method="post">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <button type="submit"
+                                                class="btn btn-success w-100"
+                                                onclick="return confirm('Are you sure you want to accept this application?');">
+
+                                            <i class="bi bi-check-circle me-1"></i>
+                                            Accept & Forward to Technical
+
+                                        </button>
+
+                                    </form>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- REJECT -->
+
+                            <div class="col-lg-6">
+
+                                <div class="border rounded-3 p-4 h-100">
+
+                                    <div class="d-flex align-items-center gap-3 mb-3">
+
+                                        <div class="retail-card-icon"
+                                             style="background: rgba(220,53,69,.12); color:#dc3545;">
+
+                                            <i class="bi bi-x-circle"></i>
+
+                                        </div>
+
+                                        <div>
+                                            <h5 class="mb-1">
+                                                Reject Application
+                                            </h5>
+
+                                            <small class="text-muted">
+                                                A rejection reason is required.
+                                            </small>
+                                        </div>
+
+                                    </div>
+
+
+                                    <form asp-action="Reject"
+                                          asp-route-id="@Model.OrderId"
+                                          method="post">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <div class="mb-3">
+
+                                            <label for="reason"
+                                                   class="form-label">
+
+                                                Rejection Reason
+
+                                            </label>
+
+                                            <textarea id="reason"
+                                                      name="reason"
+                                                      class="form-control"
+                                                      rows="4"
+                                                      maxlength="1000"
+                                                      required
+                                                      placeholder="Enter the reason for rejecting this application..."></textarea>
+
+                                        </div>
+
+
+                                        <button type="submit"
+                                                class="btn btn-outline-danger w-100"
+                                                onclick="return confirm('Are you sure you want to reject this application?');">
+
+                                            <i class="bi bi-x-circle me-1"></i>
+                                            Reject Application
+
+                                        </button>
+
+                                    </form>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-4">
+
+                            <div class="retail-empty-icon mx-auto mb-3">
+                                <i class="bi bi-lock"></i>
+                            </div>
+
+                            <h4>
+                                Application Already Reviewed
+                            </h4>
+
+                            <p class="text-muted mb-3">
+                                This application is currently marked as
+                                <strong>@Model.Status</strong>.
+                            </p>
+
+                            <a asp-action="Details"
+                               asp-route-id="@Model.OrderId"
+                               class="retail-primary-btn">
+
+                                <i class="bi bi-eye"></i>
+                                View Application Details
+
+                            </a>
+
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

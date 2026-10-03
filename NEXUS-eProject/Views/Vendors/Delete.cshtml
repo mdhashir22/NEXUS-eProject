@@ -1,0 +1,102 @@
+﻿@model NEXUS_eProject.Models.Vendor
+
+@{
+    ViewData["Title"] = "Delete Vendor";
+    ViewData["PageTitle"] = "Delete Vendor";
+    ViewData["PageSubtitle"] = "Remove vendor from Nexus";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="page-heading">
+
+    <div>
+        <h2>Delete Vendor</h2>
+        <p>Confirm vendor deletion.</p>
+    </div>
+
+</div>
+
+
+<div class="form-card delete-card">
+
+    <div class="delete-icon">
+        <i class="bi bi-trash"></i>
+    </div>
+
+
+    <h3>
+        Delete this vendor?
+    </h3>
+
+
+    <p>
+        Are you sure you want to permanently delete
+        <strong>@Model.VendorName</strong>?
+    </p>
+
+
+    <div class="delete-info">
+
+        <div>
+            <span>Vendor</span>
+            <strong>
+                @Model.VendorName
+            </strong>
+        </div>
+
+
+        <div>
+            <span>Contact Person</span>
+            <strong>
+                @(string.IsNullOrWhiteSpace(Model.ContactPerson)
+                    ? "N/A"
+                    : Model.ContactPerson)
+            </strong>
+        </div>
+
+
+        <div>
+            <span>Phone</span>
+            <strong>
+                @(string.IsNullOrWhiteSpace(Model.Phone)
+                    ? "N/A"
+                    : Model.Phone)
+            </strong>
+        </div>
+
+    </div>
+
+
+    <form asp-action="Delete"
+          method="post">
+
+        @Html.AntiForgeryToken()
+
+        <input type="hidden"
+               asp-for="VendorId" />
+
+
+        <div class="form-footer">
+
+            <a asp-action="Index"
+               class="secondary-action">
+
+                <i class="bi bi-arrow-left"></i>
+                Cancel
+
+            </a>
+
+
+            <button type="submit"
+                    class="delete-button">
+
+                <i class="bi bi-trash"></i>
+                Delete Vendor
+
+            </button>
+
+        </div>
+
+    </form>
+
+</div>

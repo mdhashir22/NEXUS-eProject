@@ -1,0 +1,264 @@
+﻿@model NEXUS_eProject.Models.AccountsProfileViewModel
+
+@{
+    Layout = "~/Views/Shared/_AccountsLayout.cshtml";
+    ViewData["Title"] = "Profile";
+
+    var displayName = string.IsNullOrWhiteSpace(Model.FullName)
+        ? "Accounts Employee"
+        : Model.FullName;
+
+    var email = string.IsNullOrWhiteSpace(Model.Email)
+        ? "Accounts Employee"
+        : Model.Email;
+
+    var initial = string.IsNullOrWhiteSpace(displayName)
+        ? "A"
+        : displayName.Substring(0, 1).ToUpper();
+}
+
+<div class="apf-page">
+
+    <!-- HEADER -->
+
+    <div class="apf-header">
+
+        <div>
+
+            <span class="apf-eyebrow">
+                <i class="bi bi-person-circle"></i>
+                ACCOUNT
+            </span>
+
+            <h1>Profile</h1>
+
+            <p>
+                View your NEXUS Accounts account information.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- PROFILE CARD -->
+
+    <div class="apf-profile-card">
+
+        <div class="apf-profile-top">
+
+            <div class="apf-avatar">
+                @initial
+            </div>
+
+
+            <div class="apf-profile-name">
+
+                <h2>
+                    @displayName
+                </h2>
+
+                <span>
+                    @email
+                </span>
+
+                <div class="apf-role">
+                    <i class="bi bi-shield-check"></i>
+                    @Model.Role
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="apf-divider"></div>
+
+
+        <!-- INFORMATION -->
+
+        <div class="apf-info-grid">
+
+
+            <div class="apf-info-item">
+
+                <span>
+                    FULL NAME
+                </span>
+
+                <strong>
+                    @displayName
+                </strong>
+
+            </div>
+
+
+            <div class="apf-info-item">
+
+                <span>
+                    EMPLOYEE ID
+                </span>
+
+                <strong>
+                    @if (Model.EmployeeId.HasValue)
+                    {
+                        @($"EMP{Model.EmployeeId.Value:D5}")
+                    }
+                    else
+                    {
+                        @("-")
+                    }
+                </strong>
+
+            </div>
+
+
+            <div class="apf-info-item">
+
+                <span>
+                    EMAIL ADDRESS
+                </span>
+
+                <strong>
+                    @email
+                </strong>
+
+            </div>
+
+
+            <div class="apf-info-item">
+
+                <span>
+                    PHONE NUMBER
+                </span>
+
+                <strong>
+                    @(string.IsNullOrWhiteSpace(Model.PhoneNumber)
+                        ? "-"
+                        : Model.PhoneNumber)
+                </strong>
+
+            </div>
+
+
+            <div class="apf-info-item">
+
+                <span>
+                    DEPARTMENT
+                </span>
+
+                <strong>
+                    @(string.IsNullOrWhiteSpace(Model.Department)
+                        ? "Accounts"
+                        : Model.Department)
+                </strong>
+
+            </div>
+
+
+            <div class="apf-info-item">
+
+                <span>
+                    ACCOUNT TYPE
+                </span>
+
+                <strong>
+                    @Model.Role
+                </strong>
+
+            </div>
+
+
+            <div class="apf-info-item">
+
+                <span>
+                    ACCOUNT STATUS
+                </span>
+
+                @if (Model.IsActive)
+                {
+                    <strong class="apf-active">
+                        <i class="bi bi-circle-fill"></i>
+                        Active
+                    </strong>
+                }
+                else
+                {
+                    <strong class="apf-inactive">
+                        <i class="bi bi-circle-fill"></i>
+                        Inactive
+                    </strong>
+                }
+
+            </div>
+
+
+            <div class="apf-info-item">
+
+                <span>
+                    USERNAME
+                </span>
+
+                <strong>
+                    @Model.UserName
+                </strong>
+
+            </div>
+
+
+            <div class="apf-info-item apf-address">
+
+                <span>
+                    ADDRESS
+                </span>
+
+                <strong>
+                    @(string.IsNullOrWhiteSpace(Model.Address)
+                        ? "-"
+                        : Model.Address)
+                </strong>
+
+            </div>
+
+
+            <div class="apf-info-item apf-user-id">
+
+                <span>
+                    USER ID
+                </span>
+
+                <strong>
+                    @Model.UserId
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- SECURITY CARD -->
+
+    <div class="apf-security-card">
+
+        <div class="apf-security-icon">
+            <i class="bi bi-shield-lock"></i>
+        </div>
+
+        <div>
+
+            <h3>
+                Account Security
+            </h3>
+
+            <p>
+                Your account is managed through the NEXUS identity system.
+                Contact an administrator if you need account changes.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>

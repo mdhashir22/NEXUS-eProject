@@ -1,0 +1,344 @@
+﻿@model IEnumerable<NEXUS_eProject.Models.Feedback>
+
+@{
+    ViewData["Title"] = "Feedback";
+    ViewData["PageTitle"] = "Customer Feedback";
+    ViewData["PageSubtitle"] = "Review and manage customer feedback";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="page-heading">
+
+    <div>
+        <h2>Customer Feedback</h2>
+
+        <p>
+            Review, approve and manage customer feedback.
+        </p>
+    </div>
+
+</div>
+
+
+@if (TempData["Success"] != null)
+{
+    <div class="success-alert">
+
+        <i class="bi bi-check-circle-fill"></i>
+
+        <span>
+            @TempData["Success"]
+        </span>
+
+    </div>
+}
+
+
+@if (TempData["Error"] != null)
+{
+    <div class="error-alert">
+
+        <i class="bi bi-exclamation-circle-fill"></i>
+
+        <span>
+            @TempData["Error"]
+        </span>
+
+    </div>
+}
+
+
+<div class="dashboard-card">
+
+    <div class="card-header">
+
+        <div>
+
+            <h5>Feedback List</h5>
+
+            <span>
+                @Model.Count() customer feedback entries
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="table-responsive">
+
+        <table class="nexus-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>ID</th>
+
+                    <th>Customer</th>
+
+                    <th>Subject</th>
+
+                    <th>Rating</th>
+
+                    <th>Message</th>
+
+                    <th>Status</th>
+
+                    <th>Date</th>
+
+                    <th>Actions</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                @if (Model == null || !Model.Any())
+                {
+                    <tr>
+
+                        <td colspan="8" class="empty-state">
+
+                            <i class="bi bi-chat-square-text"></i>
+
+                            <div>
+                                No feedback found.
+                            </div>
+
+                            <span>
+                                Customer feedback will appear here once submitted.
+                            </span>
+
+                        </td>
+
+                    </tr>
+                }
+                else
+                {
+                    foreach (var feedback in Model)
+                    {
+                        var customerName =
+                            feedback.Customer?.FullName
+                            ?? "Unknown Customer";
+
+                        var customerEmail =
+                            feedback.Customer?.Email
+                            ?? "N/A";
+
+                        var customerInitial =
+                            !string.IsNullOrWhiteSpace(
+                                feedback.Customer?.FullName)
+                                ? feedback.Customer.FullName
+                                    .Substring(0, 1)
+                                    .ToUpper()
+                                : "U";
+
+                        <tr>
+
+                            <!-- ID -->
+
+                            <td>
+                                #@feedback.FeedbackId
+                            </td>
+
+
+                            <!-- CUSTOMER -->
+
+                            <td>
+
+                                <div class="employee-cell">
+
+                                    <div class="employee-avatar">
+
+                                        @customerInitial
+
+                                    </div>
+
+                                    <div>
+
+                                        <strong>
+                                            @customerName
+                                        </strong>
+
+                                        <small>
+                                            @customerEmail
+                                        </small>
+
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+
+                            <!-- SUBJECT -->
+
+                            <td>
+
+                                <strong>
+                                    @feedback.Subject
+                                </strong>
+
+                            </td>
+
+
+                            <!-- RATING -->
+
+                            <td>
+
+                                <div class="feedback-stars">
+
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        if (i <= feedback.Rating)
+                                        {
+                                            <i class="bi bi-star-fill"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="bi bi-star"></i>
+                                        }
+                                    }
+
+                                </div>
+
+                            </td>
+
+
+                            <!-- MESSAGE -->
+
+                            <td>
+
+                                <div class="feedback-message-cell">
+                                    @feedback.Message
+                                </div>
+
+                            </td>
+
+
+                            <!-- STATUS -->
+
+                            <td>
+
+                                @if (feedback.Status == "Approved")
+                                {
+                                    <span class="status-badge active">
+
+                                        <i class="bi bi-check-circle-fill"></i>
+
+                                        Approved
+
+                                    </span>
+                                }
+                                else if (feedback.Status == "Rejected")
+                                {
+                                    <span class="status-badge inactive">
+
+                                        <i class="bi bi-x-circle-fill"></i>
+
+                                        Rejected
+
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="status-badge pending">
+
+                                        <i class="bi bi-clock-fill"></i>
+
+                                        Submitted
+
+                                    </span>
+                                }
+
+                            </td>
+
+
+                            <!-- DATE -->
+
+                            <td>
+                                @feedback.CreatedAt.ToString("dd MMM yyyy")
+                            </td>
+
+
+                            <!-- ACTIONS -->
+
+                            <td>
+
+                                <div class="table-actions">
+
+                                    <!-- DETAILS -->
+
+                                    <a asp-action="Details"
+                                       asp-route-id="@feedback.FeedbackId"
+                                       class="table-action details"
+                                       title="View Details">
+
+                                        <i class="bi bi-eye"></i>
+
+                                    </a>
+
+
+                                    <!-- APPROVE -->
+
+                                    @if (feedback.Status != "Approved")
+                                    {
+                                        <form asp-action="Approve"
+                                              asp-route-id="@feedback.FeedbackId"
+                                              method="post"
+                                              class="d-inline">
+
+                                            @Html.AntiForgeryToken()
+
+                                            <button type="submit"
+                                                    class="table-action approve"
+                                                    title="Approve">
+
+                                                <i class="bi bi-check-lg"></i>
+
+                                            </button>
+
+                                        </form>
+                                    }
+
+
+                                    <!-- REJECT -->
+
+                                    @if (feedback.Status != "Rejected")
+                                    {
+                                        <form asp-action="Reject"
+                                              asp-route-id="@feedback.FeedbackId"
+                                              method="post"
+                                              class="d-inline">
+
+                                            @Html.AntiForgeryToken()
+
+                                            <button type="submit"
+                                                    class="table-action delete"
+                                                    title="Reject">
+
+                                                <i class="bi bi-x-lg"></i>
+
+                                            </button>
+
+                                        </form>
+                                    }
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+                    }
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>

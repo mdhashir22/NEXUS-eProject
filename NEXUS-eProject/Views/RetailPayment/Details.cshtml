@@ -1,0 +1,394 @@
+﻿@model NEXUS_eProject.Models.Payment
+
+@{
+    Layout = "~/Views/Shared/_RetailLayout.cshtml";
+    ViewData["Title"] = "Payment Details";
+
+    var status = Model.Status ?? "Pending";
+
+    var statusClass =
+        status == "Paid"
+            ? "rpd-status-paid"
+            : status == "Rejected"
+                ? "rpd-status-rejected"
+                : "rpd-status-pending";
+}
+
+<div class="rpd-page">
+
+    <div class="rpd-header">
+
+        <div>
+            <span class="rpd-eyebrow">
+                <i class="bi bi-credit-card"></i>
+                PAYMENT DETAILS
+            </span>
+
+            <h1>@Model.PaymentNumber</h1>
+
+            <p>Complete payment and customer transaction information.</p>
+        </div>
+
+        <div class="rpd-header-actions">
+
+            <a asp-action="Index"
+               class="retail-secondary-btn">
+                <i class="bi bi-arrow-left"></i>
+                Back to Payments
+            </a>
+
+            <button type="button"
+                    class="retail-primary-btn"
+                    onclick="window.print()">
+                <i class="bi bi-printer"></i>
+                Print
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div class="rpd-summary-grid">
+
+        <div class="rpd-summary-card">
+            <div class="rpd-summary-icon purple">
+                <i class="bi bi-credit-card-2-front"></i>
+            </div>
+            <div>
+                <span>PAYMENT NUMBER</span>
+                <strong>@Model.PaymentNumber</strong>
+            </div>
+        </div>
+
+        <div class="rpd-summary-card">
+            <div class="rpd-summary-icon blue">
+                <i class="bi bi-person-vcard"></i>
+            </div>
+            <div>
+                <span>ACCOUNT ID</span>
+                <strong>
+                    @(string.IsNullOrWhiteSpace(Model.AccountId)
+                        ? "N/A"
+                        : Model.AccountId)
+                </strong>
+            </div>
+        </div>
+
+        <div class="rpd-summary-card">
+            <div class="rpd-summary-icon green">
+                <i class="bi bi-cash-stack"></i>
+            </div>
+            <div>
+                <span>PAYMENT AMOUNT</span>
+                <strong>PKR @Model.Amount.ToString("N2")</strong>
+            </div>
+        </div>
+
+        <div class="rpd-summary-card">
+            <div class="rpd-summary-icon orange">
+                <i class="bi bi-activity"></i>
+            </div>
+            <div>
+                <span>STATUS</span>
+                <strong class="rpd-status @statusClass">
+                    @status
+                </strong>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="rpd-main-grid">
+
+        <!-- PAYMENT INFORMATION -->
+
+        <div class="retail-card rpd-card">
+
+            <div class="retail-card-header">
+
+                <div class="retail-card-title">
+
+                    <div class="retail-card-icon">
+                        <i class="bi bi-credit-card"></i>
+                    </div>
+
+                    <div>
+                        <h3>Payment Information</h3>
+                        <span>Transaction details</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="retail-card-body">
+
+                <div class="rpd-info-grid">
+
+                    <div class="rpd-info-item">
+                        <span>PAYMENT NUMBER</span>
+                        <strong>@Model.PaymentNumber</strong>
+                    </div>
+
+                    <div class="rpd-info-item">
+                        <span>PAYMENT ID</span>
+                        <strong>#@Model.PaymentId</strong>
+                    </div>
+
+                    <div class="rpd-info-item">
+                        <span>AMOUNT</span>
+                        <strong>PKR @Model.Amount.ToString("N2")</strong>
+                    </div>
+
+                    <div class="rpd-info-item">
+                        <span>PAYMENT METHOD</span>
+                        <strong>
+                            @(Model.PaymentMethod ?? "N/A")
+                        </strong>
+                    </div>
+
+                    <div class="rpd-info-item">
+                        <span>PAYMENT DATE</span>
+                        <strong>
+                            @Model.PaymentDate.ToString("dd MMM yyyy, hh:mm tt")
+                        </strong>
+                    </div>
+
+                    <div class="rpd-info-item">
+                        <span>STATUS</span>
+                        <strong class="rpd-status @statusClass">
+                            @status
+                        </strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- CUSTOMER -->
+
+        <div class="retail-card rpd-card">
+
+            <div class="retail-card-header">
+
+                <div class="retail-card-title">
+
+                    <div class="retail-card-icon">
+                        <i class="bi bi-person"></i>
+                    </div>
+
+                    <div>
+                        <h3>Customer</h3>
+                        <span>Customer account information</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="retail-card-body">
+
+                <div class="rpd-customer-box">
+
+                    <div class="rpd-avatar">
+                        @(Model.Customer?.FullName?
+                            .Substring(0, 1)
+                            .ToUpper() ?? "?")
+                    </div>
+
+                    <div>
+                        <strong>
+                            @(Model.Customer?.FullName ?? "N/A")
+                        </strong>
+
+                        <span>
+                            @(Model.Customer?.Phone ?? "N/A")
+                        </span>
+
+                        <span>
+                            @(Model.Customer?.Email ?? "N/A")
+                        </span>
+                    </div>
+
+                </div>
+
+                <div class="rpd-customer-meta">
+
+                    <div>
+                        <span>FATHER NAME</span>
+                        <strong>
+                            @(Model.Customer?.FatherName ?? "N/A")
+                        </strong>
+                    </div>
+
+                    <div>
+                        <span>CITY</span>
+                        <strong>
+                            @(Model.Customer?.City ?? "N/A")
+                        </strong>
+                    </div>
+
+                    <div class="rpd-full">
+                        <span>ADDRESS</span>
+                        <strong>
+                            @(Model.Customer?.Address ?? "N/A")
+                        </strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- BILL INFORMATION -->
+
+    <div class="retail-card rpd-card">
+
+        <div class="retail-card-header">
+
+            <div class="retail-card-title">
+
+                <div class="retail-card-icon">
+                    <i class="bi bi-receipt"></i>
+                </div>
+
+                <div>
+                    <h3>Bill Information</h3>
+                    <span>Bill against which payment was recorded</span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="retail-card-body">
+
+            <div class="rpd-info-grid rpd-bill-grid">
+
+                <div class="rpd-info-item">
+                    <span>BILL NUMBER</span>
+                    <strong>
+                        @(Model.Bill?.BillNumber ?? "N/A")
+                    </strong>
+                </div>
+
+                <div class="rpd-info-item">
+                    <span>BILL AMOUNT</span>
+                    <strong>
+                        @(Model.Bill != null
+                            ? $"PKR {Model.Bill.TotalAmount:N2}"
+                            : "N/A")
+                    </strong>
+                </div>
+
+                <div class="rpd-info-item">
+                    <span>BILLING DATE</span>
+                    <strong>
+                        @(Model.Bill != null
+                            ? Model.Bill.BillingDate.ToString("dd MMM yyyy")
+                            : "N/A")
+                    </strong>
+                </div>
+
+                <div class="rpd-info-item">
+                    <span>DUE DATE</span>
+                    <strong>
+                        @(Model.Bill != null
+                            ? Model.Bill.DueDate.ToString("dd MMM yyyy")
+                            : "N/A")
+                    </strong>
+                </div>
+
+                <div class="rpd-info-item">
+                    <span>PLAN</span>
+                    <strong>
+                        @(Model.Bill?.Connection?.Plan?.PlanName ?? "N/A")
+                    </strong>
+                </div>
+
+                <div class="rpd-info-item">
+                    <span>SPEED</span>
+                    <strong>
+                        @(Model.Bill?.Connection?.Plan?.Speed ?? "N/A")
+                    </strong>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- REMARKS -->
+
+    <div class="retail-card rpd-card">
+
+        <div class="retail-card-header">
+
+            <div class="retail-card-title">
+
+                <div class="retail-card-icon">
+                    <i class="bi bi-chat-left-text"></i>
+                </div>
+
+                <div>
+                    <h3>Remarks</h3>
+                    <span>Additional payment information</span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="retail-card-body">
+
+            <div class="rpd-remarks">
+
+                @if (string.IsNullOrWhiteSpace(Model.Remarks))
+                {
+                    <span class="rpd-no-remarks">
+                        No remarks were added to this payment.
+                    </span>
+                }
+                else
+                {
+                    <span>
+                        @Model.Remarks
+                    </span>
+                }
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="rpd-footer-actions">
+
+        <a asp-action="Index"
+           class="retail-secondary-btn">
+            <i class="bi bi-arrow-left"></i>
+            Back to Payments
+        </a>
+
+        <button type="button"
+                class="retail-primary-btn"
+                onclick="window.print()">
+            <i class="bi bi-printer"></i>
+            Print Payment
+        </button>
+
+    </div>
+
+</div>

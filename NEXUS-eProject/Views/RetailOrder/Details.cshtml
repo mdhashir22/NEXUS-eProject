@@ -1,0 +1,742 @@
+﻿@model NEXUS_eProject.Models.Order
+
+@{
+    ViewData["Title"] = "Application Details";
+    ViewData["PageTitle"] = "Application Details";
+    Layout = "~/Views/Shared/_RetailLayout.cshtml";
+
+    var isRetailPending =
+        string.IsNullOrWhiteSpace(Model.Status) ||
+        Model.Status == "Pending" ||
+        Model.Status == "Submitted";
+}
+
+<div class="retail-page ad-page">
+
+    <!-- PAGE HEADER -->
+
+    <div class="ad-header">
+
+        <div class="ad-header-content">
+
+            <div class="retail-page-eyebrow">
+                <i class="bi bi-file-earmark-text"></i>
+                APPLICATION DETAILS
+            </div>
+
+            <h1>
+                Application #@Model.OrderNumber
+            </h1>
+
+            <p>
+                Complete customer application information and current workflow status.
+            </p>
+
+        </div>
+
+
+        <div class="ad-header-actions">
+
+            <a asp-action="Index"
+               class="ad-btn ad-btn-back">
+
+                <i class="bi bi-arrow-left"></i>
+                Back
+
+            </a>
+
+
+            @if (isRetailPending)
+            {
+                <a asp-action="Review"
+                   asp-route-id="@Model.OrderId"
+                   class="ad-btn ad-btn-primary">
+
+                    <i class="bi bi-clipboard-check"></i>
+                    Review Application
+
+                </a>
+            }
+
+        </div>
+
+    </div>
+
+
+    <!-- ALERTS -->
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="ad-alert ad-alert-success">
+
+            <i class="bi bi-check-circle-fill"></i>
+
+            <span>
+                @TempData["Success"]
+            </span>
+
+        </div>
+    }
+
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="ad-alert ad-alert-danger">
+
+            <i class="bi bi-exclamation-circle-fill"></i>
+
+            <span>
+                @TempData["Error"]
+            </span>
+
+        </div>
+    }
+
+
+    <!-- MAIN CONTENT -->
+
+    <div class="row g-4">
+
+
+        <!-- CUSTOMER INFORMATION -->
+
+        <div class="col-xl-8">
+
+            <div class="ad-card">
+
+                <div class="ad-card-header">
+
+                    <div class="ad-card-title">
+
+                        <div class="ad-card-icon">
+                            <i class="bi bi-person"></i>
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                Customer Information
+                            </h3>
+
+                            <span>
+                                Applicant personal details
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="ad-card-body">
+
+                    <div class="row g-3">
+
+                        <div class="col-md-6">
+
+                            <div class="ad-detail">
+
+                                <span class="ad-detail-label">
+                                    Customer Name
+                                </span>
+
+                                <span class="ad-detail-value">
+                                    @(Model.Customer?.FullName ?? "N/A")
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <div class="ad-detail">
+
+                                <span class="ad-detail-label">
+                                    Father Name
+                                </span>
+
+                                <span class="ad-detail-value">
+                                    @(Model.Customer?.FatherName ?? "N/A")
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <div class="ad-detail">
+
+                                <span class="ad-detail-label">
+                                    Phone
+                                </span>
+
+                                <span class="ad-detail-value">
+                                    @(Model.Customer?.Phone ?? "N/A")
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <div class="ad-detail">
+
+                                <span class="ad-detail-label">
+                                    Email
+                                </span>
+
+                                <span class="ad-detail-value">
+                                    @(Model.Customer?.Email ?? "N/A")
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <div class="ad-detail">
+
+                                <span class="ad-detail-label">
+                                    City
+                                </span>
+
+                                <span class="ad-detail-value">
+                                    @(Model.Customer?.City ?? "N/A")
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <div class="ad-detail">
+
+                                <span class="ad-detail-label">
+                                    Customer ID
+                                </span>
+
+                                <span class="ad-detail-value">
+                                    #@Model.CustomerId
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-12">
+
+                            <div class="ad-detail">
+
+                                <span class="ad-detail-label">
+                                    Address
+                                </span>
+
+                                <span class="ad-detail-value">
+                                    @(Model.Customer?.Address ?? "N/A")
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- APPLICATION STATUS -->
+
+        <div class="col-xl-4">
+
+            <div class="ad-card">
+
+                <div class="ad-card-header">
+
+                    <div class="ad-card-title">
+
+                        <div class="ad-card-icon">
+                            <i class="bi bi-activity"></i>
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                Application Status
+                            </h3>
+
+                            <span>
+                                Current workflow stage
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="ad-card-body">
+
+                    @{
+                        var statusClass = Model.Status switch
+                        {
+                            "Pending" => "ad-status-pending",
+                            "Submitted" => "ad-status-pending",
+                            "Retail Accepted" => "ad-status-approved",
+                            "Retail Rejected" => "ad-status-rejected",
+                            "Feasibility Pending" => "ad-status-pending",
+                            "Feasible" => "ad-status-approved",
+                            "Not Feasible" => "ad-status-rejected",
+                            "Billing Pending" => "ad-status-pending",
+                            "Payment Pending" => "ad-status-pending",
+                            "Payment Verified" => "ad-status-approved",
+                            "Installation Pending" => "ad-status-pending",
+                            "Active" => "ad-status-active",
+                            _ => "ad-status-neutral"
+                        };
+
+                        var statusIcon = Model.Status switch
+                        {
+                            "Pending" => "bi-hourglass-split",
+                            "Submitted" => "bi-hourglass-split",
+                            "Retail Accepted" => "bi-check-circle",
+                            "Retail Rejected" => "bi-x-circle",
+                            "Feasibility Pending" => "bi-hourglass-split",
+                            "Feasible" => "bi-check-circle",
+                            "Not Feasible" => "bi-x-circle",
+                            "Billing Pending" => "bi-receipt",
+                            "Payment Pending" => "bi-credit-card",
+                            "Payment Verified" => "bi-check-circle",
+                            "Installation Pending" => "bi-tools",
+                            "Active" => "bi-wifi",
+                            _ => "bi-arrow-repeat"
+                        };
+                    }
+
+
+                    <div class="ad-status-area">
+
+                        <span class="ad-status @statusClass">
+
+                            <i class="bi @statusIcon"></i>
+
+                            @(string.IsNullOrWhiteSpace(Model.Status)
+                                ? "Pending"
+                                : Model.Status)
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="ad-time">
+
+                        <div class="ad-detail">
+
+                            <span class="ad-detail-label">
+                                Application Submitted
+                            </span>
+
+                            <span class="ad-detail-value">
+
+                                @Model.CreatedAt.ToString("dd MMM yyyy")
+
+                                <small>
+                                    @Model.CreatedAt.ToString("hh:mm tt")
+                                </small>
+
+                            </span>
+
+                        </div>
+
+
+                        @if (Model.UpdatedAt.HasValue)
+                        {
+                            <div class="ad-detail">
+
+                                <span class="ad-detail-label">
+                                    Last Updated
+                                </span>
+
+                                <span class="ad-detail-value">
+
+                                    @Model.UpdatedAt.Value.ToString("dd MMM yyyy")
+
+                                    <small>
+                                        @Model.UpdatedAt.Value.ToString("hh:mm tt")
+                                    </small>
+
+                                </span>
+
+                            </div>
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- SERVICE INFORMATION -->
+
+        <div class="col-xl-6">
+
+            <div class="ad-card">
+
+                <div class="ad-card-header">
+
+                    <div class="ad-card-title">
+
+                        <div class="ad-card-icon">
+                            <i class="bi bi-wifi"></i>
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                Service Information
+                            </h3>
+
+                            <span>
+                                Requested connection details
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="ad-card-body">
+
+                    <div class="row g-3">
+
+                        <div class="col-md-6">
+
+                            <div class="ad-detail">
+
+                                <span class="ad-detail-label">
+                                    Connection Type
+                                </span>
+
+                                <span class="ad-detail-value">
+                                    @Model.ConnectionType
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <div class="ad-detail">
+
+                                <span class="ad-detail-label">
+                                    Plan
+                                </span>
+
+                                <span class="ad-detail-value">
+                                    @(Model.Plan?.PlanName ?? "N/A")
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <div class="ad-detail">
+
+                                <span class="ad-detail-label">
+                                    Speed
+                                </span>
+
+                                <span class="ad-detail-value">
+                                    @(Model.Plan?.Speed ?? "N/A")
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <div class="ad-detail">
+
+                                <span class="ad-detail-label">
+                                    Plan Price
+                                </span>
+
+                                <span class="ad-detail-value ad-price">
+                                    Rs. @(Model.Plan?.Price.ToString("N2") ?? "0.00")
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-12">
+
+                            <div class="ad-detail">
+
+                                <span class="ad-detail-label">
+                                    Requested Equipment
+                                </span>
+
+                                <span class="ad-detail-value">
+
+                                    @(string.IsNullOrWhiteSpace(Model.Equipment)
+                                        ? "No equipment specified"
+                                        : Model.Equipment)
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- APPLICATION INFORMATION -->
+
+        <div class="col-xl-6">
+
+            <div class="ad-card">
+
+                <div class="ad-card-header">
+
+                    <div class="ad-card-title">
+
+                        <div class="ad-card-icon">
+                            <i class="bi bi-info-circle"></i>
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                Application Information
+                            </h3>
+
+                            <span>
+                                Order and additional details
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="ad-card-body">
+
+                    <div class="ad-detail ad-order-detail">
+
+                        <span class="ad-detail-label">
+                            Order Number
+                        </span>
+
+                        <span class="ad-detail-value ad-order-number">
+                            #@Model.OrderNumber
+                        </span>
+
+                    </div>
+
+
+                    <div class="ad-detail ad-additional-detail">
+
+                        <span class="ad-detail-label">
+                            Additional Information
+                        </span>
+
+                        @if (string.IsNullOrWhiteSpace(Model.AdditionalInfo))
+                        {
+                            <span class="ad-detail-value muted">
+                                No additional information provided.
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="ad-detail-value ad-preserve-lines">
+                                @Model.AdditionalInfo
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- RETAIL REVIEW -->
+
+        @if (isRetailPending)
+        {
+            <div class="col-12">
+
+                <div class="ad-card ad-review-card">
+
+                    <div class="ad-card-header">
+
+                        <div class="ad-card-title">
+
+                            <div class="ad-card-icon ad-review-icon">
+                                <i class="bi bi-clipboard-check"></i>
+                            </div>
+
+                            <div>
+
+                                <h3>
+                                    Retail Review Required
+                                </h3>
+
+                                <span>
+                                    Review this application before forwarding it to Technical.
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="ad-card-body">
+
+                        <div class="ad-review-actions">
+
+
+                            <!-- OPEN REVIEW -->
+
+                            <a asp-action="Review"
+                               asp-route-id="@Model.OrderId"
+                               class="ad-btn ad-btn-primary">
+
+                                <i class="bi bi-clipboard-check"></i>
+                                Open Review
+
+                            </a>
+
+
+                            <!-- ACCEPT -->
+
+                            <form asp-action="Accept"
+                                  asp-route-id="@Model.OrderId"
+                                  method="post">
+
+                                @Html.AntiForgeryToken()
+
+                                <button type="submit"
+                                        class="ad-btn ad-btn-success"
+                                        onclick="return confirm('Accept this customer application?');">
+
+                                    <i class="bi bi-check-circle"></i>
+                                    Accept Application
+
+                                </button>
+
+                            </form>
+
+
+                            <!-- REJECT -->
+
+                            <form asp-action="Reject"
+                                  asp-route-id="@Model.OrderId"
+                                  method="post"
+                                  class="ad-reject-form">
+
+                                @Html.AntiForgeryToken()
+
+                                <input type="hidden"
+                                       name="reason"
+                                       id="adRejectReason" />
+
+                                <button type="submit"
+                                        class="ad-btn ad-btn-danger"
+                                        onclick="return rejectDetailsApplication();">
+
+                                    <i class="bi bi-x-circle"></i>
+                                    Reject Application
+
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+
+</div>
+
+
+<script>
+
+    function rejectDetailsApplication() {
+
+        const reason = prompt(
+            "Enter rejection reason:"
+        );
+
+        if (reason === null) {
+            return false;
+        }
+
+        if (reason.trim() === "") {
+
+            alert(
+                "Please provide a rejection reason."
+            );
+
+            return false;
+        }
+
+        document.getElementById("adRejectReason").value =
+            reason.trim();
+
+        return confirm(
+            "Are you sure you want to reject this application?"
+        );
+    }
+
+</script>

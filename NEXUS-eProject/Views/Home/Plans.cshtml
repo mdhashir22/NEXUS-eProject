@@ -1,0 +1,521 @@
+﻿@{
+    ViewData["Title"] = "Plans";
+    Layout = "_PublicLayout";
+}
+
+<!-- =========================================================
+     PLANS HERO
+========================================================= -->
+
+<section class="plans-hero">
+
+    <div class="plans-hero-grid"></div>
+
+    <div class="container">
+
+        <div class="plans-hero-content">
+
+            <span class="plans-eyebrow">
+                <i class="bi bi-speedometer2"></i>
+                NEXUS PLANS
+            </span>
+
+            <h1>
+                Choose Your
+                <span>Connection.</span>
+            </h1>
+
+            <p>
+                Explore NEXUS service plans and select the connectivity
+                option that matches your requirements.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     PLAN FILTER
+========================================================= -->
+
+<section class="plans-section nexus-section">
+
+    <div class="container">
+
+        <div class="section-heading text-center">
+
+            <span class="section-eyebrow">
+                SERVICE PLANS
+            </span>
+
+            <h2>
+                Simple plans.
+                <span>Clear choices.</span>
+            </h2>
+
+            <p>
+                NEXUS offers plans across its internet and telephone
+                services. Select a category to explore.
+            </p>
+
+        </div>
+
+
+        <div class="plans-filter">
+
+            <button class="plan-filter-btn active"
+                    type="button"
+                    data-filter="all">
+                All Plans
+            </button>
+
+            <button class="plan-filter-btn"
+                    type="button"
+                    data-filter="broadband">
+                <i class="bi bi-wifi"></i>
+                Broadband
+            </button>
+
+            <button class="plan-filter-btn"
+                    type="button"
+                    data-filter="dialup">
+                <i class="bi bi-router"></i>
+                Dial-Up
+            </button>
+
+            <button class="plan-filter-btn"
+                    type="button"
+                    data-filter="telephone">
+                <i class="bi bi-telephone"></i>
+                Telephone
+            </button>
+
+        </div>
+
+
+        <div class="row g-4 plans-grid">
+
+
+            <!-- =================================================
+                 BROADBAND PLAN
+            ================================================== -->
+
+            <div class="col-lg-4 col-md-6 plan-item"
+                 data-category="broadband">
+
+                <div class="plan-card">
+
+                    <div class="plan-card-top">
+
+                        <span class="plan-badge">
+                            BROADBAND
+                        </span>
+
+                        <div class="plan-icon">
+                            <i class="bi bi-wifi"></i>
+                        </div>
+
+                    </div>
+
+                    <h3>Broadband Internet</h3>
+
+                    <p class="plan-description">
+                        Internet connectivity for everyday browsing,
+                        communication, work and entertainment.
+                    </p>
+
+                    <div class="plan-divider"></div>
+
+                    <div class="plan-features">
+
+                        <div>
+                            <i class="bi bi-check2"></i>
+                            Internet Connectivity
+                        </div>
+
+                        <div>
+                            <i class="bi bi-check2"></i>
+                            Multiple Plan Options
+                        </div>
+
+                        <div>
+                            <i class="bi bi-check2"></i>
+                            Equipment Support
+                        </div>
+
+                        <div>
+                            <i class="bi bi-check2"></i>
+                            Technical Feasibility
+                        </div>
+
+                    </div>
+
+                    <a asp-controller="Home"
+                       asp-action="Contact"
+                       class="plan-button">
+                        Enquire Now
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 DIAL UP PLAN
+            ================================================== -->
+
+            <div class="col-lg-4 col-md-6 plan-item"
+                 data-category="dialup">
+
+                <div class="plan-card">
+
+                    <div class="plan-card-top">
+
+                        <span class="plan-badge purple">
+                            DIAL-UP
+                        </span>
+
+                        <div class="plan-icon purple-icon">
+                            <i class="bi bi-router"></i>
+                        </div>
+
+                    </div>
+
+                    <h3>Dial-Up Internet</h3>
+
+                    <p class="plan-description">
+                        A traditional internet access option available
+                        within the NEXUS service portfolio.
+                    </p>
+
+                    <div class="plan-divider"></div>
+
+                    <div class="plan-features">
+
+                        <div>
+                            <i class="bi bi-check2"></i>
+                            Internet Access
+                        </div>
+
+                        <div>
+                            <i class="bi bi-check2"></i>
+                            Service Processing
+                        </div>
+
+                        <div>
+                            <i class="bi bi-check2"></i>
+                            Technical Feasibility
+                        </div>
+
+                        <div>
+                            <i class="bi bi-check2"></i>
+                            Customer Assistance
+                        </div>
+
+                    </div>
+
+                    <a asp-controller="Home"
+                       asp-action="Contact"
+                       class="plan-button purple-button">
+                        Enquire Now
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 TELEPHONE PLAN
+            ================================================== -->
+
+            <div class="col-lg-4 col-md-6 plan-item"
+                 data-category="telephone">
+
+                <div class="plan-card">
+
+                    <div class="plan-card-top">
+
+                        <span class="plan-badge">
+                            TELEPHONE
+                        </span>
+
+                        <div class="plan-icon">
+                            <i class="bi bi-telephone"></i>
+                        </div>
+
+                    </div>
+
+                    <h3>Telephone / Landline</h3>
+
+                    <p class="plan-description">
+                        Telephone and landline connectivity for
+                        dependable everyday voice communication.
+                    </p>
+
+                    <div class="plan-divider"></div>
+
+                    <div class="plan-features">
+
+                        <div>
+                            <i class="bi bi-check2"></i>
+                            Voice Communication
+                        </div>
+
+                        <div>
+                            <i class="bi bi-check2"></i>
+                            Telephone Service
+                        </div>
+
+                        <div>
+                            <i class="bi bi-check2"></i>
+                            Service Processing
+                        </div>
+
+                        <div>
+                            <i class="bi bi-check2"></i>
+                            Customer Assistance
+                        </div>
+
+                    </div>
+
+                    <a asp-controller="Home"
+                       asp-action="Contact"
+                       class="plan-button">
+                        Enquire Now
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     WHY CHOOSE A PLAN
+========================================================= -->
+
+<section class="plans-features nexus-section">
+
+    <div class="container">
+
+        <div class="row align-items-center g-5">
+
+            <div class="col-lg-5">
+
+                <span class="section-eyebrow">
+                    BEFORE YOU CONNECT
+                </span>
+
+                <h2>
+                    A clear path to
+                    <span>activation.</span>
+                </h2>
+
+                <p>
+                    NEXUS follows a structured process before a
+                    connection is activated. Availability depends
+                    on technical feasibility for the requested area.
+                </p>
+
+                <a asp-controller="Home"
+                   asp-action="Services"
+                   class="btn-nexus-primary">
+                    View Services
+                    <i class="bi bi-arrow-right"></i>
+                </a>
+
+            </div>
+
+
+            <div class="col-lg-7">
+
+                <div class="plans-info-grid">
+
+                    <div class="plans-info-card">
+
+                        <div class="plans-info-icon">
+                            <i class="bi bi-geo-alt"></i>
+                        </div>
+
+                        <h4>Area Check</h4>
+
+                        <p>
+                            Your service area is checked for
+                            availability.
+                        </p>
+
+                    </div>
+
+
+                    <div class="plans-info-card">
+
+                        <div class="plans-info-icon">
+                            <i class="bi bi-diagram-3"></i>
+                        </div>
+
+                        <h4>Infrastructure</h4>
+
+                        <p>
+                            Required network infrastructure is
+                            evaluated.
+                        </p>
+
+                    </div>
+
+
+                    <div class="plans-info-card">
+
+                        <div class="plans-info-icon">
+                            <i class="bi bi-tools"></i>
+                        </div>
+
+                        <h4>Equipment</h4>
+
+                        <p>
+                            Required equipment can be assigned
+                            where applicable.
+                        </p>
+
+                    </div>
+
+
+                    <div class="plans-info-card">
+
+                        <div class="plans-info-icon">
+                            <i class="bi bi-lightning-charge"></i>
+                        </div>
+
+                        <h4>Activation</h4>
+
+                        <p>
+                            Approved applications proceed toward
+                            connection activation.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     PLANS CTA
+========================================================= -->
+
+<section class="plans-cta">
+
+    <div class="plans-cta-glow"></div>
+
+    <div class="container">
+
+        <div class="plans-cta-content">
+
+            <span class="section-eyebrow">
+                READY TO GET STARTED?
+            </span>
+
+            <h2>
+                Find the right
+                <span>NEXUS service.</span>
+            </h2>
+
+            <p>
+                Have questions about a service or plan?
+                Our team is ready to help.
+            </p>
+
+            <div class="plans-cta-actions">
+
+                <a asp-controller="Home"
+                   asp-action="Contact"
+                   class="btn-nexus-primary">
+                    Contact Us
+                    <i class="bi bi-arrow-right"></i>
+                </a>
+
+                <a asp-controller="Home"
+                   asp-action="Services"
+                   class="btn-nexus-outline">
+                    Explore Services
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+@section Scripts {
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const buttons = document.querySelectorAll(".plan-filter-btn");
+    const plans = document.querySelectorAll(".plan-item");
+
+    buttons.forEach(function (button) {
+
+        button.addEventListener("click", function () {
+
+            const filter = this.dataset.filter;
+
+            buttons.forEach(function (btn) {
+                btn.classList.remove("active");
+            });
+
+            this.classList.add("active");
+
+            plans.forEach(function (plan) {
+
+                const category = plan.dataset.category;
+
+                if (filter === "all" || category === filter) {
+
+                    plan.style.display = "";
+
+                    setTimeout(function () {
+                        plan.classList.add("plan-visible");
+                    }, 20);
+
+                } else {
+
+                    plan.classList.remove("plan-visible");
+                    plan.style.display = "none";
+
+                }
+
+            });
+
+        });
+
+    });
+
+});
+
+</script>
+
+}

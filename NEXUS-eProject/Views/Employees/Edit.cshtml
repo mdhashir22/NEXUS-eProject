@@ -1,0 +1,204 @@
+﻿@model NEXUS_eProject.Models.Employee
+
+@{
+    ViewData["Title"] = "Edit Employee";
+    ViewData["PageTitle"] = "Edit Employee";
+    ViewData["PageSubtitle"] = "Update employee information";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="page-heading">
+
+    <div>
+        <h2>Edit Employee</h2>
+        <p>Update employee information.</p>
+    </div>
+
+    <a asp-action="Index"
+       class="secondary-action">
+        <i class="bi bi-arrow-left"></i>
+        Back
+    </a>
+
+</div>
+
+
+<div class="form-card">
+
+    <form asp-action="Edit"
+          method="post">
+
+        <input type="hidden"
+               asp-for="EmployeeId" />
+
+        <input type="hidden"
+               asp-for="CreatedAt" />
+
+
+        <div asp-validation-summary="ModelOnly"
+             class="validation-summary"></div>
+
+
+        <div class="form-section-title">
+            Employee Information
+        </div>
+
+
+        <div class="form-grid">
+
+            <div class="form-group">
+
+                <label asp-for="FullName">
+                    Full Name
+                </label>
+
+                <input asp-for="FullName"
+                       class="nexus-input" />
+
+                <span asp-validation-for="FullName"
+                      class="field-error"></span>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label asp-for="Email">
+                    Email
+                </label>
+
+                <input asp-for="Email"
+                       type="email"
+                       class="nexus-input" />
+
+                <span asp-validation-for="Email"
+                      class="field-error"></span>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label asp-for="Phone">
+                    Phone
+                </label>
+
+                <input asp-for="Phone"
+                       class="nexus-input" />
+
+                <span asp-validation-for="Phone"
+                      class="field-error"></span>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label asp-for="Address">
+                    Address
+                </label>
+
+                <input asp-for="Address"
+                       class="nexus-input" />
+
+                <span asp-validation-for="Address"
+                      class="field-error"></span>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label asp-for="Role">
+                    Role
+                </label>
+
+                <select asp-for="Role"
+                        class="nexus-input">
+
+                    <option value="Admin">
+                        Admin
+                    </option>
+
+                    <option value="Retail Employee">
+                        Retail Employee
+                    </option>
+
+                    <option value="Technical Employee">
+                        Technical Employee
+                    </option>
+
+                    <option value="Accounts Employee">
+                        Accounts Employee
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label asp-for="Department">
+                    Department
+                </label>
+
+                <input asp-for="Department"
+                       class="nexus-input" />
+
+                <span asp-validation-for="Department"
+                      class="field-error"></span>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label asp-for="IsActive">
+                    Status
+                </label>
+
+                <select asp-for="IsActive"
+                        class="nexus-input">
+
+                    <option value="true">
+                        Active
+                    </option>
+
+                    <option value="false">
+                        Inactive
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <div class="form-footer">
+
+            <a asp-action="Index"
+               class="secondary-action">
+                Cancel
+            </a>
+
+            <button type="submit"
+                    class="dashboard-action">
+                <i class="bi bi-check-lg"></i>
+                Update Employee
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync(
+            "_ValidationScriptsPartial");
+    }
+}

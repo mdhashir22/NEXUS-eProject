@@ -1,0 +1,766 @@
+﻿@using System.Globalization
+@model IEnumerable<NEXUS_eProject.Models.Bill>
+
+@{
+    Layout = "_PublicLayout";
+    ViewData["Title"] = "Make Payment";
+
+    var bills = Model?.ToList()
+        ?? new List<NEXUS_eProject.Models.Bill>();
+
+    int selectedBillId = 0;
+
+    if (ViewBag.SelectedBillId != null)
+    {
+        int.TryParse(
+            ViewBag.SelectedBillId.ToString(),
+            out selectedBillId
+        );
+    }
+}
+
+<div class="customer-payment-page">
+
+    <div class="container">
+
+        <!-- =====================================================
+             HEADER
+        ====================================================== -->
+        <div class="customer-page-header">
+
+            <div>
+
+                <span class="portal-eyebrow">
+                    <i class="bi bi-credit-card"></i>
+                    CUSTOMER PORTAL
+                </span>
+
+                <h1>Make Payment</h1>
+
+                <p>
+                    Submit payment for your outstanding NEXUS bill.
+                    Your payment will be verified by our Accounts team.
+                </p>
+
+            </div>
+
+
+            <a asp-controller="CustomerPortal"
+               asp-action="Bills"
+               class="btn-nexus-outline">
+
+                <i class="bi bi-receipt"></i>
+                View Bills
+
+            </a>
+
+        </div>
+
+
+        <!-- =====================================================
+             BACK
+        ====================================================== -->
+        <div class="application-back-wrapper">
+
+            <a asp-controller="CustomerPortal"
+               asp-action="Index"
+               class="portal-back-link">
+
+                <i class="bi bi-arrow-left"></i>
+                Back to My Account
+
+            </a>
+
+        </div>
+
+
+        <!-- =====================================================
+             SUCCESS MESSAGE
+        ====================================================== -->
+        @if (TempData["PaymentSuccess"] != null)
+        {
+            <div class="payment-alert payment-success">
+
+                <i class="bi bi-check-circle-fill"></i>
+
+                <span>
+                    @TempData["PaymentSuccess"]
+                </span>
+
+            </div>
+        }
+
+
+        <!-- =====================================================
+             ERROR MESSAGE
+        ====================================================== -->
+        @if (TempData["PaymentError"] != null)
+        {
+            <div class="payment-alert payment-error">
+
+                <i class="bi bi-exclamation-circle-fill"></i>
+
+                <span>
+                    @TempData["PaymentError"]
+                </span>
+
+            </div>
+        }
+
+
+        @if (bills.Any())
+        {
+            <div class="payment-layout">
+
+
+                <!-- =================================================
+                     LEFT SIDE - OUTSTANDING BILLS
+                ================================================== -->
+                <div>
+
+                    <div class="payment-section-title">
+
+                        <span class="portal-eyebrow">
+                            <i class="bi bi-wallet2"></i>
+                            OUTSTANDING BILLS
+                        </span>
+
+                        <h2>Select a bill to pay</h2>
+
+                    </div>
+
+
+                    <div class="payment-bills-list">
+
+                        @foreach (var bill in bills)
+                        {
+                            var amountValue =
+                                bill.TotalAmount.ToString(
+                                    CultureInfo.InvariantCulture
+                                );
+
+                            <div class="payment-bill-card"
+                                 data-card-bill-id="@bill.BillId">
+
+
+                                <!-- BILL HEADER -->
+                                <div class="payment-bill-top">
+
+                                    <div>
+
+                                        <span>
+                                            BILL NUMBER
+                                        </span>
+
+                                        <strong>
+                                            @bill.BillNumber
+                                        </strong>
+
+                                    </div>
+
+
+                                    <div class="payment-bill-status">
+                                        @bill.Status
+                                    </div>
+
+                                </div>
+
+
+                                <!-- BILL DETAILS -->
+                                <div class="payment-bill-main">
+
+                                    <div>
+
+                                        <span>
+                                            ACCOUNT ID
+                                        </span>
+
+                                        <strong>
+                                            @bill.AccountId
+                                        </strong>
+
+                                    </div>
+
+
+                                    <div>
+
+                                        <span>
+                                            DUE DATE
+                                        </span>
+
+                                        <strong>
+                                            @bill.DueDate.ToString("dd MMM yyyy")
+                                        </strong>
+
+                                    </div>
+
+
+                                    <div>
+
+                                        <span>
+                                            AMOUNT
+                                        </span>
+
+                                        <strong class="payment-amount">
+                                            Rs. @bill.TotalAmount.ToString("N2")
+                                        </strong>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- SELECT BILL -->
+                                <button type="button"
+                                        class="payment-select-btn"
+                                        data-bill-id="@bill.BillId"
+                                        data-bill-number="@bill.BillNumber"
+                                        data-account-id="@bill.AccountId"
+                                        data-amount="@amountValue"
+                                        onclick="selectBill(this)">
+
+                                    <i class="bi bi-check2-circle"></i>
+
+                                    <span>
+                                        Select This Bill
+                                    </span>
+
+                                </button>
+
+                            </div>
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     RIGHT SIDE - PAYMENT FORM
+                ================================================== -->
+                <div class="payment-form-card">
+
+
+                    <!-- FORM HEADING -->
+                    <div class="payment-form-heading">
+
+                        <div class="payment-form-icon">
+
+                            <i class="bi bi-credit-card-2-front"></i>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                PAYMENT
+                            </span>
+
+                            <h2>
+                                Payment Details
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         PAYMENT FORM
+                    ================================================== -->
+                    <form asp-controller="CustomerPortal"
+                          asp-action="Payment"
+                          method="post"
+                          id="paymentForm">
+
+                        @Html.AntiForgeryToken()
+
+
+                        <!-- SELECTED BILL ID -->
+                        <input type="hidden"
+                               name="billId"
+                               id="selectedBillId"
+                               value="" />
+
+
+                        <!-- =============================================
+                             SELECTED BILL INFORMATION
+                        ============================================== -->
+                        <div class="payment-selected-info">
+
+                            <span>
+                                SELECTED BILL
+                            </span>
+
+
+                            <strong id="selectedBillNumber">
+                                Select a bill first
+                            </strong>
+
+
+                            <small id="selectedAccountId">
+                                No bill selected
+                            </small>
+
+                        </div>
+
+
+                        <!-- =============================================
+                             PAYMENT AMOUNT
+                        ============================================== -->
+                        <div class="payment-field">
+
+                            <label for="amount">
+                                Payment Amount
+                            </label>
+
+
+                            <div class="payment-input-wrapper">
+
+                                <span>
+                                    Rs.
+                                </span>
+
+
+                                <input type="number"
+                                       id="amount"
+                                       name="amount"
+                                       class="nexus-input"
+                                       min="0.01"
+                                       step="0.01"
+                                       placeholder="0.00"
+                                       required />
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- =============================================
+                             PAYMENT METHOD
+                        ============================================== -->
+                        <div class="payment-field">
+
+                            <label for="paymentMethod">
+                                Payment Method
+                            </label>
+
+
+                            <select id="paymentMethod"
+                                    name="paymentMethod"
+                                    class="nexus-select"
+                                    required>
+
+                                <option value="">
+                                    Select Payment Method
+                                </option>
+
+
+                                <option value="Cash">
+                                    Cash
+                                </option>
+
+
+                                <option value="Bank Transfer">
+                                    Bank Transfer
+                                </option>
+
+
+                                <option value="JazzCash">
+                                    JazzCash
+                                </option>
+
+
+                                <option value="Easypaisa">
+                                    Easypaisa
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- =============================================
+                             REMARKS
+                        ============================================== -->
+                        <div class="payment-field">
+
+                            <label for="remarks">
+
+                                Remarks
+
+                                <span>
+                                    (Optional)
+                                </span>
+
+                            </label>
+
+
+                            <textarea id="remarks"
+                                      name="remarks"
+                                      class="nexus-input payment-textarea"
+                                      rows="3"
+                                      placeholder="Transaction reference or any additional information..."></textarea>
+
+                        </div>
+
+
+                        <!-- =============================================
+                             VERIFICATION INFORMATION
+                        ============================================== -->
+                        <div class="payment-verification-note">
+
+                            <i class="bi bi-info-circle"></i>
+
+                            <div>
+
+                                <strong>
+                                    Payment Verification
+                                </strong>
+
+                                <span>
+                                    Your payment will be submitted to
+                                    the NEXUS Accounts team for verification.
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- =============================================
+                             SUBMIT
+                        ============================================== -->
+                        <button type="submit"
+                                class="btn-nexus-primary payment-submit"
+                                id="paymentSubmit"
+                                disabled>
+
+                            <i class="bi bi-shield-check"></i>
+
+                            <span>
+                                Submit for Verification
+                            </span>
+
+                        </button>
+
+
+                        <!-- =============================================
+                             SECURE NOTE
+                        ============================================== -->
+                        <div class="payment-secure-note">
+
+                            <i class="bi bi-shield-check"></i>
+
+                            Your payment information is handled
+                            securely by NEXUS.
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+        }
+        else
+        {
+            <!-- =====================================================
+                 NO OUTSTANDING BILLS
+            ====================================================== -->
+            <div class="payment-empty">
+
+                <div class="payment-empty-icon">
+
+                    <i class="bi bi-check2-circle"></i>
+
+                </div>
+
+
+                <h2>
+                    No Outstanding Bills
+                </h2>
+
+
+                <p>
+                    You currently don't have any unpaid bills.
+                    Once an outstanding bill is generated,
+                    it will appear here for payment.
+                </p>
+
+
+                <a asp-controller="CustomerPortal"
+                   asp-action="Bills"
+                   class="btn-nexus-outline">
+
+                    <i class="bi bi-receipt"></i>
+
+                    View My Bills
+
+                </a>
+
+            </div>
+        }
+
+    </div>
+
+</div>
+
+
+<script>
+
+    // ============================================================
+    // SELECT BILL
+    // ============================================================
+
+    function selectBill(button) {
+
+        const billId =
+            button.dataset.billId;
+
+        const billNumber =
+            button.dataset.billNumber;
+
+        const accountId =
+            button.dataset.accountId;
+
+        const amount =
+            parseFloat(button.dataset.amount);
+
+
+        // --------------------------------------------------------
+        // SET BILL ID
+        // --------------------------------------------------------
+
+        document
+            .getElementById("selectedBillId")
+            .value = billId;
+
+
+        // --------------------------------------------------------
+        // SHOW BILL NUMBER
+        // --------------------------------------------------------
+
+        document
+            .getElementById("selectedBillNumber")
+            .innerText = billNumber;
+
+
+        // --------------------------------------------------------
+        // SHOW ACCOUNT ID
+        // --------------------------------------------------------
+
+        document
+            .getElementById("selectedAccountId")
+            .innerText =
+                "Account ID: " + accountId;
+
+
+        // --------------------------------------------------------
+        // SET PAYMENT AMOUNT
+        // --------------------------------------------------------
+
+        const amountInput =
+            document.getElementById("amount");
+
+
+        if (!Number.isNaN(amount)) {
+
+            amountInput.value =
+                amount.toFixed(2);
+
+            amountInput.max =
+                amount.toFixed(2);
+
+        }
+
+
+        // --------------------------------------------------------
+        // ENABLE SUBMIT BUTTON
+        // --------------------------------------------------------
+
+        document
+            .getElementById("paymentSubmit")
+            .disabled = false;
+
+
+        // --------------------------------------------------------
+        // REMOVE PREVIOUS SELECTION
+        // --------------------------------------------------------
+
+        document
+            .querySelectorAll(
+                ".payment-bill-card"
+            )
+            .forEach(card => {
+
+                card.classList.remove(
+                    "selected"
+                );
+
+            });
+
+
+        // --------------------------------------------------------
+        // MARK CURRENT BILL SELECTED
+        // --------------------------------------------------------
+
+        const selectedCard =
+            button.closest(
+                ".payment-bill-card"
+            );
+
+
+        if (selectedCard) {
+
+            selectedCard.classList.add(
+                "selected"
+            );
+
+        }
+
+
+        // --------------------------------------------------------
+        // UPDATE BUTTONS
+        // --------------------------------------------------------
+
+        document
+            .querySelectorAll(
+                ".payment-select-btn"
+            )
+            .forEach(selectButton => {
+
+                const text =
+                    selectButton.querySelector(
+                        "span"
+                    );
+
+                const icon =
+                    selectButton.querySelector(
+                        "i"
+                    );
+
+
+                if (
+                    selectButton.dataset.billId ===
+                    billId
+                ) {
+
+                    if (text) {
+                        text.innerText =
+                            "Selected";
+                    }
+
+                    if (icon) {
+                        icon.className =
+                            "bi bi-check-circle-fill";
+                    }
+
+                }
+                else {
+
+                    if (text) {
+                        text.innerText =
+                            "Select This Bill";
+                    }
+
+                    if (icon) {
+                        icon.className =
+                            "bi bi-check2-circle";
+                    }
+
+                }
+
+            });
+
+    }
+
+
+    // ============================================================
+    // AUTO SELECT BILL
+    //
+    // Example:
+    // /CustomerPortal/Payment?billId=1
+    // ============================================================
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        function () {
+
+            const requestedBillId =
+                @selectedBillId;
+
+
+            if (requestedBillId <= 0) {
+                return;
+            }
+
+
+            const billButton =
+                document.querySelector(
+                    '.payment-select-btn[data-bill-id="' +
+                    requestedBillId +
+                    '"]'
+                );
+
+
+            if (billButton) {
+
+                selectBill(
+                    billButton
+                );
+
+            }
+
+        }
+    );
+
+
+    // ============================================================
+    // FINAL FORM VALIDATION
+    // ============================================================
+
+    document
+        .getElementById("paymentForm")
+        ?.addEventListener(
+            "submit",
+            function (event) {
+
+                const billId =
+                    document
+                        .getElementById(
+                            "selectedBillId"
+                        )
+                        .value;
+
+
+                if (!billId) {
+
+                    event.preventDefault();
+
+                    alert(
+                        "Please select a bill before submitting payment."
+                    );
+
+                    return;
+                }
+
+
+                const submitButton =
+                    document.getElementById(
+                        "paymentSubmit"
+                    );
+
+
+                submitButton.disabled =
+                    true;
+
+
+                submitButton.innerHTML =
+                    '<i class="bi bi-hourglass-split"></i> Submitting for Verification...';
+
+            }
+        );
+
+</script>

@@ -1,0 +1,748 @@
+﻿@model NEXUS_eProject.Models.Order
+
+@{
+    ViewData["Title"] = "Application Status";
+    ViewData["PageTitle"] = "Application Status";
+    Layout = "~/Views/Shared/_RetailLayout.cshtml";
+
+    var status = string.IsNullOrWhiteSpace(Model.Status)
+        ? "Pending"
+        : Model.Status;
+
+    var currentStatusClass = status switch
+    {
+        "Pending" => "rs-status-pending",
+        "Submitted" => "rs-status-pending",
+        "Retail Accepted" => "rs-status-approved",
+        "Retail Rejected" => "rs-status-rejected",
+        "Feasibility Pending" => "rs-status-pending",
+        "Feasible" => "rs-status-approved",
+        "Not Feasible" => "rs-status-rejected",
+        "Connection Created" => "rs-status-approved",
+        "Billing Pending" => "rs-status-pending",
+        "Payment Pending" => "rs-status-pending",
+        "Payment Verified" => "rs-status-approved",
+        "Installation Pending" => "rs-status-pending",
+        "Installed" => "rs-status-approved",
+        "Active" => "rs-status-active",
+        _ => "rs-status-neutral"
+    };
+
+    var currentStatusIcon = status switch
+    {
+        "Pending" => "bi-clock",
+        "Submitted" => "bi-clock",
+        "Retail Rejected" => "bi-x-circle",
+        "Not Feasible" => "bi-x-circle",
+        "Active" => "bi-check-circle-fill",
+        "Retail Accepted" => "bi-check-circle",
+        "Feasible" => "bi-check-circle",
+        "Payment Verified" => "bi-check-circle",
+        "Installed" => "bi-check-circle",
+        "Connection Created" => "bi-router",
+        _ => "bi-arrow-repeat"
+    };
+
+    int progress = status switch
+    {
+        "Pending" => 1,
+        "Submitted" => 1,
+        "Retail Accepted" => 2,
+        "Feasibility Pending" => 3,
+        "Feasible" => 4,
+        "Connection Created" => 5,
+        "Billing Pending" => 6,
+        "Payment Pending" => 7,
+        "Payment Verified" => 8,
+        "Installation Pending" => 9,
+        "Installed" => 10,
+        "Active" => 11,
+        "Retail Rejected" => 2,
+        "Not Feasible" => 4,
+        _ => 1
+    };
+}
+
+<div class="retail-page rs-page">
+
+    <!-- =====================================================
+         PAGE HEADER
+         ===================================================== -->
+
+    <div class="retail-page-header rs-header">
+
+        <div>
+
+            <div class="retail-page-eyebrow">
+                <i class="bi bi-activity"></i>
+                APPLICATION TRACKING
+            </div>
+
+            <h1>Application Status</h1>
+
+            <p>
+                Track the complete progress of
+                <strong>#@Model.OrderNumber</strong>.
+            </p>
+
+        </div>
+
+        <div class="rs-header-actions">
+
+            <a asp-action="Details"
+               asp-route-id="@Model.OrderId"
+               class="retail-secondary-btn">
+
+                <i class="bi bi-eye"></i>
+                Details
+
+            </a>
+
+            <a asp-action="Index"
+               class="retail-secondary-btn">
+
+                <i class="bi bi-arrow-left"></i>
+                Back
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         ALERTS
+         ===================================================== -->
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="rs-alert rs-alert-success">
+
+            <i class="bi bi-check-circle-fill"></i>
+
+            <span>
+                @TempData["Success"]
+            </span>
+
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="rs-alert rs-alert-danger">
+
+            <i class="bi bi-exclamation-circle-fill"></i>
+
+            <span>
+                @TempData["Error"]
+            </span>
+
+        </div>
+    }
+
+
+    <!-- =====================================================
+         CURRENT STATUS
+         ===================================================== -->
+
+    <div class="retail-card rs-current-card">
+
+        <div class="retail-card-header">
+
+            <div class="retail-card-title">
+
+                <div class="retail-card-icon">
+                    <i class="bi bi-broadcast"></i>
+                </div>
+
+                <div>
+                    <h3>Current Application Status</h3>
+                    <span>Latest workflow stage</span>
+                </div>
+
+            </div>
+
+            <div class="rs-order-badge">
+                #@Model.OrderNumber
+            </div>
+
+        </div>
+
+        <div class="retail-card-body">
+
+            <div class="rs-current-status">
+
+                <div class="rs-current-icon @currentStatusClass">
+
+                    <i class="bi @currentStatusIcon"></i>
+
+                </div>
+
+                <div class="rs-current-info">
+
+                    <span class="rs-current-label">
+                        CURRENT STATUS
+                    </span>
+
+                    <h2>
+                        @status
+                    </h2>
+
+                    <p>
+                        Last updated
+                        <strong>
+                            @(Model.UpdatedAt?.ToString("dd MMM yyyy, hh:mm tt")
+                                ?? Model.CreatedAt.ToString("dd MMM yyyy, hh:mm tt"))
+                        </strong>
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+         ===================================================== -->
+
+    <div class="row g-4 rs-main-row">
+
+        <!-- =================================================
+             WORKFLOW
+             ================================================= -->
+
+        <div class="col-xl-8">
+
+            <div class="retail-card rs-workflow-card">
+
+                <div class="retail-card-header">
+
+                    <div class="retail-card-title">
+
+                        <div class="retail-card-icon">
+                            <i class="bi bi-diagram-3"></i>
+                        </div>
+
+                        <div>
+                            <h3>Application Workflow</h3>
+                            <span>Customer application journey</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="retail-card-body">
+
+                    <div class="rs-timeline">
+
+
+                        <!-- 1 -->
+                        <div class="rs-timeline-item @(progress >= 1 ? "completed" : "")">
+
+                            <div class="rs-timeline-marker">
+
+                                @if (progress >= 1)
+                                {
+                                    <i class="bi bi-check"></i>
+                                }
+                                else
+                                {
+                                    <i class="bi bi-file-earmark"></i>
+                                }
+
+                            </div>
+
+                            <div class="rs-timeline-content">
+
+                                <div class="rs-timeline-heading">
+                                    <strong>Application Submitted</strong>
+
+                                    @if (status == "Pending" || status == "Submitted")
+                                    {
+                                        <span class="rs-step-badge active">Current</span>
+                                    }
+                                </div>
+
+                                <span>
+                                    Customer submitted the connection application.
+                                </span>
+
+                                <small>
+                                    @Model.CreatedAt.ToString("dd MMM yyyy, hh:mm tt")
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- 2 -->
+                        <div class="rs-timeline-item @(progress >= 2 ? "completed" : "")">
+
+                            <div class="rs-timeline-marker">
+
+                                @if (progress >= 2)
+                                {
+                                    <i class="bi bi-check"></i>
+                                }
+                                else
+                                {
+                                    <i class="bi bi-person-check"></i>
+                                }
+
+                            </div>
+
+                            <div class="rs-timeline-content">
+
+                                <div class="rs-timeline-heading">
+
+                                    <strong>Retail Review</strong>
+
+                                    @if (status == "Retail Accepted" ||
+                                         status == "Retail Rejected")
+                                    {
+                                        <span class="rs-step-badge active">Processed</span>
+                                    }
+
+                                </div>
+
+                                <span>
+                                    Retail reviews and processes the application.
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- 3 -->
+                        <div class="rs-timeline-item @(progress >= 3 ? "completed" : "")">
+
+                            <div class="rs-timeline-marker">
+
+                                @if (progress >= 3)
+                                {
+                                    <i class="bi bi-check"></i>
+                                }
+                                else
+                                {
+                                    <i class="bi bi-tools"></i>
+                                }
+
+                            </div>
+
+                            <div class="rs-timeline-content">
+
+                                <strong>Technical Feasibility</strong>
+
+                                <span>
+                                    Technical team checks area, server and infrastructure feasibility.
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- 4 -->
+                        <div class="rs-timeline-item @(progress >= 4 ? "completed" : "")">
+
+                            <div class="rs-timeline-marker">
+
+                                @if (progress >= 4)
+                                {
+                                    <i class="bi bi-check"></i>
+                                }
+                                else
+                                {
+                                    <i class="bi bi-check2-square"></i>
+                                }
+
+                            </div>
+
+                            <div class="rs-timeline-content">
+
+                                <strong>Feasibility Confirmed</strong>
+
+                                <span>
+                                    Application has passed technical feasibility.
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- 5 -->
+                        <div class="rs-timeline-item @(progress >= 5 ? "completed" : "")">
+
+                            <div class="rs-timeline-marker">
+
+                                @if (progress >= 5)
+                                {
+                                    <i class="bi bi-check"></i>
+                                }
+                                else
+                                {
+                                    <i class="bi bi-router"></i>
+                                }
+
+                            </div>
+
+                            <div class="rs-timeline-content">
+
+                                <strong>Connection Created</strong>
+
+                                <span>
+                                    Customer connection and account are created.
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- 6 -->
+                        <div class="rs-timeline-item @(progress >= 6 ? "completed" : "")">
+
+                            <div class="rs-timeline-marker">
+
+                                @if (progress >= 6)
+                                {
+                                    <i class="bi bi-check"></i>
+                                }
+                                else
+                                {
+                                    <i class="bi bi-receipt"></i>
+                                }
+
+                            </div>
+
+                            <div class="rs-timeline-content">
+
+                                <strong>Billing</strong>
+
+                                <span>
+                                    Accounts generates the customer bill.
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- 7 -->
+                        <div class="rs-timeline-item @(progress >= 7 ? "completed" : "")">
+
+                            <div class="rs-timeline-marker">
+
+                                @if (progress >= 7)
+                                {
+                                    <i class="bi bi-check"></i>
+                                }
+                                else
+                                {
+                                    <i class="bi bi-credit-card"></i>
+                                }
+
+                            </div>
+
+                            <div class="rs-timeline-content">
+
+                                <strong>Payment</strong>
+
+                                <span>
+                                    Customer submits payment for the bill.
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- 8 -->
+                        <div class="rs-timeline-item @(progress >= 8 ? "completed" : "")">
+
+                            <div class="rs-timeline-marker">
+
+                                @if (progress >= 8)
+                                {
+                                    <i class="bi bi-check"></i>
+                                }
+                                else
+                                {
+                                    <i class="bi bi-shield-check"></i>
+                                }
+
+                            </div>
+
+                            <div class="rs-timeline-content">
+
+                                <strong>Payment Verified</strong>
+
+                                <span>
+                                    Accounts verifies the customer payment.
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- 9 -->
+                        <div class="rs-timeline-item @(progress >= 9 ? "completed" : "")">
+
+                            <div class="rs-timeline-marker">
+
+                                @if (progress >= 9)
+                                {
+                                    <i class="bi bi-check"></i>
+                                }
+                                else
+                                {
+                                    <i class="bi bi-wrench-adjustable"></i>
+                                }
+
+                            </div>
+
+                            <div class="rs-timeline-content">
+
+                                <strong>Installation</strong>
+
+                                <span>
+                                    Technical team installs the connection.
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- 10 -->
+                        <div class="rs-timeline-item @(progress >= 10 ? "completed" : "")">
+
+                            <div class="rs-timeline-marker">
+
+                                @if (progress >= 10)
+                                {
+                                    <i class="bi bi-check"></i>
+                                }
+                                else
+                                {
+                                    <i class="bi bi-hdd-network"></i>
+                                }
+
+                            </div>
+
+                            <div class="rs-timeline-content">
+
+                                <strong>Installation Completed</strong>
+
+                                <span>
+                                    Equipment is installed and ready for activation.
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- 11 -->
+                        <div class="rs-timeline-item @(progress >= 11 ? "completed" : "")">
+
+                            <div class="rs-timeline-marker">
+
+                                @if (progress >= 11)
+                                {
+                                    <i class="bi bi-check-circle-fill"></i>
+                                }
+                                else
+                                {
+                                    <i class="bi bi-broadcast-pin"></i>
+                                }
+
+                            </div>
+
+                            <div class="rs-timeline-content">
+
+                                <strong>Connection Active</strong>
+
+                                <span>
+                                    Customer connection is active and operational.
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             APPLICATION SUMMARY
+             ================================================= -->
+
+        <div class="col-xl-4">
+
+            <div class="retail-card rs-summary-card">
+
+                <div class="retail-card-header">
+
+                    <div class="retail-card-title">
+
+                        <div class="retail-card-icon">
+                            <i class="bi bi-file-text"></i>
+                        </div>
+
+                        <div>
+                            <h3>Application</h3>
+                            <span>Basic information</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="retail-card-body">
+
+                    <div class="rs-detail-item">
+
+                        <span>ORDER NUMBER</span>
+
+                        <strong>
+                            #@Model.OrderNumber
+                        </strong>
+
+                    </div>
+
+
+                    <div class="rs-detail-item">
+
+                        <span>CUSTOMER</span>
+
+                        <strong>
+                            @(Model.Customer?.FullName ?? "N/A")
+                        </strong>
+
+                    </div>
+
+
+                    <div class="rs-detail-item">
+
+                        <span>CONNECTION TYPE</span>
+
+                        <strong>
+                            @Model.ConnectionType
+                        </strong>
+
+                    </div>
+
+
+                    <div class="rs-detail-item">
+
+                        <span>PLAN</span>
+
+                        <strong>
+                            @(Model.Plan?.PlanName ?? "N/A")
+                        </strong>
+
+                    </div>
+
+
+                    <div class="rs-detail-item">
+
+                        <span>PLAN PRICE</span>
+
+                        <strong>
+                            Rs. @(Model.Plan?.Price.ToString("N2") ?? "0.00")
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- REJECTED -->
+
+            @if (status == "Retail Rejected" ||
+                 status == "Not Feasible")
+            {
+                <div class="rs-notice rs-notice-danger">
+
+                    <div class="rs-notice-icon">
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            @(status == "Retail Rejected"
+                                ? "Application Rejected"
+                                : "Application Not Feasible")
+                        </strong>
+
+                        <p>
+                            @if (!string.IsNullOrWhiteSpace(Model.AdditionalInfo))
+                            {
+                                @Model.AdditionalInfo
+                            }
+                            else
+                            {
+                                <span>
+                                    No rejection reason available.
+                                </span>
+                            }
+                        </p>
+
+                    </div>
+
+                </div>
+            }
+
+
+            <!-- ACTIVE -->
+
+            @if (status == "Active")
+            {
+                <div class="rs-notice rs-notice-success">
+
+                    <div class="rs-notice-icon">
+                        <i class="bi bi-check-circle-fill"></i>
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Connection Active
+                        </strong>
+
+                        <p>
+                            This customer's connection is currently active and operational.
+                        </p>
+
+                    </div>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>

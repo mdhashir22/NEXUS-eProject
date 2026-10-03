@@ -1,0 +1,248 @@
+﻿@model NEXUS_eProject.Models.Bill
+
+@{
+    ViewData["Title"] = "Bill Details";
+    ViewData["PageTitle"] = "Bill Details";
+    Layout = "~/Views/Shared/_AccountsLayout.cshtml";
+}
+
+<div class="abd-page">
+
+    <div class="abd-header">
+
+        <div>
+            <span>
+                <i class="bi bi-receipt"></i>
+                BILL DETAILS
+            </span>
+
+            <h2>@Model.BillNumber</h2>
+
+            <p>
+                Billing information for
+                <strong>@Model.AccountId</strong>
+            </p>
+        </div>
+
+        <a asp-action="Index"
+           class="abc-back">
+
+            <i class="bi bi-arrow-left"></i>
+            Back to Bills
+
+        </a>
+
+    </div>
+
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="ab-alert success">
+            <i class="bi bi-check-circle-fill"></i>
+            @TempData["Success"]
+        </div>
+    }
+
+
+    <div class="abd-grid">
+
+        <div>
+
+            <div class="abc-card">
+
+                <div class="abc-card-header">
+                    <h5>
+                        <i class="bi bi-person"></i>
+                        Customer Information
+                    </h5>
+                </div>
+
+                <div class="abc-info-grid">
+
+                    <div>
+                        <span>Customer</span>
+                        <strong>
+                            @(Model.Customer?.FullName ?? "-")
+                        </strong>
+                    </div>
+
+                    <div>
+                        <span>Phone</span>
+                        <strong>
+                            @(Model.Customer?.Phone ?? "-")
+                        </strong>
+                    </div>
+
+                    <div>
+                        <span>Account ID</span>
+                        <strong class="abc-purple">
+                            @Model.AccountId
+                        </strong>
+                    </div>
+
+                    <div>
+                        <span>Connection</span>
+                        <strong>
+                            @(Model.Connection?.ConnectionType ?? "-")
+                        </strong>
+                    </div>
+
+                    <div>
+                        <span>Plan</span>
+                        <strong>
+                            @(Model.Connection?.Plan?.PlanName ?? "-")
+                        </strong>
+                    </div>
+
+                    <div>
+                        <span>Speed</span>
+                        <strong>
+                            @(Model.Connection?.Plan?.Speed ?? "-")
+                        </strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="abc-card">
+
+                <div class="abc-card-header">
+                    <h5>
+                        <i class="bi bi-calendar3"></i>
+                        Billing Information
+                    </h5>
+                </div>
+
+                <div class="abc-info-grid">
+
+                    <div>
+                        <span>Bill Number</span>
+                        <strong>@Model.BillNumber</strong>
+                    </div>
+
+                    <div>
+                        <span>Status</span>
+
+                        <strong class="@(Model.Status == "Paid" ? "abd-paid" : "abd-unpaid")">
+                            @Model.Status
+                        </strong>
+                    </div>
+
+                    <div>
+                        <span>Billing Date</span>
+                        <strong>
+                            @Model.BillingDate.ToString("dd MMM yyyy")
+                        </strong>
+                    </div>
+
+                    <div>
+                        <span>Due Date</span>
+                        <strong>
+                            @Model.DueDate.ToString("dd MMM yyyy")
+                        </strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div>
+
+            <div class="abd-invoice">
+
+                <div class="abd-invoice-top">
+
+                    <div>
+                        <span>NEXUS</span>
+                        <strong>INVOICE</strong>
+                    </div>
+
+                    <i class="bi bi-receipt-cutoff"></i>
+
+                </div>
+
+
+                <div class="abd-row">
+                    <span>Plan Amount</span>
+
+                    <strong>
+                        Rs. @Model.PlanAmount.ToString("N2")
+                    </strong>
+                </div>
+
+
+                <div class="abd-row">
+                    <span>Equipment Amount</span>
+
+                    <strong>
+                        Rs. @Model.EquipmentAmount.ToString("N2")
+                    </strong>
+                </div>
+
+
+                <div class="abd-row">
+                    <span>Previous Due</span>
+
+                    <strong>
+                        Rs. @Model.PreviousDue.ToString("N2")
+                    </strong>
+                </div>
+
+
+                <div class="abd-row discount">
+                    <span>Discount</span>
+
+                    <strong>
+                        - Rs. @Model.Discount.ToString("N2")
+                    </strong>
+                </div>
+
+
+                <div class="abd-row">
+                    <span>Tax</span>
+
+                    <strong>
+                        Rs. @Model.Tax.ToString("N2")
+                    </strong>
+                </div>
+
+
+                <div class="abd-total">
+
+                    <span>TOTAL PAYABLE</span>
+
+                    <strong>
+                        Rs. @Model.TotalAmount.ToString("N2")
+                    </strong>
+
+                </div>
+
+
+                <div class="abd-status">
+
+                    <span>PAYMENT STATUS</span>
+
+                    <strong class="@(Model.Status == "Paid" ? "paid" : "unpaid")">
+
+                        <i class="bi @(Model.Status == "Paid"
+                            ? "bi-check-circle-fill"
+                            : "bi-clock-fill")"></i>
+
+                        @Model.Status
+
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

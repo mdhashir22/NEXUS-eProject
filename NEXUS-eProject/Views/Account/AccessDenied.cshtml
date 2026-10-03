@@ -1,0 +1,54 @@
+﻿@{
+    Layout = null;
+    ViewData["Title"] = "Access Denied";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>Nexus | Access Denied</title>
+
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet"
+          href="~/css/auth.css" />
+
+</head>
+
+<body>
+
+    <div class="auth-wrapper">
+
+        <div class="auth-card access-denied-card">
+
+            <div class="denied-icon">
+                !
+            </div>
+
+            <h1>Access Denied</h1>
+
+            <p>
+                You don't have permission to access this page.
+            </p>
+
+            <a asp-controller="Home"
+               asp-action="Index"
+               class="auth-button access-button">
+                Go to Home
+            </a>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

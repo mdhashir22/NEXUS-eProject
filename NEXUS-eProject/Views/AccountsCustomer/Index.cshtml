@@ -1,0 +1,295 @@
+﻿@model IEnumerable<NEXUS_eProject.Models.Customer>
+
+@{
+    ViewData["Title"] = "Customers";
+    ViewData["PageTitle"] = "Customers";
+    Layout = "~/Views/Shared/_AccountsLayout.cshtml";
+
+    string currentStatus =
+        Convert.ToString(ViewBag.Status) ?? "All";
+
+    string currentSearch =
+        Convert.ToString(ViewBag.Search) ?? "";
+}
+
+<div class="ac-page">
+
+    <div class="ac-header">
+
+        <div>
+
+            <div class="ac-eyebrow">
+                <i class="bi bi-people"></i>
+                CUSTOMER ACCOUNTS
+            </div>
+
+            <h2>Customers</h2>
+
+            <p>
+                View customer accounts, connections,
+                bills and payment history.
+            </p>
+
+        </div>
+
+
+        <div class="ac-count">
+
+            <div class="ac-count-icon">
+                <i class="bi bi-people-fill"></i>
+            </div>
+
+            <div>
+                <span>TOTAL CUSTOMERS</span>
+                <strong>@Model.Count()</strong>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="ac-panel">
+
+        <div class="ac-toolbar">
+
+            <form asp-controller="AccountsCustomer"
+                  asp-action="Index"
+                  method="get"
+                  class="ac-filter">
+
+                <div class="ac-search">
+
+                    <i class="bi bi-search"></i>
+
+                    <input type="text"
+                           name="search"
+                           value="@currentSearch"
+                           placeholder="Search customer, email, phone or city..." />
+
+                </div>
+
+
+                <select name="status"
+                        class="ac-select">
+
+                    @if (currentStatus == "All" ||
+                         string.IsNullOrWhiteSpace(currentStatus))
+                    {
+                        <option value="All" selected>
+                            All Customers
+                        </option>
+                    }
+                    else
+                    {
+                        <option value="All">
+                            All Customers
+                        </option>
+                    }
+
+
+                    @if (currentStatus == "Active")
+                    {
+                        <option value="Active" selected>
+                            Active
+                        </option>
+                    }
+                    else
+                    {
+                        <option value="Active">
+                            Active
+                        </option>
+                    }
+
+
+                    @if (currentStatus == "Inactive")
+                    {
+                        <option value="Inactive" selected>
+                            Inactive
+                        </option>
+                    }
+                    else
+                    {
+                        <option value="Inactive">
+                            Inactive
+                        </option>
+                    }
+
+                </select>
+
+
+                <button type="submit"
+                        class="ac-btn primary">
+
+                    <i class="bi bi-funnel"></i>
+                    Filter
+
+                </button>
+
+
+                <a asp-controller="AccountsCustomer"
+                   asp-action="Index"
+                   class="ac-btn secondary">
+
+                    <i class="bi bi-arrow-counterclockwise"></i>
+                    Reset
+
+                </a>
+
+            </form>
+
+        </div>
+
+
+        @if (Model.Any())
+        {
+            <div class="ac-table-wrap">
+
+                <table class="ac-table">
+
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>CUSTOMER</th>
+                            <th>PHONE</th>
+                            <th>EMAIL</th>
+                            <th>CITY</th>
+                            <th>JOINED</th>
+                            <th>STATUS</th>
+                            <th>ACTION</th>
+                        </tr>
+                    </thead>
+
+
+                    <tbody>
+
+                        @foreach (var customer in Model)
+                        {
+                            <tr>
+
+                                <td>
+                                    <span class="ac-id">
+                                        #@customer.CustomerId.ToString("D5")
+                                    </span>
+                                </td>
+
+
+                                <td>
+
+                                    <div class="ac-customer">
+
+                                        <div class="ac-avatar">
+                                            @(string.IsNullOrWhiteSpace(customer.FullName)
+                                                ? "C"
+                                                : customer.FullName.Substring(0, 1).ToUpper())
+                                        </div>
+
+                                        <div>
+                                            <strong>
+                                                @customer.FullName
+                                            </strong>
+
+                                            <span>
+                                                @customer.FatherName
+                                            </span>
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+
+                                <td>
+                                    @customer.Phone
+                                </td>
+
+
+                                <td>
+                                    @customer.Email
+                                </td>
+
+
+                                <td>
+                                    <span class="ac-city">
+                                        <i class="bi bi-geo-alt"></i>
+                                        @customer.City
+                                    </span>
+                                </td>
+
+
+                                <td>
+                                    <div class="ac-date">
+
+                                        <strong>
+                                            @customer.CreatedAt.ToString("dd MMM yyyy")
+                                        </strong>
+
+                                        <span>
+                                            @customer.CreatedAt.ToString("hh:mm tt")
+                                        </span>
+
+                                    </div>
+                                </td>
+
+
+                                <td>
+
+                                    @if (customer.IsActive)
+                                    {
+                                        <span class="ac-status active">
+                                            <i class="bi bi-circle-fill"></i>
+                                            Active
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="ac-status inactive">
+                                            <i class="bi bi-circle-fill"></i>
+                                            Inactive
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <td>
+
+                                    <a asp-controller="AccountsCustomer"
+                                       asp-action="Details"
+                                       asp-route-id="@customer.CustomerId"
+                                       class="ac-view">
+
+                                        <i class="bi bi-eye"></i>
+                                        View
+
+                                    </a>
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+        else
+        {
+            <div class="ac-empty">
+
+                <i class="bi bi-people"></i>
+
+                <h4>No Customers Found</h4>
+
+                <p>
+                    No customer records match your current search.
+                </p>
+
+            </div>
+        }
+
+    </div>
+
+</div>

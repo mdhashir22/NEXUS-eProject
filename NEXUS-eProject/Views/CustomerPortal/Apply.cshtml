@@ -1,0 +1,424 @@
+﻿@model NEXUS_eProject.Models.CustomerApplyViewModel
+
+@{
+    Layout = "_PublicLayout";
+    ViewData["Title"] = "Apply for New Connection";
+
+    var customer = ViewBag.Customer as NEXUS_eProject.Models.Customer;
+    var plans = ViewBag.Plans as List<NEXUS_eProject.Models.Plan>
+                 ?? new List<NEXUS_eProject.Models.Plan>();
+}
+
+
+<section class="customer-portal customer-apply-page">
+
+    <div class="customer-portal-bg"></div>
+    <div class="customer-portal-overlay"></div>
+    <div class="customer-portal-grid"></div>
+
+    <div class="customer-portal-glow customer-glow-one"></div>
+    <div class="customer-portal-glow customer-glow-two"></div>
+
+    <div class="container position-relative">
+
+        <!-- PAGE HEADER -->
+        <div class="portal-page-header mb-4">
+
+            <a asp-controller="CustomerPortal"
+               asp-action="Index"
+               class="portal-back-link">
+                <i class="bi bi-arrow-left"></i>
+                Back to My Account
+            </a>
+
+            <div class="mt-4">
+                <span class="portal-eyebrow">
+                    <i class="bi bi-wifi"></i>
+                    NEW CONNECTION
+                </span>
+
+                <h1 class="portal-page-title">
+                    Apply for a <span>New Connection</span>
+                </h1>
+
+                <p class="portal-page-subtitle">
+                    Choose your connection type and plan to submit
+                    your application to NEXUS.
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="row g-4">
+
+            <!-- CUSTOMER INFORMATION -->
+            <div class="col-lg-4">
+
+                <div class="portal-info-card apply-customer-card">
+
+                    <div class="portal-card-icon">
+                        <i class="bi bi-person-circle"></i>
+                    </div>
+
+                    <h4>Your Information</h4>
+
+                    <p class="text-white-50 small mb-4">
+                        Your registered customer information will
+                        automatically be attached to this application.
+                    </p>
+
+                    @if (customer != null)
+                    {
+                        <div class="apply-info-item">
+                            <span>Full Name</span>
+                            <strong>@customer.FullName</strong>
+                        </div>
+
+                        <div class="apply-info-item">
+                            <span>Father Name</span>
+                            <strong>@customer.FatherName</strong>
+                        </div>
+
+                        <div class="apply-info-item">
+                            <span>Phone</span>
+                            <strong>@customer.Phone</strong>
+                        </div>
+
+                        <div class="apply-info-item">
+                            <span>Email</span>
+                            <strong>@customer.Email</strong>
+                        </div>
+
+                        <div class="apply-info-item">
+                            <span>City</span>
+                            <strong>@customer.City</strong>
+                        </div>
+                    }
+
+                    <div class="apply-security-note mt-4">
+                        <i class="bi bi-shield-check"></i>
+                        <span>
+                            Your registered information will be used
+                            for this application.
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- APPLICATION FORM -->
+            <div class="col-lg-8">
+
+                <div class="portal-info-card apply-form-card">
+
+                    <div class="d-flex align-items-center gap-3 mb-4">
+
+                        <div class="portal-card-icon">
+                            <i class="bi bi-file-earmark-plus"></i>
+                        </div>
+
+                        <div>
+                            <h4 class="mb-1">
+                                Connection Application
+                            </h4>
+
+                            <p class="text-white-50 mb-0 small">
+                                Fill in the required details below.
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <form asp-controller="CustomerPortal"
+                          asp-action="Apply"
+                          method="post">
+
+                        @Html.AntiForgeryToken()
+
+                        <div asp-validation-summary="ModelOnly"
+                             class="text-danger mb-3">
+                        </div>
+
+
+                        <!-- CONNECTION TYPE -->
+                        <div class="apply-field mb-4">
+
+                            <label asp-for="ConnectionType"
+                                   class="form-label">
+                                Connection Type
+                            </label>
+
+                            <select asp-for="ConnectionType"
+                                    class="form-select nexus-select"
+                                    id="connectionType">
+
+                                <option value="">
+                                    Select Connection Type
+                                </option>
+
+                                <option value="Broadband Internet">
+                                    Broadband Internet
+                                </option>
+
+                                <option value="Dial-Up Internet">
+                                    Dial-Up Internet
+                                </option>
+
+                                <option value="Telephone/Landline">
+                                    Telephone / Landline
+                                </option>
+
+                            </select>
+
+                            <span asp-validation-for="ConnectionType"
+                                  class="text-danger small">
+                            </span>
+
+                        </div>
+
+
+                        <!-- PLAN -->
+                        <div class="apply-field mb-4">
+
+                            <label asp-for="PlanId"
+                                   class="form-label">
+                                Select Plan
+                            </label>
+
+                            <select asp-for="PlanId"
+                                    class="form-select nexus-select"
+                                    id="planId"
+                                    disabled>
+
+                                <option value="">
+                                    Select connection type first
+                                </option>
+
+                                @foreach (var plan in plans)
+                                {
+                                    <option value="@plan.PlanId"
+                                            data-connection-type="@plan.ConnectionType">
+
+                                        @plan.PlanName
+
+                                        @if (!string.IsNullOrWhiteSpace(plan.Speed))
+                                        {
+                                            <text> — @plan.Speed</text>
+                                        }
+
+                                        <text> — Rs. @plan.Price.ToString("N0")</text>
+
+                                    </option>
+                                }
+
+                            </select>
+
+                            <span asp-validation-for="PlanId"
+                                  class="text-danger small">
+                            </span>
+
+                        </div>
+
+
+                        <!-- EQUIPMENT -->
+                        <div class="apply-field mb-4">
+
+                            <label asp-for="Equipment"
+                                   class="form-label">
+                                Equipment
+                                <span class="optional-label">
+                                    Optional
+                                </span>
+                            </label>
+
+                            <input asp-for="Equipment"
+                                   class="form-control nexus-input"
+                                   placeholder="e.g. Router / Modem" />
+
+                            <span asp-validation-for="Equipment"
+                                  class="text-danger small">
+                            </span>
+
+                            <div class="field-hint">
+                                You can leave this empty. Equipment
+                                assignment can be handled later by NEXUS.
+                            </div>
+
+                        </div>
+
+
+                        <!-- ADDITIONAL INFORMATION -->
+                        <div class="apply-field mb-4">
+
+                            <label asp-for="AdditionalInfo"
+                                   class="form-label">
+                                Additional Information
+                                <span class="optional-label">
+                                    Optional
+                                </span>
+                            </label>
+
+                            <textarea asp-for="AdditionalInfo"
+                                      class="form-control nexus-input nexus-textarea"
+                                      rows="4"
+                                      placeholder="Any additional information or installation requirements..."></textarea>
+
+                            <span asp-validation-for="AdditionalInfo"
+                                  class="text-danger small">
+                            </span>
+
+                        </div>
+
+
+                        <!-- NOTICE -->
+                        <div class="apply-notice">
+
+                            <i class="bi bi-info-circle-fill"></i>
+
+                            <div>
+                                <strong>
+                                    Application Process
+                                </strong>
+
+                                <p>
+                                    After submission, your application
+                                    will be reviewed by the NEXUS team
+                                    for technical feasibility.
+                                </p>
+                            </div>
+
+                        </div>
+
+
+                        <!-- BUTTONS -->
+                        <div class="d-flex flex-wrap gap-3 mt-4">
+
+                            <button type="submit"
+                                    class="btn-nexus-primary apply-submit-btn">
+
+                                <i class="bi bi-send-fill"></i>
+                                Submit Application
+
+                            </button>
+
+                            <a asp-controller="CustomerPortal"
+                               asp-action="Index"
+                               class="btn-nexus-outline">
+
+                                Cancel
+
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const connectionType =
+                document.getElementById("connectionType");
+
+            const planSelect =
+                document.getElementById("planId");
+
+            const allOptions =
+                Array.from(
+                    planSelect.querySelectorAll("option[data-connection-type]")
+                );
+
+            function normalizeType(value) {
+
+                value = value.toLowerCase();
+
+                if (value.includes("broadband"))
+                    return "broadband";
+
+                if (value.includes("dial"))
+                    return "dial";
+
+                if (value.includes("telephone") ||
+                    value.includes("landline"))
+                    return "telephone";
+
+                return "";
+            }
+
+
+            function filterPlans() {
+
+                const selectedType =
+                    normalizeType(connectionType.value);
+
+                planSelect.value = "";
+
+                allOptions.forEach(function (option) {
+
+                    const optionType =
+                        normalizeType(
+                            option.dataset.connectionType
+                        );
+
+                    option.hidden =
+                        !selectedType ||
+                        optionType !== selectedType;
+
+                });
+
+
+                if (!selectedType) {
+
+                    planSelect.disabled = true;
+
+                    planSelect.querySelector(
+                        'option[value=""]'
+                    ).textContent =
+                        "Select connection type first";
+
+                }
+                else {
+
+                    planSelect.disabled = false;
+
+                    planSelect.querySelector(
+                        'option[value=""]'
+                    ).textContent =
+                        "Select a plan";
+
+                }
+
+            }
+
+
+            connectionType.addEventListener(
+                "change",
+                filterPlans
+            );
+
+
+            filterPlans();
+
+        });
+
+    </script>
+}

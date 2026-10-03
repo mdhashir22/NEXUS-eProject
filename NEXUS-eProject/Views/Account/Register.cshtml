@@ -1,0 +1,320 @@
+﻿@model NEXUS_eProject.Models.CustomerRegisterViewModel
+
+@{
+    ViewData["Title"] = "Register";
+    Layout = "_PublicLayout";
+}
+
+<section class="account-page register-page">
+
+    <div class="account-glow"></div>
+
+    <div class="container">
+
+        <div class="account-wrapper">
+
+            <div class="account-card register-card">
+
+                <div class="account-logo">
+
+                    <div class="account-logo-icon">
+                        <i class="bi bi-globe2"></i>
+                    </div>
+
+                    <div>
+                        <strong>NEXUS</strong>
+                        <span>CONNECTING YOUR WORLD</span>
+                    </div>
+
+                </div>
+
+
+                <div class="account-heading">
+
+                    <span>CREATE ACCOUNT</span>
+
+                    <h1>Join <b>NEXUS.</b></h1>
+
+                    <p>
+                        Create your customer account to apply
+                        for NEXUS services and manage your connection.
+                    </p>
+
+                </div>
+
+
+                <form asp-action="Register"
+                      method="post">
+
+                    @Html.AntiForgeryToken()
+
+                    <div asp-validation-summary="ModelOnly"
+                         class="account-validation">
+                    </div>
+
+
+                    <div class="row g-3">
+
+                        <div class="col-md-6">
+
+                            <div class="account-field">
+
+                                <label asp-for="FullName">
+                                    Full Name
+                                </label>
+
+                                <div class="account-input">
+
+                                    <i class="bi bi-person"></i>
+
+                                    <input asp-for="FullName"
+                                           placeholder="Full name" />
+
+                                </div>
+
+                                <span asp-validation-for="FullName"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <div class="account-field">
+
+                                <label asp-for="FatherName">
+                                    Father Name
+                                </label>
+
+                                <div class="account-input">
+
+                                    <i class="bi bi-person-vcard"></i>
+
+                                    <input asp-for="FatherName"
+                                           placeholder="Father name" />
+
+                                </div>
+
+                                <span asp-validation-for="FatherName"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <div class="account-field">
+
+                                <label asp-for="Phone">
+                                    Phone Number
+                                </label>
+
+                                <div class="account-input">
+
+                                    <i class="bi bi-telephone"></i>
+
+                                    <input asp-for="Phone"
+                                           placeholder="Phone number" />
+
+                                </div>
+
+                                <span asp-validation-for="Phone"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <div class="account-field">
+
+                                <label asp-for="Email">
+                                    Email Address
+                                </label>
+
+                                <div class="account-input">
+
+                                    <i class="bi bi-envelope"></i>
+
+                                    <input asp-for="Email"
+                                           placeholder="Email address" />
+
+                                </div>
+
+                                <span asp-validation-for="Email"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-12">
+
+                            <div class="account-field">
+
+                                <label asp-for="Address">
+                                    Address
+                                </label>
+
+                                <div class="account-input">
+
+                                    <i class="bi bi-geo-alt"></i>
+
+                                    <input asp-for="Address"
+                                           placeholder="Complete address" />
+
+                                </div>
+
+                                <span asp-validation-for="Address"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-12">
+
+                            <div class="account-field">
+
+                                <label asp-for="City">
+                                    City
+                                </label>
+
+                                <div class="account-input">
+
+                                    <i class="bi bi-buildings"></i>
+
+                                    <input asp-for="City"
+                                           placeholder="City" />
+
+                                </div>
+
+                                <span asp-validation-for="City"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <div class="account-field">
+
+                                <label asp-for="Password">
+                                    Password
+                                </label>
+
+                                <div class="account-input">
+
+                                    <i class="bi bi-lock"></i>
+
+                                    <input asp-for="Password"
+                                           placeholder="Create password" />
+
+                                </div>
+
+                                <span asp-validation-for="Password"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <div class="account-field">
+
+                                <label asp-for="ConfirmPassword">
+                                    Confirm Password
+                                </label>
+
+                                <div class="account-input">
+
+                                    <i class="bi bi-shield-lock"></i>
+
+                                    <input asp-for="ConfirmPassword"
+                                           placeholder="Confirm password" />
+
+                                </div>
+
+                                <span asp-validation-for="ConfirmPassword"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-12">
+
+                            <button type="submit"
+                                    class="account-submit">
+
+                                Create Account
+
+                                <i class="bi bi-arrow-right"></i>
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </form>
+
+
+                <div class="account-footer">
+
+                    <span>Already have an account?</span>
+
+                    <a asp-action="Login">
+                        Sign In
+                    </a>
+
+                </div>
+
+
+                <div class="account-back">
+
+                    <a asp-controller="Home"
+                       asp-action="Index">
+
+                        <i class="bi bi-arrow-left"></i>
+
+                        Back to NEXUS
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+}

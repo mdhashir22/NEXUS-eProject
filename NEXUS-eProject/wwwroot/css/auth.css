@@ -1,0 +1,212 @@
+﻿* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Arial, Helvetica, sans-serif;
+    background: radial-gradient(circle at top right, rgba(139, 92, 246, 0.18), transparent 35%), #111116;
+    color: #ffffff;
+}
+
+.auth-wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 430px;
+    padding: 38px;
+    background: rgba(29, 29, 38, 0.88);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(16px);
+}
+
+.auth-brand {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    margin-bottom: 35px;
+}
+
+.brand-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #8b5cf6, #c084fc);
+    color: white;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.auth-brand h2 {
+    margin: 0;
+    font-size: 23px;
+}
+
+.auth-brand span {
+    display: block;
+    margin-top: 3px;
+    color: #92929d;
+    font-size: 12px;
+}
+
+.auth-header {
+    margin-bottom: 27px;
+}
+
+    .auth-header h1 {
+        margin: 0 0 8px;
+        font-size: 30px;
+        font-weight: 700;
+    }
+
+    .auth-header p {
+        margin: 0;
+        color: #92929d;
+        font-size: 14px;
+    }
+
+.auth-form-group {
+    margin-bottom: 20px;
+}
+
+    .auth-form-group label {
+        display: block;
+        margin-bottom: 8px;
+        color: #d6d6df;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+.auth-input {
+    width: 100%;
+    height: 50px;
+    padding: 0 15px;
+    border: 1px solid #383844;
+    border-radius: 12px;
+    outline: none;
+    background: #191920;
+    color: #ffffff;
+    font-size: 14px;
+    transition: 0.2s ease;
+}
+
+    .auth-input::placeholder {
+        color: #666673;
+    }
+
+    .auth-input:focus {
+        border-color: #9b6cff;
+        box-shadow: 0 0 0 3px rgba(155, 108, 255, 0.12);
+    }
+
+.remember-row {
+    margin: 4px 0 22px;
+}
+
+.remember-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #aaaab5;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+    .remember-label input {
+        accent-color: #9b6cff;
+    }
+
+.auth-button {
+    width: 100%;
+    height: 50px;
+    border: 0;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #8b5cf6, #a855f7);
+    color: white;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s ease;
+}
+
+    .auth-button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 10px 25px rgba(139, 92, 246, 0.25);
+        color: white;
+    }
+
+.auth-validation {
+    margin-bottom: 15px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: rgba(239, 68, 68, 0.1);
+    color: #fca5a5;
+    font-size: 13px;
+}
+
+.field-validation {
+    display: block;
+    margin-top: 6px;
+    color: #fca5a5;
+    font-size: 12px;
+}
+
+.auth-footer {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    text-align: center;
+    color: #666673;
+    font-size: 11px;
+}
+
+.access-denied-card {
+    text-align: center;
+}
+
+.denied-icon {
+    width: 65px;
+    height: 65px;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(239, 68, 68, 0.12);
+    color: #f87171;
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.access-denied-card h1 {
+    margin-bottom: 10px;
+    font-size: 28px;
+}
+
+.access-denied-card p {
+    margin-bottom: 25px;
+    color: #92929d;
+    font-size: 14px;
+}
+
+.access-button {
+    width: auto;
+    padding: 0 25px;
+    display: inline-flex;
+}

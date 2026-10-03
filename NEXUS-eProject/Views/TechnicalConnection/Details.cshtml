@@ -1,0 +1,1184 @@
+﻿@model NEXUS_eProject.Models.Connection
+
+@{
+    ViewData["Title"] = "Connection Details";
+    ViewData["PageTitle"] = "Connection Details";
+    ViewData["PageSubtitle"] = "Technical Operations";
+
+    Layout = "~/Views/Shared/_TechnicalLayout.cshtml";
+
+    var status = Model.Status ?? "Pending";
+    var orderStatus = Model.Order?.Status ?? status;
+
+    var statusClass = "pending";
+
+    if (string.Equals(status, "Active", StringComparison.OrdinalIgnoreCase))
+    {
+        statusClass = "success";
+    }
+    else if (
+        string.Equals(status, "Rejected", StringComparison.OrdinalIgnoreCase) ||
+        string.Equals(status, "Technical Rejected", StringComparison.OrdinalIgnoreCase) ||
+        string.Equals(status, "Inactive", StringComparison.OrdinalIgnoreCase))
+    {
+        statusClass = "danger";
+    }
+    else if (
+        string.Equals(status, "Installation Pending", StringComparison.OrdinalIgnoreCase) ||
+        string.Equals(status, "Payment Pending", StringComparison.OrdinalIgnoreCase) ||
+        string.Equals(status, "Payment Verified", StringComparison.OrdinalIgnoreCase) ||
+        string.Equals(status, "Billing Pending", StringComparison.OrdinalIgnoreCase) ||
+        string.Equals(status, "Pending", StringComparison.OrdinalIgnoreCase))
+    {
+        statusClass = "warning";
+    }
+
+    var customerName =
+        string.IsNullOrWhiteSpace(Model.Customer?.FullName)
+            ? "Unknown Customer"
+            : Model.Customer.FullName;
+
+    var customerInitial =
+        customerName.Substring(0, 1).ToUpper();
+
+
+    // =========================================================
+    // WORKFLOW FLAGS
+    // =========================================================
+
+    var isActive =
+        string.Equals(
+            status,
+            "Active",
+            StringComparison.OrdinalIgnoreCase) ||
+        string.Equals(
+            orderStatus,
+            "Active",
+            StringComparison.OrdinalIgnoreCase);
+
+
+    var isInstallationPending =
+        string.Equals(
+            status,
+            "Installation Pending",
+            StringComparison.OrdinalIgnoreCase) ||
+        string.Equals(
+            orderStatus,
+            "Installation Pending",
+            StringComparison.OrdinalIgnoreCase);
+
+
+    var isPaymentVerified =
+        string.Equals(
+            status,
+            "Payment Verified",
+            StringComparison.OrdinalIgnoreCase) ||
+        string.Equals(
+            orderStatus,
+            "Payment Verified",
+            StringComparison.OrdinalIgnoreCase) ||
+        isInstallationPending ||
+        isActive;
+
+
+    var isPaymentPending =
+        string.Equals(
+            status,
+            "Payment Pending",
+            StringComparison.OrdinalIgnoreCase) ||
+        string.Equals(
+            orderStatus,
+            "Payment Pending",
+            StringComparison.OrdinalIgnoreCase);
+
+
+    var isBillingPending =
+        string.Equals(
+            status,
+            "Billing Pending",
+            StringComparison.OrdinalIgnoreCase) ||
+        string.Equals(
+            orderStatus,
+            "Billing Pending",
+            StringComparison.OrdinalIgnoreCase);
+
+
+    var billingCompleted =
+        isPaymentPending ||
+        isPaymentVerified ||
+        isInstallationPending ||
+        isActive;
+
+
+    var paymentCompleted =
+        isPaymentVerified ||
+        isInstallationPending ||
+        isActive;
+
+
+    var installationCompleted =
+        isActive;
+}
+
+
+<div class="tcd-page">
+
+    <!-- =====================================================
+         PAGE HEADER
+    ====================================================== -->
+
+    <div class="tcd-header">
+
+        <div class="tcd-header-left">
+
+            <a asp-controller="TechnicalConnection"
+               asp-action="Index"
+               class="tcd-back-button">
+
+                <i class="bi bi-arrow-left"></i>
+
+            </a>
+
+
+            <div>
+
+                <div class="tcd-breadcrumb">
+
+                    <span>Connections</span>
+
+                    <i class="bi bi-chevron-right"></i>
+
+                    <strong>Connection Details</strong>
+
+                </div>
+
+
+                <h2>
+                    @Model.AccountId
+                </h2>
+
+
+                <p>
+                    Customer connection and technical service
+                    information.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="tcd-header-status">
+
+            <span class="tcd-status @statusClass">
+
+                <i class="bi bi-circle-fill"></i>
+
+                @status
+
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SUCCESS MESSAGE
+    ====================================================== -->
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="tcd-alert-success">
+
+            <i class="bi bi-check-circle-fill"></i>
+
+            <div>
+
+                <strong>Success</strong>
+
+                <span>
+                    @TempData["Success"]
+                </span>
+
+            </div>
+
+        </div>
+    }
+
+
+    <!-- =====================================================
+         SUMMARY CARDS
+    ====================================================== -->
+
+    <div class="tcd-summary-grid">
+
+        <div class="tcd-summary-card">
+
+            <div class="tcd-summary-icon purple">
+                <i class="bi bi-person-badge"></i>
+            </div>
+
+            <div>
+
+                <span>ACCOUNT ID</span>
+
+                <strong>
+                    @Model.AccountId
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="tcd-summary-card">
+
+            <div class="tcd-summary-icon blue">
+                <i class="bi bi-wifi"></i>
+            </div>
+
+            <div>
+
+                <span>CONNECTION TYPE</span>
+
+                <strong>
+                    @(Model.ConnectionType ?? "-")
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="tcd-summary-card">
+
+            <div class="tcd-summary-icon green">
+                <i class="bi bi-box-seam"></i>
+            </div>
+
+            <div>
+
+                <span>PLAN</span>
+
+                <strong>
+                    @(Model.Plan?.PlanName ?? "-")
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="tcd-summary-card">
+
+            <div class="tcd-summary-icon orange">
+                <i class="bi bi-calendar-check"></i>
+            </div>
+
+            <div>
+
+                <span>INSTALLATION DATE</span>
+
+                <strong>
+                    @(Model.InstallationDate?.ToString("dd MMM yyyy")
+                        ?? "Not Scheduled")
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         MAIN GRID
+    ====================================================== -->
+
+    <div class="tcd-main-grid">
+
+
+        <!-- =================================================
+             LEFT COLUMN
+        ================================================== -->
+
+        <div class="tcd-left-column">
+
+
+            <!-- =================================================
+                 CUSTOMER INFORMATION
+            ================================================== -->
+
+            <div class="tcd-card">
+
+                <div class="tcd-card-header">
+
+                    <div>
+
+                        <h5>
+                            <i class="bi bi-person"></i>
+                            Customer Information
+                        </h5>
+
+                        <span>
+                            Customer associated with this connection.
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="tcd-customer-profile">
+
+                    <div class="tcd-avatar">
+                        @customerInitial
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            @customerName
+                        </strong>
+
+                        <span>
+                            Customer ID: @Model.CustomerId
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="tcd-info-grid">
+
+                    <div class="tcd-info-item">
+
+                        <span>Father Name</span>
+
+                        <strong>
+                            @(Model.Customer?.FatherName ?? "-")
+                        </strong>
+
+                    </div>
+
+
+                    <div class="tcd-info-item">
+
+                        <span>Phone</span>
+
+                        <strong>
+                            @(Model.Customer?.Phone ?? "-")
+                        </strong>
+
+                    </div>
+
+
+                    <div class="tcd-info-item">
+
+                        <span>Email</span>
+
+                        <strong>
+                            @(Model.Customer?.Email ?? "-")
+                        </strong>
+
+                    </div>
+
+
+                    <div class="tcd-info-item">
+
+                        <span>City</span>
+
+                        <strong>
+                            @(Model.Customer?.City ?? "-")
+                        </strong>
+
+                    </div>
+
+
+                    <div class="tcd-info-item full">
+
+                        <span>Installation Address</span>
+
+                        <strong>
+                            @(Model.Customer?.Address ?? "-")
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 CONNECTION INFORMATION
+            ================================================== -->
+
+            <div class="tcd-card">
+
+                <div class="tcd-card-header">
+
+                    <div>
+
+                        <h5>
+                            <i class="bi bi-router"></i>
+                            Connection Information
+                        </h5>
+
+                        <span>
+                            Technical details of the customer connection.
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="tcd-info-grid">
+
+                    <div class="tcd-info-item">
+
+                        <span>Account ID</span>
+
+                        <strong class="highlight">
+                            @Model.AccountId
+                        </strong>
+
+                    </div>
+
+
+                    <div class="tcd-info-item">
+
+                        <span>Connection Type</span>
+
+                        <strong>
+                            @(Model.ConnectionType ?? "-")
+                        </strong>
+
+                    </div>
+
+
+                    <div class="tcd-info-item">
+
+                        <span>Router Serial</span>
+
+                        <strong>
+                            @(string.IsNullOrWhiteSpace(Model.RouterSerial)
+                                ? "-"
+                                : Model.RouterSerial)
+                        </strong>
+
+                    </div>
+
+
+                    <div class="tcd-info-item">
+
+                        <span>Equipment</span>
+
+                        <strong>
+                            @(string.IsNullOrWhiteSpace(Model.Equipment)
+                                ? "Not Specified"
+                                : Model.Equipment)
+                        </strong>
+
+                    </div>
+
+
+                    <div class="tcd-info-item">
+
+                        <span>Installation Date</span>
+
+                        <strong>
+                            @(Model.InstallationDate?.ToString(
+                                "dd MMM yyyy") ?? "Not Scheduled")
+                        </strong>
+
+                    </div>
+
+
+                    <div class="tcd-info-item">
+
+                        <span>Status</span>
+
+                        <strong class="status-text @statusClass">
+                            @status
+                        </strong>
+
+                    </div>
+
+
+                    <div class="tcd-info-item">
+
+                        <span>Created</span>
+
+                        <strong>
+                            @Model.CreatedAt.ToString(
+                                "dd MMM yyyy, hh:mm tt")
+                        </strong>
+
+                    </div>
+
+
+                    <div class="tcd-info-item">
+
+                        <span>Activated</span>
+
+                        <strong>
+                            @(Model.ActivatedAt?.ToString(
+                                "dd MMM yyyy, hh:mm tt")
+                                ?? "Not Activated")
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 SOURCE ORDER
+            ================================================== -->
+
+            <div class="tcd-card">
+
+                <div class="tcd-card-header">
+
+                    <div>
+
+                        <h5>
+                            <i class="bi bi-file-earmark-text"></i>
+                            Source Order
+                        </h5>
+
+                        <span>
+                            Original order used to create this connection.
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="tcd-order-box">
+
+                    <div class="tcd-order-icon">
+
+                        <i class="bi bi-file-earmark-check"></i>
+
+                    </div>
+
+
+                    <div class="tcd-order-main">
+
+                        <span>ORDER NUMBER</span>
+
+                        <strong>
+                            @(Model.Order?.OrderNumber ?? "-")
+                        </strong>
+
+                        <small>
+                            @(Model.Order?.ConnectionType ?? "-")
+                        </small>
+
+                    </div>
+
+
+                    @if (Model.Order != null)
+                    {
+                        <a asp-controller="TechnicalOrder"
+                           asp-action="Details"
+                           asp-route-id="@Model.OrderId"
+                           class="tcd-view-order">
+
+                            View Order
+
+                            <i class="bi bi-arrow-right"></i>
+
+                        </a>
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             RIGHT COLUMN
+        ================================================== -->
+
+        <div class="tcd-right-column">
+
+
+            <!-- =================================================
+                 ACCOUNT CARD
+            ================================================== -->
+
+            <div class="tcd-account-card">
+
+                <div class="tcd-account-icon">
+
+                    <i class="bi bi-person-badge-fill"></i>
+
+                </div>
+
+                <span>
+                    NEXUS ACCOUNT ID
+                </span>
+
+                <h3>
+                    @Model.AccountId
+                </h3>
+
+                <p>
+                    Unique service account assigned to
+                    @customerName.
+                </p>
+
+            </div>
+
+
+            <!-- =================================================
+                 PLAN
+            ================================================== -->
+
+            <div class="tcd-card">
+
+                <div class="tcd-card-header">
+
+                    <div>
+
+                        <h5>
+                            <i class="bi bi-speedometer2"></i>
+                            Service Plan
+                        </h5>
+
+                    </div>
+
+                </div>
+
+
+                <div class="tcd-plan">
+
+                    <div class="tcd-plan-icon">
+
+                        <i class="bi bi-wifi"></i>
+
+                    </div>
+
+
+                    <div class="tcd-plan-main">
+
+                        <strong>
+                            @(Model.Plan?.PlanName ?? "No Plan")
+                        </strong>
+
+                        <span>
+                            @(Model.Plan?.Speed ??
+                                "Speed not specified")
+                        </span>
+
+                    </div>
+
+
+                    <div class="tcd-plan-price">
+
+                        <span>MONTHLY</span>
+
+                        <strong>
+                            Rs.
+                            @(Model.Plan != null
+                                ? Model.Plan.Price.ToString("N0")
+                                : "0")
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                @if (!string.IsNullOrWhiteSpace(
+                    Model.Plan?.Description))
+                {
+                    <div class="tcd-plan-description">
+
+                        @Model.Plan.Description
+
+                    </div>
+                }
+
+            </div>
+
+
+            <!-- =================================================
+                 WORKFLOW STATUS
+            ================================================== -->
+
+            <div class="tcd-card">
+
+                <div class="tcd-card-header">
+
+                    <div>
+
+                        <h5>
+                            <i class="bi bi-diagram-3"></i>
+                            Workflow Status
+                        </h5>
+
+                    </div>
+
+                </div>
+
+
+                <div class="tcd-workflow">
+
+
+                    <!-- =========================================
+                         RETAIL ACCEPTED
+                    ========================================== -->
+
+                    <div class="tcd-workflow-item completed">
+
+                        <div>
+                            <i class="bi bi-check"></i>
+                        </div>
+
+                        <span>
+                            Retail Accepted
+                        </span>
+
+                    </div>
+
+
+                    <div class="tcd-workflow-line completed"></div>
+
+
+                    <!-- =========================================
+                         FEASIBILITY
+                    ========================================== -->
+
+                    <div class="tcd-workflow-item completed">
+
+                        <div>
+                            <i class="bi bi-check"></i>
+                        </div>
+
+                        <span>
+                            Feasibility Approved
+                        </span>
+
+                    </div>
+
+
+                    <div class="tcd-workflow-line completed"></div>
+
+
+                    <!-- =========================================
+                         CONNECTION CREATED
+                    ========================================== -->
+
+                    <div class="tcd-workflow-item completed">
+
+                        <div>
+                            <i class="bi bi-check"></i>
+                        </div>
+
+                        <span>
+                            Connection Created
+                        </span>
+
+                    </div>
+
+
+                    <!-- =========================================
+                         LINE TO BILLING
+                    ========================================== -->
+
+                    <div class="tcd-workflow-line
+                        @(billingCompleted ||
+                          isBillingPending ||
+                          isPaymentPending ||
+                          isPaymentVerified ||
+                          isInstallationPending ||
+                          isActive
+                            ? "completed"
+                            : "")">
+                    </div>
+
+
+                    <!-- =========================================
+                         BILLING
+                    ========================================== -->
+
+                    <div class="tcd-workflow-item
+                        @(billingCompleted
+                            ? "completed"
+                            : isBillingPending
+                                ? "current"
+                                : "")">
+
+                        <div>
+
+                            @if (billingCompleted)
+                            {
+                                <i class="bi bi-check"></i>
+                            }
+                            else
+                            {
+                                <i class="bi bi-receipt"></i>
+                            }
+
+                        </div>
+
+                        <span>
+                            @(billingCompleted
+                                ? "Billing Completed"
+                                : "Billing")
+                        </span>
+
+                    </div>
+
+
+                    <!-- =========================================
+                         LINE TO PAYMENT
+                    ========================================== -->
+
+                    <div class="tcd-workflow-line
+                        @(paymentCompleted ||
+                          isPaymentPending ||
+                          isPaymentVerified ||
+                          isInstallationPending ||
+                          isActive
+                            ? "completed"
+                            : "")">
+                    </div>
+
+
+                    <!-- =========================================
+                         PAYMENT
+                    ========================================== -->
+
+                    <div class="tcd-workflow-item
+                        @(paymentCompleted
+                            ? "completed"
+                            : isPaymentPending
+                                ? "current"
+                                : "")">
+
+                        <div>
+
+                            @if (paymentCompleted)
+                            {
+                                <i class="bi bi-check"></i>
+                            }
+                            else
+                            {
+                                <i class="bi bi-credit-card"></i>
+                            }
+
+                        </div>
+
+                        <span>
+                            @(paymentCompleted
+                                ? "Payment Verified"
+                                : "Payment")
+                        </span>
+
+                    </div>
+
+
+                    <!-- =========================================
+                         LINE TO INSTALLATION
+                    ========================================== -->
+
+                    <div class="tcd-workflow-line
+                        @(installationCompleted ||
+                          isInstallationPending ||
+                          isActive
+                            ? "completed"
+                            : "")">
+                    </div>
+
+
+                    <!-- =========================================
+                         INSTALLATION
+                    ========================================== -->
+
+                    <div class="tcd-workflow-item
+                        @(installationCompleted
+                            ? "completed"
+                            : isInstallationPending
+                                ? "current"
+                                : "")">
+
+                        <div>
+
+                            @if (installationCompleted)
+                            {
+                                <i class="bi bi-check"></i>
+                            }
+                            else
+                            {
+                                <i class="bi bi-tools"></i>
+                            }
+
+                        </div>
+
+                        <span>
+                            @(installationCompleted
+                                ? "Installation Completed"
+                                : "Installation")
+                        </span>
+
+                    </div>
+
+
+                    <!-- =========================================
+                         LINE TO ACTIVE
+                    ========================================== -->
+
+                    <div class="tcd-workflow-line
+                        @(isActive ? "completed" : "")">
+                    </div>
+
+
+                    <!-- =========================================
+                         ACTIVE
+                    ========================================== -->
+
+                    <div class="tcd-workflow-item
+                        @(isActive ? "completed" : "")">
+
+                        <div>
+
+                            @if (isActive)
+                            {
+                                <i class="bi bi-check"></i>
+                            }
+                            else
+                            {
+                                <i class="bi bi-wifi"></i>
+                            }
+
+                        </div>
+
+                        <span>
+                            Active
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     DYNAMIC WORKFLOW MESSAGE
+                ================================================== -->
+
+                @if (isActive)
+                {
+                    <div class="tcd-next-note">
+
+                        <i class="bi bi-check-circle-fill"></i>
+
+                        <div>
+
+                            <strong>
+                                Connection Active
+                            </strong>
+
+                            <p>
+                                Installation has been completed successfully.
+                                The customer's NEXUS connection is now active
+                                and ready for use.
+                            </p>
+
+                        </div>
+
+                    </div>
+                }
+                else if (isInstallationPending)
+                {
+                    <div class="tcd-next-note">
+
+                        <i class="bi bi-tools"></i>
+
+                        <div>
+
+                            <strong>
+                                Installation In Progress
+                            </strong>
+
+                            <p>
+                                Payment has been verified successfully.
+                                Complete the installation to activate the
+                                customer's connection.
+                            </p>
+
+                        </div>
+
+                    </div>
+                }
+                else if (isPaymentVerified)
+                {
+                    <div class="tcd-next-note">
+
+                        <i class="bi bi-check-circle-fill"></i>
+
+                        <div>
+
+                            <strong>
+                                Payment Verified
+                            </strong>
+
+                            <p>
+                                The customer's payment has been verified.
+                                The connection is ready for installation.
+                            </p>
+
+                        </div>
+
+                    </div>
+                }
+                else if (isPaymentPending)
+                {
+                    <div class="tcd-next-note">
+
+                        <i class="bi bi-credit-card"></i>
+
+                        <div>
+
+                            <strong>
+                                Payment Pending
+                            </strong>
+
+                            <p>
+                                Billing has been completed. The customer's
+                                payment is waiting for verification by the
+                                Accounts department.
+                            </p>
+
+                        </div>
+
+                    </div>
+                }
+                else
+                {
+                    <div class="tcd-next-note">
+
+                        <i class="bi bi-info-circle-fill"></i>
+
+                        <div>
+
+                            <strong>
+                                Next Stage
+                            </strong>
+
+                            <p>
+                                Connection has been created successfully.
+                                Billing and payment processing will be
+                                handled by the Accounts department.
+                            </p>
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+
+
+            <!-- =================================================
+                 CONNECTION RECORD
+            ================================================== -->
+
+            <div class="tcd-card">
+
+                <div class="tcd-card-header">
+
+                    <div>
+
+                        <h5>
+                            <i class="bi bi-info-circle"></i>
+                            Connection Record
+                        </h5>
+
+                    </div>
+
+                </div>
+
+
+                <div class="tcd-meta">
+
+                    <div>
+
+                        <span>Connection ID</span>
+
+                        <strong>
+                            @Model.ConnectionId
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>Order ID</span>
+
+                        <strong>
+                            @Model.OrderId
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>Customer ID</span>
+
+                        <strong>
+                            @Model.CustomerId
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>Status</span>
+
+                        <strong class="status-text @statusClass">
+                            @status
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 BACK BUTTON
+            ================================================== -->
+
+            <a asp-controller="TechnicalConnection"
+               asp-action="Index"
+               class="tcd-secondary-button">
+
+                <i class="bi bi-arrow-left"></i>
+
+                Back to Connections
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>

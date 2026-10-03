@@ -1,0 +1,195 @@
+﻿@model NEXUS_eProject.Models.Plan
+
+@{
+    ViewData["Title"] = "Add Plan";
+    ViewData["PageTitle"] = "Add Plan";
+    ViewData["PageSubtitle"] = "Create a new Nexus connection plan";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="page-heading">
+
+    <div>
+        <h2>Add Plan</h2>
+        <p>Add a new internet connection plan to Nexus.</p>
+    </div>
+
+</div>
+
+
+<div class="form-card">
+
+    <form asp-action="Create" method="post">
+
+        @Html.AntiForgeryToken()
+
+        <div asp-validation-summary="All"
+             class="validation-summary">
+        </div>
+
+
+        <div class="form-section-title">
+            Plan Information
+        </div>
+
+
+        <div class="form-grid">
+
+            <div class="form-group">
+
+                <label asp-for="ConnectionType">
+                    Connection Type
+                </label>
+
+                <select asp-for="ConnectionType"
+                        class="nexus-input">
+
+                    <option value="">
+                        Select Connection Type
+                    </option>
+
+                    <option value="Dial-Up">
+                        Dial-Up Internet
+                    </option>
+
+                    <option value="Broadband">
+                        Broadband Internet
+                    </option>
+
+                    <option value="Telephone">
+                        Telephone / Landline
+                    </option>
+
+                </select>
+
+                <span asp-validation-for="ConnectionType"
+                      class="field-error">
+                </span>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label asp-for="PlanName">
+                    Plan Name
+                </label>
+
+                <input asp-for="PlanName"
+                       class="nexus-input"
+                       placeholder="Enter plan name" />
+
+                <span asp-validation-for="PlanName"
+                      class="field-error">
+                </span>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label asp-for="Speed">
+                    Speed
+                </label>
+
+                <input asp-for="Speed"
+                       class="nexus-input"
+                       placeholder="e.g. 20 Mbps" />
+
+                <span asp-validation-for="Speed"
+                      class="field-error">
+                </span>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label asp-for="Duration">
+                    Duration
+                </label>
+
+                <input asp-for="Duration"
+                       class="nexus-input"
+                       placeholder="e.g. Monthly" />
+
+                <span asp-validation-for="Duration"
+                      class="field-error">
+                </span>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label asp-for="Price">
+                    Price
+                </label>
+
+                <input asp-for="Price"
+                       type="number"
+                       step="0.01"
+                       min="0"
+                       class="nexus-input"
+                       placeholder="Enter plan price" />
+
+                <span asp-validation-for="Price"
+                      class="field-error">
+                </span>
+
+            </div>
+
+
+            <div class="form-group full-width">
+
+                <label asp-for="Description">
+                    Description
+                </label>
+
+                <textarea asp-for="Description"
+                          class="nexus-input"
+                          rows="4"
+                          placeholder="Enter plan description"></textarea>
+
+                <span asp-validation-for="Description"
+                      class="field-error">
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="form-footer">
+
+            <a asp-action="Index"
+               class="secondary-action">
+
+                <i class="bi bi-arrow-left"></i>
+                Cancel
+
+            </a>
+
+
+            <button type="submit"
+                    class="nexus-btn">
+
+                <i class="bi bi-check-lg"></i>
+                Save Plan
+
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+}

@@ -1,0 +1,595 @@
+﻿@model IEnumerable<NEXUS_eProject.Models.Customer>
+
+@{
+    ViewData["Title"] = "Customers";
+    ViewData["PageTitle"] = "Customers";
+    Layout = "~/Views/Shared/_RetailLayout.cshtml";
+
+    var search = ViewData["Search"]?.ToString();
+    var status = ViewData["Status"]?.ToString();
+}
+
+<div class="retail-page rc-page">
+
+    <!-- =====================================================
+         PAGE HEADER
+    ====================================================== -->
+
+    <div class="retail-page-header rc-header">
+
+        <div>
+
+            <div class="retail-page-eyebrow">
+                <i class="bi bi-people"></i>
+                RETAIL MANAGEMENT
+            </div>
+
+            <h1>Customers</h1>
+
+            <p>
+                View and track customer records registered in the system.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         CUSTOMER STATISTICS
+    ====================================================== -->
+
+    <div class="row g-3 rc-stats">
+
+        <!-- TOTAL -->
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="retail-card rc-stat-card">
+
+                <div class="rc-stat-top">
+
+                    <div class="rc-stat-icon">
+                        <i class="bi bi-people"></i>
+                    </div>
+
+                </div>
+
+                <span class="rc-stat-label">
+                    TOTAL CUSTOMERS
+                </span>
+
+                <strong class="rc-stat-number">
+                    @Model.Count()
+                </strong>
+
+                <span class="rc-stat-footer">
+                    All registered customers
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- ACTIVE -->
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="retail-card rc-stat-card">
+
+                <div class="rc-stat-top">
+
+                    <div class="rc-stat-icon rc-stat-success">
+                        <i class="bi bi-person-check"></i>
+                    </div>
+
+                </div>
+
+                <span class="rc-stat-label">
+                    ACTIVE CUSTOMERS
+                </span>
+
+                <strong class="rc-stat-number">
+                    @Model.Count(c => c.IsActive)
+                </strong>
+
+                <span class="rc-stat-footer">
+                    Currently active
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- INACTIVE -->
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="retail-card rc-stat-card">
+
+                <div class="rc-stat-top">
+
+                    <div class="rc-stat-icon rc-stat-danger">
+                        <i class="bi bi-person-x"></i>
+                    </div>
+
+                </div>
+
+                <span class="rc-stat-label">
+                    INACTIVE CUSTOMERS
+                </span>
+
+                <strong class="rc-stat-number">
+                    @Model.Count(c => !c.IsActive)
+                </strong>
+
+                <span class="rc-stat-footer">
+                    Currently inactive
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- RESULTS -->
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="retail-card rc-stat-card">
+
+                <div class="rc-stat-top">
+
+                    <div class="rc-stat-icon rc-stat-blue">
+                        <i class="bi bi-search"></i>
+                    </div>
+
+                </div>
+
+                <span class="rc-stat-label">
+                    CURRENT RESULTS
+                </span>
+
+                <strong class="rc-stat-number">
+                    @Model.Count()
+                </strong>
+
+                <span class="rc-stat-footer">
+                    Matching customers
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SEARCH + FILTER
+    ====================================================== -->
+
+    <div class="retail-card rc-filter-card">
+
+        <div class="retail-card-header">
+
+            <div class="retail-card-title">
+
+                <div class="retail-card-icon">
+                    <i class="bi bi-funnel"></i>
+                </div>
+
+                <div>
+
+                    <h3>
+                        Search Customers
+                    </h3>
+
+                    <span>
+                        Find customers by name, phone, email or city.
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="retail-card-body">
+
+            <form asp-controller="RetailCustomer"
+                  asp-action="Index"
+                  method="get">
+
+                <div class="row g-3 align-items-end">
+
+                    <!-- SEARCH -->
+
+                    <div class="col-lg-7">
+
+                        <label class="rc-form-label">
+                            Search
+                        </label>
+
+                        <div class="rc-input-wrapper">
+
+                            <i class="bi bi-search"></i>
+
+                            <input type="text"
+                                   name="search"
+                                   value="@search"
+                                   class="form-control"
+                                   placeholder="Name, father name, phone, email or city..." />
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- STATUS -->
+
+                    <div class="col-lg-3">
+
+                        <label class="rc-form-label">
+                            Status
+                        </label>
+
+                        <select name="status"
+                                class="form-select rc-select">
+
+                            @if (string.IsNullOrEmpty(status))
+                            {
+                                <option value="" selected>
+                                    All Customers
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="">
+                                    All Customers
+                                </option>
+                            }
+
+                            @if (status == "Active")
+                            {
+                                <option value="Active" selected>
+                                    Active
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="Active">
+                                    Active
+                                </option>
+                            }
+
+                            @if (status == "Inactive")
+                            {
+                                <option value="Inactive" selected>
+                                    Inactive
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="Inactive">
+                                    Inactive
+                                </option>
+                            }
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- SEARCH BUTTON -->
+
+                    <div class="col-lg-2">
+
+                        <div class="d-flex gap-2">
+
+                            <button type="submit"
+                                    class="retail-primary-btn rc-search-btn">
+
+                                <i class="bi bi-search"></i>
+
+                                Search
+
+                            </button>
+
+                            <a asp-controller="RetailCustomer"
+                               asp-action="Index"
+                               class="rc-clear-btn"
+                               title="Clear filters">
+
+                                <i class="bi bi-x-lg"></i>
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         CUSTOMER TABLE
+    ====================================================== -->
+
+    <div class="retail-card rc-table-card">
+
+        <div class="retail-card-header">
+
+            <div class="retail-card-title">
+
+                <div class="retail-card-icon">
+
+                    <i class="bi bi-people"></i>
+
+                </div>
+
+                <div>
+
+                    <h3>
+                        Customer List
+                    </h3>
+
+                    <span>
+                        Customer records available in the system.
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="rc-record-count">
+
+                <i class="bi bi-people"></i>
+
+                @Model.Count() Records
+
+            </div>
+
+        </div>
+
+
+        <div class="retail-card-body p-0">
+
+            @if (Model.Any())
+            {
+                <div class="rc-table-wrapper">
+
+                    <table class="table rc-table align-middle mb-0">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    CUSTOMER
+                                </th>
+
+                                <th>
+                                    FATHER NAME
+                                </th>
+
+                                <th>
+                                    PHONE
+                                </th>
+
+                                <th>
+                                    CITY
+                                </th>
+
+                                <th>
+                                    STATUS
+                                </th>
+
+                                <th>
+                                    JOINED
+                                </th>
+
+                                <th class="text-end">
+                                    ACTION
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            @foreach (var customer in Model)
+                            {
+                                <tr>
+
+                                    <!-- CUSTOMER -->
+
+                                    <td>
+
+                                        <div class="rc-customer">
+
+                                            <div class="rc-avatar">
+
+                                                @(string.IsNullOrWhiteSpace(customer.FullName)
+                                                    ? "?"
+                                                    : customer.FullName
+                                                        .Trim()
+                                                        .Substring(0, 1)
+                                                        .ToUpper())
+
+                                            </div>
+
+
+                                            <div class="rc-customer-info">
+
+                                                <strong>
+                                                    @customer.FullName
+                                                </strong>
+
+                                                @if (!string.IsNullOrWhiteSpace(customer.Email))
+                                                {
+                                                    <span>
+                                                        @customer.Email
+                                                    </span>
+                                                }
+
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <!-- FATHER -->
+
+                                    <td>
+
+                                        <span class="rc-text">
+                                            @customer.FatherName
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- PHONE -->
+
+                                    <td>
+
+                                        <span class="rc-phone">
+                                            @customer.Phone
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- CITY -->
+
+                                    <td>
+
+                                        <span class="rc-city">
+                                            @customer.City
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- STATUS -->
+
+                                    <td>
+
+                                        @if (customer.IsActive)
+                                        {
+                                            <span class="rc-status rc-status-active">
+
+                                                <i class="bi bi-check-circle"></i>
+
+                                                Active
+
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="rc-status rc-status-inactive">
+
+                                                <i class="bi bi-x-circle"></i>
+
+                                                Inactive
+
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <!-- JOINED -->
+
+                                    <td>
+
+                                        <div class="rc-date">
+
+                                            <strong>
+                                                @customer.CreatedAt.ToString("dd MMM yyyy")
+                                            </strong>
+
+                                            <span>
+                                                @customer.CreatedAt.ToString("hh:mm tt")
+                                            </span>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <!-- ACTION -->
+
+                                    <td class="text-end">
+
+                                        <a asp-controller="RetailCustomer"
+                                           asp-action="Details"
+                                           asp-route-id="@customer.CustomerId"
+                                           class="rc-view-btn"
+                                           title="View Customer Details">
+
+                                            <i class="bi bi-eye"></i>
+
+                                        </a>
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+            else
+            {
+                <div class="rc-empty">
+
+                    <div class="rc-empty-icon">
+
+                        <i class="bi bi-people"></i>
+
+                    </div>
+
+                    <h4>
+                        No Customers Found
+                    </h4>
+
+                    <p>
+                        No customers match your current search or filter.
+                    </p>
+
+                    <a asp-controller="RetailCustomer"
+                       asp-action="Index"
+                       class="retail-secondary-btn">
+
+                        <i class="bi bi-arrow-clockwise"></i>
+
+                        Clear Filters
+
+                    </a>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,469 @@
+﻿@model NEXUS_eProject.Models.Order
+
+@{
+    ViewData["Title"] = "Create Connection";
+    ViewData["PageTitle"] = "Create Connection";
+    Layout = "~/Views/Shared/_TechnicalLayout.cshtml";
+
+    string connectionPrefix = Model.ConnectionType?.ToLower() switch
+    {
+        "broadband" => "B",
+        "broadband internet" => "B",
+        "dial-up" => "D",
+        "dialup" => "D",
+        "dial-up internet" => "D",
+        "telephone" => "T",
+        "telephone/landline" => "T",
+        "landline" => "T",
+        _ => "N"
+    };
+}
+
+<div class="tc-create-page">
+
+    <!-- =========================
+         PAGE HEADER
+    ========================== -->
+    <div class="tc-create-header">
+
+        <div>
+            <div class="tc-create-eyebrow">
+                <i class="bi bi-router"></i>
+                TECHNICAL OPERATIONS
+            </div>
+
+            <h2>Create Connection</h2>
+
+            <p>
+                Create a customer connection after successful
+                technical feasibility.
+            </p>
+        </div>
+
+        <a asp-controller="TechnicalOrder"
+           asp-action="Details"
+           asp-route-id="@Model.OrderId"
+           class="tc-back-btn">
+
+            <i class="bi bi-arrow-left"></i>
+            Back to Order
+
+        </a>
+
+    </div>
+
+
+    <!-- =========================
+         MESSAGES
+    ========================== -->
+    @if (TempData["Error"] != null)
+    {
+        <div class="tc-alert tc-alert-danger">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+
+            <span>
+                @TempData["Error"]
+            </span>
+        </div>
+    }
+
+
+    <!-- =========================
+         WORKFLOW STATUS
+    ========================== -->
+    <div class="tc-workflow-card">
+
+        <div class="tc-workflow-item completed">
+            <div class="tc-workflow-icon">
+                <i class="bi bi-check-lg"></i>
+            </div>
+
+            <div>
+                <span>Retail Review</span>
+                <strong>Accepted</strong>
+            </div>
+        </div>
+
+        <div class="tc-workflow-line completed"></div>
+
+        <div class="tc-workflow-item completed">
+            <div class="tc-workflow-icon">
+                <i class="bi bi-check-lg"></i>
+            </div>
+
+            <div>
+                <span>Feasibility</span>
+                <strong>Feasible</strong>
+            </div>
+        </div>
+
+        <div class="tc-workflow-line active"></div>
+
+        <div class="tc-workflow-item active">
+            <div class="tc-workflow-icon">
+                <i class="bi bi-router"></i>
+            </div>
+
+            <div>
+                <span>Connection</span>
+                <strong>Create</strong>
+            </div>
+        </div>
+
+        <div class="tc-workflow-line"></div>
+
+        <div class="tc-workflow-item">
+            <div class="tc-workflow-icon">
+                <i class="bi bi-receipt"></i>
+            </div>
+
+            <div>
+                <span>Accounts</span>
+                <strong>Pending</strong>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="tc-create-grid">
+
+        <!-- =====================================
+             LEFT SIDE
+        ====================================== -->
+        <div class="tc-create-left">
+
+
+            <!-- ORDER INFORMATION -->
+            <div class="tc-card">
+
+                <div class="tc-card-header">
+
+                    <div>
+                        <span class="tc-card-label">
+                            ORDER INFORMATION
+                        </span>
+
+                        <h5>
+                            <i class="bi bi-file-earmark-text"></i>
+                            @Model.OrderNumber
+                        </h5>
+                    </div>
+
+                    <span class="tc-status-badge feasible">
+                        <i class="bi bi-check-circle-fill"></i>
+                        Feasible
+                    </span>
+
+                </div>
+
+
+                <div class="tc-info-grid">
+
+                    <div class="tc-info-item">
+                        <span>Order ID</span>
+                        <strong>@Model.OrderNumber</strong>
+                    </div>
+
+                    <div class="tc-info-item">
+                        <span>Connection Type</span>
+                        <strong>
+                            @(Model.ConnectionType ?? "N/A")
+                        </strong>
+                    </div>
+
+                    <div class="tc-info-item">
+                        <span>Application Date</span>
+                        <strong>
+                            @Model.CreatedAt.ToString("dd MMM yyyy")
+                        </strong>
+                    </div>
+
+                    <div class="tc-info-item">
+                        <span>Current Status</span>
+                        <strong class="tc-text-success">
+                            @Model.Status
+                        </strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- CUSTOMER INFORMATION -->
+            <div class="tc-card">
+
+                <div class="tc-section-title">
+                    <div class="tc-section-icon">
+                        <i class="bi bi-person"></i>
+                    </div>
+
+                    <div>
+                        <span>CUSTOMER</span>
+                        <h5>Customer Information</h5>
+                    </div>
+                </div>
+
+
+                <div class="tc-info-grid">
+
+                    <div class="tc-info-item">
+                        <span>Customer Name</span>
+                        <strong>
+                            @(Model.Customer?.FullName ?? "N/A")
+                        </strong>
+                    </div>
+
+                    <div class="tc-info-item">
+                        <span>Father Name</span>
+                        <strong>
+                            @(Model.Customer?.FatherName ?? "N/A")
+                        </strong>
+                    </div>
+
+                    <div class="tc-info-item">
+                        <span>Phone Number</span>
+                        <strong>
+                            @(Model.Customer?.Phone ?? "N/A")
+                        </strong>
+                    </div>
+
+                    <div class="tc-info-item">
+                        <span>Email Address</span>
+                        <strong>
+                            @(Model.Customer?.Email ?? "N/A")
+                        </strong>
+                    </div>
+
+                    <div class="tc-info-item tc-info-full">
+                        <span>Installation Address</span>
+                        <strong>
+                            @(Model.Customer?.Address ?? "N/A"),
+                            @(Model.Customer?.City ?? "")
+                        </strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- PLAN INFORMATION -->
+            <div class="tc-card">
+
+                <div class="tc-section-title">
+                    <div class="tc-section-icon">
+                        <i class="bi bi-wifi"></i>
+                    </div>
+
+                    <div>
+                        <span>SERVICE</span>
+                        <h5>Plan Information</h5>
+                    </div>
+                </div>
+
+
+                <div class="tc-info-grid">
+
+                    <div class="tc-info-item">
+                        <span>Plan</span>
+                        <strong>
+                            @(Model.Plan?.PlanName ?? "N/A")
+                        </strong>
+                    </div>
+
+                    <div class="tc-info-item">
+                        <span>Speed</span>
+                        <strong>
+                            @(Model.Plan?.Speed ?? "N/A")
+                        </strong>
+                    </div>
+
+                    <div class="tc-info-item">
+                        <span>Monthly Price</span>
+                        <strong>
+                            Rs. @(Model.Plan?.Price.ToString("N0") ?? "0")
+                        </strong>
+                    </div>
+
+                    <div class="tc-info-item">
+                        <span>Equipment</span>
+                        <strong>
+                            @(string.IsNullOrWhiteSpace(Model.Equipment)
+                                ? "Not Specified"
+                                : Model.Equipment)
+                        </strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================
+             RIGHT SIDE
+        ====================================== -->
+        <div class="tc-create-right">
+
+
+            <!-- ACCOUNT ID PREVIEW -->
+            <div class="tc-account-preview">
+
+                <div class="tc-account-icon">
+                    <i class="bi bi-person-badge"></i>
+                </div>
+
+                <span>ACCOUNT ID</span>
+
+                <h3>
+                    @connectionPrefix<span>101</span>XXXXXXXXXXXX
+                </h3>
+
+                <p>
+                    Account ID will be generated automatically
+                    after connection creation.
+                </p>
+
+            </div>
+
+
+            <!-- CONNECTION FORM -->
+            <div class="tc-card tc-form-card">
+
+                <div class="tc-section-title">
+                    <div class="tc-section-icon">
+                        <i class="bi bi-hdd-network"></i>
+                    </div>
+
+                    <div>
+                        <span>CONNECTION SETUP</span>
+                        <h5>Connection Details</h5>
+                    </div>
+                </div>
+
+
+                <form asp-controller="TechnicalConnection"
+                      asp-action="Create"
+                      method="post"
+                      id="createConnectionForm">
+
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden"
+                           name="orderId"
+                           value="@Model.OrderId" />
+
+
+                    <!-- CONNECTION TYPE -->
+                    <div class="tc-form-group">
+
+                        <label>
+                            Connection Type
+                        </label>
+
+                        <div class="tc-readonly-input">
+                            <i class="bi bi-broadcast"></i>
+
+                            <span>
+                                @Model.ConnectionType
+                            </span>
+                        </div>
+
+                    </div>
+
+
+                    <!-- ROUTER SERIAL -->
+                    <div class="tc-form-group">
+
+                        <label for="routerSerial">
+                            Router / Equipment Serial
+                            <span>*</span>
+                        </label>
+
+                        <div class="tc-input-wrapper">
+
+                            <i class="bi bi-upc-scan"></i>
+
+                            <input type="text"
+                                   id="routerSerial"
+                                   name="routerSerial"
+                                   class="tc-form-control"
+                                   placeholder="Enter serial number"
+                                   maxlength="100"
+                                   required />
+
+                        </div>
+
+                        <small>
+                            Enter the serial number of the
+                            equipment assigned to this connection.
+                        </small>
+
+                    </div>
+
+
+                    <!-- INSTALLATION DATE -->
+                    <div class="tc-form-group">
+
+                        <label for="installationDate">
+                            Proposed Installation Date
+                        </label>
+
+                        <div class="tc-input-wrapper">
+
+                            <i class="bi bi-calendar3"></i>
+
+                            <input type="date"
+                                   id="installationDate"
+                                   name="installationDate"
+                                   class="tc-form-control"
+                                   value="@DateTime.Today.ToString("yyyy-MM-dd")"
+                                   min="@DateTime.Today.ToString("yyyy-MM-dd")" />
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- NOTE -->
+                    <div class="tc-form-note">
+
+                        <i class="bi bi-info-circle-fill"></i>
+
+                        <div>
+                            <strong>What happens next?</strong>
+
+                            <p>
+                                After creating this connection,
+                                NEXUS will generate the customer's
+                                unique Account ID and the order will
+                                move forward in the service workflow.
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <!-- BUTTON -->
+                    <button type="submit"
+                            class="tc-create-btn"
+                            id="createConnectionBtn">
+
+                        <i class="bi bi-router-fill"></i>
+
+                        <span>Create Connection</span>
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

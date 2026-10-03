@@ -1,0 +1,297 @@
+﻿@model NEXUS_eProject.Models.SystemSetting
+
+@{
+    Layout = null;
+
+    var appName = string.IsNullOrWhiteSpace(Model?.ApplicationName)
+        ? "NEXUS"
+        : Model.ApplicationName;
+
+    var supportEmail = string.IsNullOrWhiteSpace(Model?.SupportEmail)
+        ? "support@nexus.com"
+        : Model.SupportEmail;
+
+    var supportPhone = Model?.SupportPhone;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>Maintenance | @appName</title>
+
+    <meta name="robots"
+          content="noindex, nofollow" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+          rel="stylesheet" />
+
+<link rel="stylesheet"
+      href="~/css/public.css"
+      asp-append-version="true" />
+</head>
+
+<body>
+
+    <main class="maintenance-page">
+
+        <div class="maintenance-background">
+            <div class="maintenance-glow glow-one"></div>
+            <div class="maintenance-glow glow-two"></div>
+        </div>
+
+
+        <div class="container maintenance-container">
+
+            <!-- =============================================
+                 TOP BAR
+            ============================================== -->
+
+            <header class="maintenance-header">
+
+                <a asp-controller="Home"
+                   asp-action="Maintenance"
+                   class="maintenance-brand">
+
+                    <span class="brand-icon">
+                        <i class="bi bi-router-fill"></i>
+                    </span>
+
+                    <span>
+                        @appName
+                    </span>
+
+                </a>
+
+
+                <div class="maintenance-status">
+
+                    <span class="status-dot"></span>
+
+                    Scheduled Maintenance
+
+                </div>
+
+            </header>
+
+
+            <!-- =============================================
+                 MAIN CONTENT
+            ============================================== -->
+
+            <section class="maintenance-content">
+
+                <div class="maintenance-card">
+
+                    <div class="maintenance-icon-wrap">
+
+                        <div class="maintenance-icon">
+                            <i class="bi bi-tools"></i>
+                        </div>
+
+                    </div>
+
+
+                    <div class="maintenance-badge">
+
+                        <i class="bi bi-wrench-adjustable-circle"></i>
+
+                        System Maintenance
+
+                    </div>
+
+
+                    <h1>
+                        We'll Be Back
+                        <span>Soon.</span>
+                    </h1>
+
+
+                    <p class="maintenance-description">
+
+                        @appName is currently undergoing scheduled
+                        system maintenance to improve performance,
+                        reliability and your overall experience.
+
+                    </p>
+
+
+                    <p class="maintenance-description secondary">
+
+                        Our technical team is working on the system.
+                        Customer services will become available again
+                        as soon as maintenance is completed.
+
+                    </p>
+
+
+                    <!-- =============================================
+                         SYSTEM STATUS
+                    ============================================== -->
+
+                    <div class="system-status-card">
+
+                        <div class="system-status-left">
+
+                            <span class="system-status-icon">
+                                <i class="bi bi-activity"></i>
+                            </span>
+
+                            <div>
+
+                                <small>
+                                    SYSTEM STATUS
+                                </small>
+
+                                <strong>
+                                    Maintenance in Progress
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="status-indicator">
+
+                            <span></span>
+
+                            Maintenance
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =============================================
+                         SUPPORT
+                    ============================================== -->
+
+                    <div class="maintenance-support">
+
+                        <div class="support-heading">
+
+                            <i class="bi bi-headset"></i>
+
+                            Need assistance?
+
+                        </div>
+
+
+                        <div class="support-options">
+
+                            <a href="mailto:@supportEmail"
+                               class="support-item">
+
+                                <span>
+                                    <i class="bi bi-envelope"></i>
+                                </span>
+
+                                <div>
+                                    <small>Email Support</small>
+
+                                    <strong>
+                                        @supportEmail
+                                    </strong>
+                                </div>
+
+                            </a>
+
+
+                            @if (!string.IsNullOrWhiteSpace(supportPhone))
+                            {
+                                <a href="tel:@supportPhone"
+                                   class="support-item">
+
+                                    <span>
+                                        <i class="bi bi-telephone"></i>
+                                    </span>
+
+                                    <div>
+                                        <small>Call Support</small>
+
+                                        <strong>
+                                            @supportPhone
+                                        </strong>
+                                    </div>
+
+                                </a>
+                            }
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =============================================
+                         STAFF ACCESS
+                    ============================================== -->
+
+                    <div class="maintenance-actions">
+
+                        <a asp-controller="Account"
+                           asp-action="Login"
+                           class="staff-login-btn">
+
+                            <i class="bi bi-shield-lock"></i>
+
+                            Staff Login
+
+                            <i class="bi bi-arrow-right"></i>
+
+                        </a>
+
+                    </div>
+
+
+                    <div class="maintenance-note">
+
+                        <i class="bi bi-info-circle"></i>
+
+                        Existing customer data and account information
+                        remain secure during maintenance.
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =============================================
+                 FOOTER
+            ============================================== -->
+
+            <footer class="maintenance-footer">
+
+                <span>
+                    © @DateTime.Now.Year @appName
+                </span>
+
+                <span class="footer-separator"></span>
+
+                <span>
+                    Network Management System
+                </span>
+
+            </footer>
+
+        </div>
+
+    </main>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+    </script>
+
+</body>
+
+</html>

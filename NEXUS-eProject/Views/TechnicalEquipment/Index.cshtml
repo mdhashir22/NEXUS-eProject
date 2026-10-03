@@ -1,0 +1,283 @@
+﻿@model IEnumerable<NEXUS_eProject.Models.TechnicalEquipmentViewModel>
+
+@{
+    ViewData["Title"] = "Equipment";
+    ViewData["PageTitle"] = "Equipment";
+    Layout = "~/Views/Shared/_TechnicalLayout.cshtml";
+
+    var search = ViewBag.Search as string;
+    var stock = ViewBag.Stock as string;
+
+    var total = Model.Count();
+    var available = Model.Count(x => x.Quantity > 0);
+    var outOfStock = Model.Count(x => x.Quantity <= 0);
+    var totalUnits = Model.Sum(x => x.Quantity);
+}
+
+<div class="te-page">
+
+    <div class="te-header">
+
+        <div>
+            <span>
+                <i class="bi bi-box-seam"></i>
+                TECHNICAL EQUIPMENT
+            </span>
+
+            <h2>Equipment</h2>
+
+            <p>
+                View equipment and stock available for
+                customer installations.
+            </p>
+        </div>
+
+    </div>
+
+
+    <div class="te-stats">
+
+        <div class="te-stat">
+
+            <div class="te-stat-icon purple">
+                <i class="bi bi-box-seam"></i>
+            </div>
+
+            <div>
+                <span>PRODUCTS</span>
+                <strong>@total</strong>
+            </div>
+
+        </div>
+
+
+        <div class="te-stat">
+
+            <div class="te-stat-icon green">
+                <i class="bi bi-check-circle"></i>
+            </div>
+
+            <div>
+                <span>AVAILABLE</span>
+                <strong>@available</strong>
+            </div>
+
+        </div>
+
+
+        <div class="te-stat">
+
+            <div class="te-stat-icon blue">
+                <i class="bi bi-boxes"></i>
+            </div>
+
+            <div>
+                <span>TOTAL UNITS</span>
+                <strong>@totalUnits</strong>
+            </div>
+
+        </div>
+
+
+        <div class="te-stat">
+
+            <div class="te-stat-icon red">
+                <i class="bi bi-exclamation-circle"></i>
+            </div>
+
+            <div>
+                <span>OUT OF STOCK</span>
+                <strong>@outOfStock</strong>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="te-filter-card">
+
+        <form method="get"
+              asp-controller="TechnicalEquipment"
+              asp-action="Index"
+              class="te-filter">
+
+            <div class="te-search">
+
+                <i class="bi bi-search"></i>
+
+                <input type="text"
+                       name="search"
+                       value="@search"
+                       placeholder="Search equipment or vendor..." />
+
+            </div>
+
+
+            <select name="stock">
+
+                <option value="">All Stock</option>
+
+                <option value="Available"
+                        selected="@(stock == "Available")">
+                    Available
+                </option>
+
+                <option value="OutOfStock"
+                        selected="@(stock == "OutOfStock")">
+                    Out of Stock
+                </option>
+
+            </select>
+
+
+            <button type="submit">
+                <i class="bi bi-funnel"></i>
+                Filter
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <div class="te-card">
+
+        <div class="te-card-header">
+
+            <div>
+                <h5>
+                    <i class="bi bi-boxes"></i>
+                    Equipment Inventory
+                </h5>
+
+                <span>
+                    Equipment is managed by Admin.
+                    Technical employees have read-only access.
+                </span>
+            </div>
+
+        </div>
+
+
+        @if (Model.Any())
+        {
+            <div class="te-table-wrap">
+
+                <table class="te-table">
+
+                    <thead>
+
+                        <tr>
+                            <th>PRODUCT</th>
+                            <th>VENDOR</th>
+                            <th>PRICE</th>
+                            <th>QUANTITY</th>
+                            <th>STOCK</th>
+                            <th>DESCRIPTION</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+
+                                <td>
+
+                                    <div class="te-product">
+
+                                        <div>
+                                            <i class="bi bi-router"></i>
+                                        </div>
+
+                                        <strong>
+                                            @item.ProductName
+                                        </strong>
+
+                                    </div>
+
+                                </td>
+
+
+                                <td>
+                                    @item.VendorName
+                                </td>
+
+
+                                <td>
+                                    Rs. @item.Price.ToString("N0")
+                                </td>
+
+
+                                <td>
+
+                                    <strong class="te-quantity">
+                                        @item.Quantity
+                                    </strong>
+
+                                </td>
+
+
+                                <td>
+
+                                    @if (item.InStock)
+                                    {
+                                        <span class="te-stock available">
+
+                                            <i class="bi bi-circle-fill"></i>
+                                            In Stock
+
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="te-stock unavailable">
+
+                                            <i class="bi bi-circle-fill"></i>
+                                            Out of Stock
+
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <td class="te-description">
+
+                                    @(string.IsNullOrWhiteSpace(
+                                        item.Description)
+                                        ? "-"
+                                        : item.Description)
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+        else
+        {
+            <div class="te-empty">
+
+                <i class="bi bi-box-seam"></i>
+
+                <h5>No Equipment Found</h5>
+
+                <p>
+                    No equipment matches the current filters.
+                </p>
+
+            </div>
+        }
+
+    </div>
+
+</div>

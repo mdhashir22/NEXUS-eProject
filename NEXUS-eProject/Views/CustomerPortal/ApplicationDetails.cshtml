@@ -1,0 +1,421 @@
+﻿@model NEXUS_eProject.Models.Order
+
+@{
+    Layout = "_PublicLayout";
+    ViewData["Title"] = "Application Details";
+}
+
+<section class="customer-portal customer-application-details">
+
+    <div class="customer-portal-bg"></div>
+    <div class="customer-portal-overlay"></div>
+    <div class="customer-portal-grid"></div>
+
+    <div class="customer-portal-glow customer-glow-one"></div>
+    <div class="customer-portal-glow customer-glow-two"></div>
+
+    <div class="container position-relative">
+
+        <!-- BACK -->
+<div class="application-back-wrapper">
+    <a asp-controller="CustomerPortal"
+       asp-action="Applications"
+       class="portal-back-link">
+
+        <i class="bi bi-arrow-left"></i>
+        Back to My Applications
+
+    </a>
+</div>
+
+
+        <!-- HEADER -->
+        <div class="portal-page-header mb-4">
+
+            <span class="portal-eyebrow">
+                <i class="bi bi-file-earmark-check"></i>
+                APPLICATION DETAILS
+            </span>
+
+            <h1 class="portal-page-title">
+                Your <span>Application</span>
+            </h1>
+
+            <p class="portal-page-subtitle">
+                View the complete details and current status of your
+                NEXUS connection application.
+            </p>
+
+        </div>
+
+
+        <div class="row g-4">
+
+            <!-- APPLICATION STATUS -->
+            <div class="col-lg-4">
+
+                <div class="portal-info-card application-status-card">
+
+                    <div class="portal-card-icon">
+                        <i class="bi bi-activity"></i>
+                    </div>
+
+                    <h4>Application Status</h4>
+
+                    <div class="application-status-box">
+
+                        @if (Model.Status == "Approved")
+                        {
+                            <span class="application-status-dot status-approved"></span>
+
+                            <span class="application-status-text approved">
+                                Approved
+                            </span>
+                        }
+                        else if (Model.Status == "Rejected")
+                        {
+                            <span class="application-status-dot status-rejected"></span>
+
+                            <span class="application-status-text rejected">
+                                Rejected
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="application-status-dot status-pending"></span>
+
+                            <span class="application-status-text pending">
+                                Pending
+                            </span>
+                        }
+
+                    </div>
+
+                    <p class="status-description">
+
+                        @if (Model.Status == "Pending")
+                        {
+                            <text>
+                                Your application has been received and
+                                is waiting for technical feasibility review.
+                            </text>
+                        }
+                        else if (Model.Status == "Approved")
+                        {
+                            <text>
+                                Your application has been approved.
+                                The next steps will be handled by the
+                                NEXUS team.
+                            </text>
+                        }
+                        else
+                        {
+                            <text>
+                                Your application was not approved.
+                                Please contact NEXUS support for more information.
+                            </text>
+                        }
+
+                    </p>
+
+                </div>
+
+
+                <!-- ORDER NUMBER -->
+                <div class="portal-info-card application-number-card mt-4">
+
+                    <span class="detail-label">
+                        APPLICATION / ORDER ID
+                    </span>
+
+                    <div class="application-order-number">
+                        @Model.OrderNumber
+                    </div>
+
+                    <p>
+                        Keep this number for tracking your application.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- DETAILS -->
+            <div class="col-lg-8">
+
+                <div class="portal-info-card">
+
+                    <div class="d-flex align-items-center gap-3 mb-4">
+
+                        <div class="portal-card-icon">
+                            <i class="bi bi-info-circle"></i>
+                        </div>
+
+                        <div>
+
+                            <h4 class="mb-1">
+                                Application Information
+                            </h4>
+
+                            <p class="text-white-50 mb-0 small">
+                                Details submitted with your application.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="application-details-grid">
+
+                        <!-- CONNECTION TYPE -->
+                        <div class="application-detail-item">
+
+                            <span class="detail-label">
+                                Connection Type
+                            </span>
+
+                            <strong>
+                                @Model.ConnectionType
+                            </strong>
+
+                        </div>
+
+
+                        <!-- PLAN -->
+                        <div class="application-detail-item">
+
+                            <span class="detail-label">
+                                Selected Plan
+                            </span>
+
+                            <strong>
+                                @Model.Plan?.PlanName
+                            </strong>
+
+                        </div>
+
+
+                        <!-- SPEED -->
+                        <div class="application-detail-item">
+
+                            <span class="detail-label">
+                                Speed
+                            </span>
+
+                            <strong>
+                                @(string.IsNullOrWhiteSpace(Model.Plan?.Speed)
+                                    ? "—"
+                                    : Model.Plan.Speed)
+                            </strong>
+
+                        </div>
+
+
+                        <!-- PLAN PRICE -->
+                        <div class="application-detail-item">
+
+                            <span class="detail-label">
+                                Plan Price
+                            </span>
+
+                            <strong>
+                                @if (Model.Plan != null)
+                                {
+                                    <text>Rs. @Model.Plan.Price.ToString("N0")</text>
+                                }
+                                else
+                                {
+                                    <text>—</text>
+                                }
+                            </strong>
+
+                        </div>
+
+
+                        <!-- EQUIPMENT -->
+                        <div class="application-detail-item">
+
+                            <span class="detail-label">
+                                Equipment
+                            </span>
+
+                            <strong>
+                                @(string.IsNullOrWhiteSpace(Model.Equipment)
+                                    ? "Not specified"
+                                    : Model.Equipment)
+                            </strong>
+
+                        </div>
+
+
+                        <!-- APPLICATION DATE -->
+                        <div class="application-detail-item">
+
+                            <span class="detail-label">
+                                Application Date
+                            </span>
+
+                            <strong>
+                                @Model.CreatedAt.ToString("dd MMM yyyy, hh:mm tt")
+                            </strong>
+
+                        </div>
+
+
+                        <!-- UPDATED -->
+                        <div class="application-detail-item">
+
+                            <span class="detail-label">
+                                Last Updated
+                            </span>
+
+                            <strong>
+                                @(Model.UpdatedAt.HasValue
+                                    ? Model.UpdatedAt.Value.ToString("dd MMM yyyy, hh:mm tt")
+                                    : "Not updated yet")
+                            </strong>
+
+                        </div>
+
+
+                        <!-- CURRENT STATUS -->
+                        <div class="application-detail-item">
+
+                            <span class="detail-label">
+                                Current Status
+                            </span>
+
+                            <strong class="status-inline">
+                                @Model.Status
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    @if (!string.IsNullOrWhiteSpace(Model.AdditionalInfo))
+                    {
+                        <div class="application-additional-info mt-4">
+
+                            <span class="detail-label">
+                                Additional Information
+                            </span>
+
+                            <p>
+                                @Model.AdditionalInfo
+                            </p>
+
+                        </div>
+                    }
+
+
+                    <!-- PROCESS -->
+                    <div class="application-process mt-5">
+
+                        <h5>
+                            Application Process
+                        </h5>
+
+                        <div class="process-line">
+
+                            <div class="process-step completed">
+
+                                <div class="process-icon">
+                                    <i class="bi bi-check-lg"></i>
+                                </div>
+
+                                <span>Application</span>
+
+                            </div>
+
+
+                            <div class="process-connector"></div>
+
+
+                            <div class="process-step @(Model.Status == "Approved" ? "completed" : "active")">
+
+                                <div class="process-icon">
+
+                                    @if (Model.Status == "Approved")
+                                    {
+                                        <i class="bi bi-check-lg"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="bi bi-search"></i>
+                                    }
+
+                                </div>
+
+                                <span>Feasibility</span>
+
+                            </div>
+
+
+                            <div class="process-connector"></div>
+
+
+                            <div class="process-step">
+
+                                <div class="process-icon">
+                                    <i class="bi bi-router"></i>
+                                </div>
+
+                                <span>Connection</span>
+
+                            </div>
+
+
+                            <div class="process-connector"></div>
+
+
+                            <div class="process-step">
+
+                                <div class="process-icon">
+                                    <i class="bi bi-lightning-charge"></i>
+                                </div>
+
+                                <span>Activation</span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- BUTTONS -->
+                    <div class="d-flex flex-wrap gap-3 mt-5">
+
+                        <a asp-controller="CustomerPortal"
+                           asp-action="Applications"
+                           class="btn-nexus-outline">
+
+                            <i class="bi bi-list-ul"></i>
+                            My Applications
+
+                        </a>
+
+                        <a asp-controller="CustomerPortal"
+                           asp-action="Index"
+                           class="btn-nexus-primary">
+
+                            <i class="bi bi-grid"></i>
+                            My Account
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>

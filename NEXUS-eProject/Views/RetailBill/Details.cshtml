@@ -1,0 +1,828 @@
+﻿@model NEXUS_eProject.Models.Bill
+
+@{
+    Layout = "~/Views/Shared/_RetailLayout.cshtml";
+    ViewData["Title"] = "Bill Details";
+
+    var status = Model.Status ?? "Unpaid";
+
+    var statusClass =
+        status == "Paid"
+            ? "rbd-status-paid"
+            : status == "Unpaid"
+                ? "rbd-status-unpaid"
+                : status == "Partially Paid" || status == "Partial"
+                    ? "rbd-status-partial"
+                    : "rbd-status-neutral";
+
+    var isOverdue =
+        Model.DueDate.Date < DateTime.Today &&
+        status != "Paid";
+
+    decimal subtotal =
+        Model.PlanAmount +
+        Model.EquipmentAmount;
+
+    decimal beforeTax =
+        subtotal -
+        Model.PreviousDue -
+        Model.Discount;
+
+    if (beforeTax < 0)
+    {
+        beforeTax = 0;
+    }
+
+    decimal taxAmount =
+        Model.Tax;
+
+    decimal calculatedTotal =
+        Model.TotalAmount;
+}
+
+<div class="rbd-page">
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="rbd-header">
+
+        <div>
+
+            <span class="rbd-eyebrow">
+                <i class="bi bi-receipt"></i>
+                BILL DETAILS
+            </span>
+
+            <h1>
+                @Model.BillNumber
+            </h1>
+
+            <p>
+                Complete billing information and customer account details.
+            </p>
+
+        </div>
+
+
+        <div class="rbd-header-actions">
+
+            <a asp-action="Index"
+               class="retail-secondary-btn">
+
+                <i class="bi bi-arrow-left"></i>
+                Back to Bills
+
+            </a>
+
+            <button type="button"
+                    class="retail-primary-btn rbd-print-btn"
+                    onclick="window.print()">
+
+                <i class="bi bi-printer"></i>
+                Print
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         ALERTS
+    ====================================================== -->
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success retail-alert">
+            <i class="bi bi-check-circle"></i>
+            @TempData["Success"]
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger retail-alert">
+            <i class="bi bi-exclamation-circle"></i>
+            @TempData["Error"]
+        </div>
+    }
+
+
+    <!-- =====================================================
+         BILL SUMMARY
+    ====================================================== -->
+
+    <div class="rbd-summary-grid">
+
+        <!-- BILL NUMBER -->
+
+        <div class="rbd-summary-card">
+
+            <div class="rbd-summary-icon purple">
+                <i class="bi bi-receipt-cutoff"></i>
+            </div>
+
+            <div>
+
+                <span>
+                    BILL NUMBER
+                </span>
+
+                <strong>
+                    @Model.BillNumber
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- ACCOUNT -->
+
+        <div class="rbd-summary-card">
+
+            <div class="rbd-summary-icon blue">
+                <i class="bi bi-person-vcard"></i>
+            </div>
+
+            <div>
+
+                <span>
+                    ACCOUNT ID
+                </span>
+
+                <strong>
+                    @(string.IsNullOrWhiteSpace(Model.AccountId)
+                        ? "N/A"
+                        : Model.AccountId)
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- AMOUNT -->
+
+        <div class="rbd-summary-card">
+
+            <div class="rbd-summary-icon green">
+                <i class="bi bi-cash-stack"></i>
+            </div>
+
+            <div>
+
+                <span>
+                    TOTAL AMOUNT
+                </span>
+
+                <strong>
+                    PKR @Model.TotalAmount.ToString("N2")
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- STATUS -->
+
+        <div class="rbd-summary-card">
+
+            <div class="rbd-summary-icon orange">
+                <i class="bi bi-activity"></i>
+            </div>
+
+            <div>
+
+                <span>
+                    STATUS
+                </span>
+
+                <strong class="rbd-summary-status @statusClass">
+                    @status
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         MAIN BILL AREA
+    ====================================================== -->
+
+    <div class="rbd-main-grid">
+
+        <!-- =================================================
+             BILL INFORMATION
+        ================================================== -->
+
+        <div class="retail-card rbd-card">
+
+            <div class="retail-card-header">
+
+                <div class="retail-card-title">
+
+                    <div class="retail-card-icon">
+                        <i class="bi bi-file-earmark-text"></i>
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Bill Information
+                        </h3>
+
+                        <span>
+                            Billing and payment details
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="retail-card-body">
+
+                <div class="rbd-info-grid">
+
+                    <div class="rbd-info-item">
+
+                        <span>
+                            BILL NUMBER
+                        </span>
+
+                        <strong>
+                            @Model.BillNumber
+                        </strong>
+
+                    </div>
+
+
+                    <div class="rbd-info-item">
+
+                        <span>
+                            BILL ID
+                        </span>
+
+                        <strong>
+                            #@Model.BillId
+                        </strong>
+
+                    </div>
+
+
+                    <div class="rbd-info-item">
+
+                        <span>
+                            BILLING DATE
+                        </span>
+
+                        <strong>
+                            @Model.BillingDate.ToString("dd MMM yyyy")
+                        </strong>
+
+                    </div>
+
+
+                    <div class="rbd-info-item">
+
+                        <span>
+                            DUE DATE
+                        </span>
+
+                        <strong class="@(isOverdue ? "rbd-overdue-text" : "")">
+
+                            @Model.DueDate.ToString("dd MMM yyyy")
+
+                            @if (isOverdue)
+                            {
+                                <small>
+                                    Overdue
+                                </small>
+                            }
+
+                        </strong>
+
+                    </div>
+
+
+                    <div class="rbd-info-item">
+
+                        <span>
+                            CREATED
+                        </span>
+
+                        <strong>
+                            @Model.CreatedAt.ToString("dd MMM yyyy, hh:mm tt")
+                        </strong>
+
+                    </div>
+
+
+                    <div class="rbd-info-item">
+
+                        <span>
+                            PAYMENT STATUS
+                        </span>
+
+                        <strong class="rbd-inline-status @statusClass">
+                            @status
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             CUSTOMER INFORMATION
+        ================================================== -->
+
+        <div class="retail-card rbd-card">
+
+            <div class="retail-card-header">
+
+                <div class="retail-card-title">
+
+                    <div class="retail-card-icon">
+                        <i class="bi bi-person"></i>
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Customer
+                        </h3>
+
+                        <span>
+                            Customer account information
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="retail-card-body">
+
+                <div class="rbd-customer-box">
+
+                    <div class="rbd-customer-avatar">
+
+                        @(Model.Customer?.FullName?
+                            .Substring(0, 1)
+                            .ToUpper() ?? "?")
+
+                    </div>
+
+
+                    <div class="rbd-customer-details">
+
+                        <strong>
+                            @(Model.Customer?.FullName ?? "N/A")
+                        </strong>
+
+                        <span>
+                            @(Model.Customer?.Phone ?? "No phone available")
+                        </span>
+
+                        <span>
+                            @(Model.Customer?.Email ?? "No email available")
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="rbd-customer-meta">
+
+                    <div>
+
+                        <span>
+                            FATHER NAME
+                        </span>
+
+                        <strong>
+                            @(Model.Customer?.FatherName ?? "N/A")
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            CITY
+                        </span>
+
+                        <strong>
+                            @(Model.Customer?.City ?? "N/A")
+                        </strong>
+
+                    </div>
+
+
+                    <div class="rbd-full-width">
+
+                        <span>
+                            ADDRESS
+                        </span>
+
+                        <strong>
+                            @(Model.Customer?.Address ?? "N/A")
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         CONNECTION INFORMATION
+    ====================================================== -->
+
+    <div class="retail-card rbd-card">
+
+        <div class="retail-card-header">
+
+            <div class="retail-card-title">
+
+                <div class="retail-card-icon">
+                    <i class="bi bi-diagram-3"></i>
+                </div>
+
+                <div>
+
+                    <h3>
+                        Connection Information
+                    </h3>
+
+                    <span>
+                        Customer service and plan details
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="retail-card-body">
+
+            <div class="rbd-info-grid rbd-connection-grid">
+
+                <div class="rbd-info-item">
+
+                    <span>
+                        ACCOUNT ID
+                    </span>
+
+                    <strong>
+                        @(string.IsNullOrWhiteSpace(Model.AccountId)
+                            ? "N/A"
+                            : Model.AccountId)
+                    </strong>
+
+                </div>
+
+
+                <div class="rbd-info-item">
+
+                    <span>
+                        CONNECTION ID
+                    </span>
+
+                    <strong>
+                        @(Model.Connection?.ConnectionId > 0
+                            ? $"#{Model.Connection.ConnectionId}"
+                            : "N/A")
+                    </strong>
+
+                </div>
+
+
+                <div class="rbd-info-item">
+
+                    <span>
+                        CONNECTION TYPE
+                    </span>
+
+                    <strong>
+                        @(Model.Connection?.ConnectionType ?? "N/A")
+                    </strong>
+
+                </div>
+
+
+                <div class="rbd-info-item">
+
+                    <span>
+                        PLAN
+                    </span>
+
+                    <strong>
+                        @(Model.Connection?.Plan?.PlanName ?? "N/A")
+                    </strong>
+
+                </div>
+
+
+                <div class="rbd-info-item">
+
+                    <span>
+                        SPEED
+                    </span>
+
+                    <strong>
+                        @(Model.Connection?.Plan?.Speed ?? "N/A")
+                    </strong>
+
+                </div>
+
+
+                <div class="rbd-info-item">
+
+                    <span>
+                        CONNECTION STATUS
+                    </span>
+
+                    <strong>
+                        @(Model.Connection?.Status ?? "N/A")
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         BILL BREAKDOWN
+    ====================================================== -->
+
+    <div class="rbd-billing-grid">
+
+        <!-- BREAKDOWN -->
+
+        <div class="retail-card rbd-card">
+
+            <div class="retail-card-header">
+
+                <div class="retail-card-title">
+
+                    <div class="retail-card-icon">
+                        <i class="bi bi-list-columns"></i>
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Bill Breakdown
+                        </h3>
+
+                        <span>
+                            Charges included in this bill
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="retail-card-body">
+
+                <div class="rbd-charge-list">
+
+                    <div class="rbd-charge-row">
+
+                        <span>
+                            Plan Amount
+                        </span>
+
+                        <strong>
+                            PKR @Model.PlanAmount.ToString("N2")
+                        </strong>
+
+                    </div>
+
+
+                    <div class="rbd-charge-row">
+
+                        <span>
+                            Equipment Amount
+                        </span>
+
+                        <strong>
+                            PKR @Model.EquipmentAmount.ToString("N2")
+                        </strong>
+
+                    </div>
+
+
+                    <div class="rbd-charge-row">
+
+                        <span>
+                            Previous Due
+                        </span>
+
+                        <strong class="@(Model.PreviousDue > 0 ? "rbd-danger-amount" : "")">
+                            PKR @Model.PreviousDue.ToString("N2")
+                        </strong>
+
+                    </div>
+
+
+                    <div class="rbd-charge-row">
+
+                        <span>
+                            Discount
+                        </span>
+
+                        <strong class="rbd-discount">
+                            - PKR @Model.Discount.ToString("N2")
+                        </strong>
+
+                    </div>
+
+
+                    <div class="rbd-charge-row">
+
+                        <span>
+                            Tax
+                        </span>
+
+                        <strong>
+                            PKR @Model.Tax.ToString("N2")
+                        </strong>
+
+                    </div>
+
+
+                    <div class="rbd-charge-divider"></div>
+
+
+                    <div class="rbd-charge-total">
+
+                        <span>
+                            Total Amount
+                        </span>
+
+                        <strong>
+                            PKR @calculatedTotal.ToString("N2")
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- PAYMENT STATUS -->
+
+        <div class="retail-card rbd-card">
+
+            <div class="retail-card-header">
+
+                <div class="retail-card-title">
+
+                    <div class="retail-card-icon">
+                        <i class="bi bi-credit-card"></i>
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Payment Status
+                        </h3>
+
+                        <span>
+                            Current bill payment state
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="retail-card-body">
+
+                <div class="rbd-payment-state">
+
+                    <div class="rbd-payment-icon @statusClass">
+
+                        @if (status == "Paid")
+                        {
+                            <i class="bi bi-check-lg"></i>
+                        }
+                        else if (isOverdue)
+                        {
+                            <i class="bi bi-exclamation-lg"></i>
+                        }
+                        else
+                        {
+                            <i class="bi bi-clock"></i>
+                        }
+
+                    </div>
+
+
+                    <strong>
+                        @status
+                    </strong>
+
+
+                    @if (status == "Paid")
+                    {
+                        <p>
+                            This bill has been marked as paid.
+                        </p>
+                    }
+                    else if (isOverdue)
+                    {
+                        <p>
+                            This bill has passed its due date.
+                        </p>
+                    }
+                    else if (status == "Partially Paid" ||
+                             status == "Partial")
+                    {
+                        <p>
+                            This bill has been partially paid.
+                        </p>
+                    }
+                    else
+                    {
+                        <p>
+                            This bill is currently awaiting payment.
+                        </p>
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         FOOTER ACTIONS
+    ====================================================== -->
+
+    <div class="rbd-footer-actions">
+
+        <a asp-action="Index"
+           class="retail-secondary-btn">
+
+            <i class="bi bi-arrow-left"></i>
+            Back to Bills
+
+        </a>
+
+
+        <button type="button"
+                class="retail-primary-btn"
+                onclick="window.print()">
+
+            <i class="bi bi-printer"></i>
+            Print Bill
+
+        </button>
+
+    </div>
+
+</div>

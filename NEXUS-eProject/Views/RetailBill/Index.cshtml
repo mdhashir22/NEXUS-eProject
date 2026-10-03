@@ -1,0 +1,801 @@
+﻿@model IEnumerable<NEXUS_eProject.Models.Bill>
+
+@{
+    Layout = "~/Views/Shared/_RetailLayout.cshtml";
+    ViewData["Title"] = "Bills";
+
+    var search = ViewBag.Search as string;
+    var selectedStatus = ViewBag.Status as string;
+    var selectedCategory = ViewBag.Category as string;
+
+    int totalBills = ViewBag.TotalBills ?? 0;
+    int unpaidBills = ViewBag.UnpaidBills ?? 0;
+    int partialBills = ViewBag.PartialBills ?? 0;
+    int paidBills = ViewBag.PaidBills ?? 0;
+    int overdueBills = ViewBag.OverdueBills ?? 0;
+
+    decimal outstandingAmount =
+        ViewBag.OutstandingAmount ?? 0m;
+}
+
+<div class="rb-page">
+
+    <!-- =====================================================
+         PAGE HEADER
+    ====================================================== -->
+
+    <div class="rb-page-header">
+
+        <div>
+
+            <span class="rb-eyebrow">
+                <i class="bi bi-receipt"></i>
+                BILLING OPERATIONS
+            </span>
+
+            <h1>Bills</h1>
+
+            <p>
+                Track customer bills, payment status and outstanding amounts.
+            </p>
+
+        </div>
+
+        <div class="rb-header-actions">
+
+            <a asp-controller="RetailOrder"
+               asp-action="Index"
+               class="retail-secondary-btn">
+
+                <i class="bi bi-cart3"></i>
+                Orders
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         STATISTICS
+    ====================================================== -->
+
+    <div class="rb-stats-grid">
+
+        <!-- TOTAL -->
+
+        <div class="rb-stat-card">
+
+            <div class="rb-stat-icon rb-purple">
+                <i class="bi bi-receipt-cutoff"></i>
+            </div>
+
+            <div class="rb-stat-content">
+
+                <span>Total Bills</span>
+
+                <strong>@totalBills</strong>
+
+                <small>
+                    All generated bills
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <!-- UNPAID -->
+
+        <div class="rb-stat-card">
+
+            <div class="rb-stat-icon rb-orange">
+                <i class="bi bi-clock-history"></i>
+            </div>
+
+            <div class="rb-stat-content">
+
+                <span>Unpaid</span>
+
+                <strong>@unpaidBills</strong>
+
+                <small>
+                    Awaiting payment
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <!-- PARTIAL -->
+
+        <div class="rb-stat-card">
+
+            <div class="rb-stat-icon rb-yellow">
+                <i class="bi bi-hourglass-split"></i>
+            </div>
+
+            <div class="rb-stat-content">
+
+                <span>Partial</span>
+
+                <strong>@partialBills</strong>
+
+                <small>
+                    Partially paid
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <!-- PAID -->
+
+        <div class="rb-stat-card">
+
+            <div class="rb-stat-icon rb-green">
+                <i class="bi bi-check2-circle"></i>
+            </div>
+
+            <div class="rb-stat-content">
+
+                <span>Paid</span>
+
+                <strong>@paidBills</strong>
+
+                <small>
+                    Payment completed
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         OUTSTANDING SUMMARY
+    ====================================================== -->
+
+    <div class="rb-outstanding-card">
+
+        <div class="rb-outstanding-icon">
+            <i class="bi bi-wallet2"></i>
+        </div>
+
+        <div class="rb-outstanding-content">
+
+            <span>
+                Total Outstanding Amount
+            </span>
+
+            <strong>
+                PKR @outstandingAmount.ToString("N2")
+            </strong>
+
+            <small>
+                Based on unpaid and partially paid bills
+            </small>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         BILL CATEGORIES
+    ====================================================== -->
+
+    <div class="rb-category-bar">
+
+        <!-- ALL -->
+
+        <a asp-action="Index"
+           asp-route-search="@search"
+           asp-route-status="@selectedStatus"
+           class="rb-category @(string.IsNullOrEmpty(selectedCategory) ? "active" : "")">
+
+            <i class="bi bi-grid"></i>
+
+            <span class="rb-category-label">
+                All Bills
+            </span>
+
+            <span>
+                @totalBills
+            </span>
+
+        </a>
+
+
+        <!-- PAID -->
+
+        <a asp-action="Index"
+           asp-route-search="@search"
+           asp-route-status="@selectedStatus"
+           asp-route-category="Paid"
+           class="rb-category @(selectedCategory == "Paid" ? "active" : "")">
+
+            <i class="bi bi-check-circle"></i>
+
+            <span class="rb-category-label">
+                Paid
+            </span>
+
+            <span>
+                @paidBills
+            </span>
+
+        </a>
+
+
+        <!-- UNPAID -->
+
+        <a asp-action="Index"
+           asp-route-search="@search"
+           asp-route-status="@selectedStatus"
+           asp-route-category="Unpaid"
+           class="rb-category @(selectedCategory == "Unpaid" ? "active" : "")">
+
+            <i class="bi bi-clock"></i>
+
+            <span class="rb-category-label">
+                Unpaid
+            </span>
+
+            <span>
+                @unpaidBills
+            </span>
+
+        </a>
+
+
+        <!-- PARTIAL -->
+
+        <a asp-action="Index"
+           asp-route-search="@search"
+           asp-route-status="@selectedStatus"
+           asp-route-category="Partial"
+           class="rb-category @(selectedCategory == "Partial" ? "active" : "")">
+
+            <i class="bi bi-hourglass-split"></i>
+
+            <span class="rb-category-label">
+                Partial
+            </span>
+
+            <span>
+                @partialBills
+            </span>
+
+        </a>
+
+
+        <!-- OVERDUE -->
+
+        <a asp-action="Index"
+           asp-route-search="@search"
+           asp-route-status="@selectedStatus"
+           asp-route-category="Overdue"
+           class="rb-category @(selectedCategory == "Overdue" ? "active" : "")">
+
+            <i class="bi bi-exclamation-circle"></i>
+
+            <span class="rb-category-label">
+                Overdue
+            </span>
+
+            <span>
+                @overdueBills
+            </span>
+
+        </a>
+
+    </div>
+
+
+    <!-- =====================================================
+         SEARCH / FILTER
+    ====================================================== -->
+
+    <div class="retail-card rb-filter-card">
+
+        <div class="retail-card-body">
+
+            <form asp-action="Index"
+                  method="get"
+                  class="rb-filter-form">
+
+                <!-- SEARCH -->
+
+                <div>
+
+                    <label class="rb-form-label">
+                        SEARCH
+                    </label>
+
+                    <div class="rb-input-wrapper">
+
+                        <i class="bi bi-search"></i>
+
+                        <input type="text"
+                               name="search"
+                               value="@search"
+                               class="form-control"
+                               placeholder="Bill number, account, customer or phone..." />
+
+                    </div>
+
+                </div>
+
+
+                <!-- STATUS -->
+
+                <div>
+
+                    <label class="rb-form-label">
+                        STATUS
+                    </label>
+
+                    <select name="status"
+                            class="form-select">
+
+                        <option value="">
+                            All Statuses
+                        </option>
+
+                        @if (selectedStatus == "Unpaid")
+                        {
+                            <option value="Unpaid" selected>
+                                Unpaid
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="Unpaid">
+                                Unpaid
+                            </option>
+                        }
+
+                        @if (selectedStatus == "Partially Paid")
+                        {
+                            <option value="Partially Paid" selected>
+                                Partially Paid
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="Partially Paid">
+                                Partially Paid
+                            </option>
+                        }
+
+                        @if (selectedStatus == "Partial")
+                        {
+                            <option value="Partial" selected>
+                                Partial
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="Partial">
+                                Partial
+                            </option>
+                        }
+
+                        @if (selectedStatus == "Paid")
+                        {
+                            <option value="Paid" selected>
+                                Paid
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="Paid">
+                                Paid
+                            </option>
+                        }
+
+                    </select>
+
+                </div>
+
+
+                <!-- SEARCH BUTTON -->
+
+                <div class="rb-filter-action">
+
+                    <label class="rb-form-label rb-hidden-label">
+                        ACTION
+                    </label>
+
+                    <button type="submit"
+                            class="retail-primary-btn rb-search-btn">
+
+                        <i class="bi bi-search"></i>
+
+                        Search
+
+                    </button>
+
+                </div>
+
+
+                <!-- RESET -->
+
+                @if (!string.IsNullOrWhiteSpace(search) ||
+                     !string.IsNullOrWhiteSpace(selectedStatus) ||
+                     !string.IsNullOrWhiteSpace(selectedCategory))
+                {
+                    <div class="rb-reset-wrapper">
+
+                        <label class="rb-form-label rb-hidden-label">
+                            RESET
+                        </label>
+
+                        <a asp-action="Index"
+                           class="retail-secondary-btn rb-reset-btn">
+
+                            <i class="bi bi-arrow-clockwise"></i>
+
+                            Reset
+
+                        </a>
+
+                    </div>
+                }
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         BILLS TABLE
+    ====================================================== -->
+
+    <div class="retail-card rb-bills-card">
+
+        <!-- TABLE HEADER -->
+
+        <div class="retail-card-header">
+
+            <div class="retail-card-title">
+
+                <div class="retail-card-icon">
+                    <i class="bi bi-receipt"></i>
+                </div>
+
+                <div>
+
+                    <h3>
+                        Customer Bills
+                    </h3>
+
+                    <span>
+                        @Model.Count() bill(s) found
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- TABLE BODY -->
+
+        <div class="retail-card-body p-0">
+
+            @if (Model.Any())
+            {
+                <div class="rb-table-scroll">
+
+                    <table class="rb-bills-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    BILL
+                                </th>
+
+                                <th>
+                                    CUSTOMER
+                                </th>
+
+                                <th>
+                                    ACCOUNT
+                                </th>
+
+                                <th>
+                                    PLAN
+                                </th>
+
+                                <th>
+                                    AMOUNT
+                                </th>
+
+                                <th>
+                                    BILLING DATE
+                                </th>
+
+                                <th>
+                                    DUE DATE
+                                </th>
+
+                                <th>
+                                    STATUS
+                                </th>
+
+                                <th>
+                                    ACTION
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            @foreach (var bill in Model)
+                            {
+                                var statusClass =
+                                    bill.Status == "Paid"
+                                        ? "rb-status-paid"
+                                        : bill.Status == "Unpaid"
+                                            ? "rb-status-unpaid"
+                                            : bill.Status == "Partially Paid" ||
+                                              bill.Status == "Partial"
+                                                ? "rb-status-partial"
+                                                : "rb-status-neutral";
+
+                                var isOverdue =
+                                    bill.DueDate.Date < DateTime.Today &&
+                                    bill.Status != "Paid";
+
+                                <tr>
+
+                                    <!-- BILL -->
+
+                                    <td class="rb-bill-cell">
+
+                                        <div class="rb-bill-content">
+
+                                            <strong>
+                                                @bill.BillNumber
+                                            </strong>
+
+                                            <small>
+                                                Bill #@bill.BillId
+                                            </small>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <!-- CUSTOMER -->
+
+                                    <td>
+
+                                        <div class="rb-customer-content">
+
+                                            <div class="rb-avatar">
+
+                                                @(bill.Customer?.FullName?
+                                                    .Substring(0, 1)
+                                                    .ToUpper() ?? "?")
+
+                                            </div>
+
+                                            <div class="rb-customer-text">
+
+                                                <strong>
+                                                    @(bill.Customer?.FullName ?? "N/A")
+                                                </strong>
+
+                                                <small>
+                                                    @(bill.Customer?.Phone ?? "N/A")
+                                                </small>
+
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <!-- ACCOUNT -->
+
+                                    <td>
+
+                                        <div class="rb-account-content">
+
+                                            <strong>
+                                                @(string.IsNullOrWhiteSpace(bill.AccountId)
+                                                    ? "N/A"
+                                                    : bill.AccountId)
+                                            </strong>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <!-- PLAN -->
+
+                                    <td>
+
+                                        <div class="rb-plan-content">
+
+                                            <strong>
+                                                @(bill.Connection?.Plan?.PlanName ?? "N/A")
+                                            </strong>
+
+                                            <small>
+                                                @(bill.Connection?.Plan?.Speed ?? "N/A")
+                                            </small>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <!-- AMOUNT -->
+
+                                    <td>
+
+                                        <div class="rb-amount-content">
+
+                                            <strong>
+                                                PKR @bill.TotalAmount.ToString("N2")
+                                            </strong>
+
+                                            @if (bill.Discount > 0)
+                                            {
+                                                <small>
+                                                    Discount:
+                                                    PKR @bill.Discount.ToString("N2")
+                                                </small>
+                                            }
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <!-- BILLING DATE -->
+
+                                    <td>
+
+                                        <div class="rb-date-content">
+
+                                            <strong>
+                                                @bill.BillingDate.ToString("dd MMM yyyy")
+                                            </strong>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <!-- DUE DATE -->
+
+                                    <td>
+
+                                        <div class="rb-date-content">
+
+                                            <strong class="@(isOverdue ? "rb-overdue-date" : "")">
+
+                                                @bill.DueDate.ToString("dd MMM yyyy")
+
+                                            </strong>
+
+                                            @if (isOverdue)
+                                            {
+                                                <small class="rb-overdue-label">
+                                                    Overdue
+                                                </small>
+                                            }
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <!-- STATUS -->
+
+                                    <td>
+
+                                        <span class="rb-status @statusClass">
+
+                                            @if (bill.Status == "Paid")
+                                            {
+                                                <i class="bi bi-check-circle"></i>
+                                            }
+                                            else if (bill.Status == "Unpaid")
+                                            {
+                                                <i class="bi bi-clock"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="bi bi-hourglass-split"></i>
+                                            }
+
+                                            @(bill.Status ?? "Unpaid")
+
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- ACTION -->
+
+                                    <td>
+
+                                        <a asp-action="Details"
+                                           asp-route-id="@bill.BillId"
+                                           class="rb-view-btn"
+                                           title="View Bill Details">
+
+                                            <i class="bi bi-eye"></i>
+
+                                        </a>
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+            else
+            {
+                <!-- EMPTY -->
+
+                <div class="retail-empty-state rb-empty-state">
+
+                    <div class="retail-empty-icon">
+
+                        <i class="bi bi-receipt"></i>
+
+                    </div>
+
+                    <h3>
+                        No Bills Found
+                    </h3>
+
+                    <p>
+                        No customer bills match your current filters.
+                    </p>
+
+                    <a asp-action="Index"
+                       class="retail-secondary-btn">
+
+                        <i class="bi bi-arrow-clockwise"></i>
+
+                        Reset Filters
+
+                    </a>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,253 @@
+﻿@model IEnumerable<NEXUS_eProject.Models.Connection>
+
+@{
+    ViewData["Title"] = "Connections";
+    ViewData["PageTitle"] = "Connections";
+    Layout = "~/Views/Shared/_AccountsLayout.cshtml";
+
+    string currentSearch =
+        Convert.ToString(ViewBag.Search) ?? "";
+
+    string currentStatus =
+        Convert.ToString(ViewBag.Status) ?? "All";
+}
+
+<div class="aco-page">
+
+    <div class="aco-header">
+
+        <div>
+
+            <div class="aco-eyebrow">
+                <i class="bi bi-router"></i>
+                CUSTOMER CONNECTIONS
+            </div>
+
+            <h2>Connections</h2>
+
+            <p>
+                View customer connections and their
+                billing information.
+            </p>
+
+        </div>
+
+
+        <div class="aco-count">
+
+            <div class="aco-count-icon">
+                <i class="bi bi-broadcast-pin"></i>
+            </div>
+
+            <div>
+                <span>TOTAL CONNECTIONS</span>
+                <strong>@Model.Count()</strong>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="aco-panel">
+
+        <div class="aco-toolbar">
+
+            <form asp-controller="AccountsConnection"
+                  asp-action="Index"
+                  method="get"
+                  class="aco-filter">
+
+                <div class="aco-search">
+
+                    <i class="bi bi-search"></i>
+
+                    <input type="text"
+                           name="search"
+                           value="@currentSearch"
+                           placeholder="Search account, customer, phone or order..." />
+
+                </div>
+
+
+                <select name="status"
+                        class="aco-select">
+
+                    <option value="All"
+                            selected="@(currentStatus == "All")">
+                        All Status
+                    </option>
+
+                    <option value="Pending"
+                            selected="@(currentStatus == "Pending")">
+                        Pending
+                    </option>
+
+                    <option value="Billing Pending"
+                            selected="@(currentStatus == "Billing Pending")">
+                        Billing Pending
+                    </option>
+
+                    <option value="Installation Pending"
+                            selected="@(currentStatus == "Installation Pending")">
+                        Installation Pending
+                    </option>
+
+                    <option value="Active"
+                            selected="@(currentStatus == "Active")">
+                        Active
+                    </option>
+
+                </select>
+
+
+                <button type="submit"
+                        class="aco-btn primary">
+
+                    <i class="bi bi-funnel"></i>
+                    Filter
+
+                </button>
+
+
+                <a asp-controller="AccountsConnection"
+                   asp-action="Index"
+                   class="aco-btn secondary">
+
+                    <i class="bi bi-arrow-counterclockwise"></i>
+                    Reset
+
+                </a>
+
+            </form>
+
+        </div>
+
+
+        @if (Model.Any())
+        {
+            <div class="aco-table-wrap">
+
+                <table class="aco-table">
+
+                    <thead>
+                        <tr>
+                            <th>ACCOUNT ID</th>
+                            <th>CUSTOMER</th>
+                            <th>TYPE</th>
+                            <th>PLAN</th>
+                            <th>SPEED</th>
+                            <th>ORDER</th>
+                            <th>STATUS</th>
+                            <th>ACTION</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var connection in Model)
+                        {
+                            <tr>
+
+                                <td>
+                                    <span class="aco-account">
+                                        @connection.AccountId
+                                    </span>
+                                </td>
+
+
+                                <td>
+                                    <div class="aco-customer">
+
+                                        <strong>
+                                            @(connection.Customer?.FullName ?? "-")
+                                        </strong>
+
+                                        <span>
+                                            @(connection.Customer?.Phone ?? "-")
+                                        </span>
+
+                                    </div>
+                                </td>
+
+
+                                <td>
+                                    @connection.ConnectionType
+                                </td>
+
+
+                                <td>
+                                    @(connection.Plan?.PlanName ?? "-")
+                                </td>
+
+
+                                <td>
+                                    @(connection.Plan?.Speed ?? "-")
+                                </td>
+
+
+                                <td>
+                                    <span class="aco-order">
+                                        @(connection.Order?.OrderNumber ?? "-")
+                                    </span>
+                                </td>
+
+
+                                <td>
+                                    @{
+                                        string statusClass =
+                                            connection.Status == "Active"
+                                                ? "active"
+                                                : connection.Status == "Installation Pending"
+                                                    ? "installation"
+                                                    : "pending";
+                                    }
+
+                                    <span class="aco-status @statusClass">
+                                        <i class="bi bi-circle-fill"></i>
+                                        @connection.Status
+                                    </span>
+                                </td>
+
+
+                                <td>
+
+                                    <a asp-controller="AccountsConnection"
+                                       asp-action="Details"
+                                       asp-route-id="@connection.ConnectionId"
+                                       class="aco-view">
+
+                                        <i class="bi bi-eye"></i>
+                                        View
+
+                                    </a>
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+        else
+        {
+            <div class="aco-empty">
+
+                <i class="bi bi-router"></i>
+
+                <h4>No Connections Found</h4>
+
+                <p>
+                    No connections match the current filter.
+                </p>
+
+            </div>
+        }
+
+    </div>
+
+</div>

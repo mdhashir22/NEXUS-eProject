@@ -1,0 +1,343 @@
+﻿@model NEXUS_eProject.Models.Feedback
+
+@{
+    ViewData["Title"] = "Feedback Details";
+    Layout = "_AdminLayout";
+
+    var customerName = Model.Customer?.FullName ?? "Unknown Customer";
+    var customerEmail = Model.Customer?.Email ?? "-";
+
+    var customerInitial = !string.IsNullOrWhiteSpace(Model.Customer?.FullName)
+        ? Model.Customer.FullName.Substring(0, 1).ToUpper()
+        : "U";
+}
+
+<div class="admin-page">
+
+    <div class="admin-page-header">
+
+        <div>
+
+            <div class="admin-page-eyebrow">
+                CUSTOMER FEEDBACK
+            </div>
+
+            <h1>
+                Feedback Details
+            </h1>
+
+            <p>
+                Review customer feedback and provide a response.
+            </p>
+
+        </div>
+
+        <div>
+
+            <a asp-action="Index"
+               class="admin-secondary-btn">
+
+                <i class="bi bi-arrow-left"></i>
+
+                Back to Feedback
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            <i class="bi bi-check-circle me-2"></i>
+            @TempData["Success"]
+        </div>
+    }
+
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">
+            <i class="bi bi-exclamation-circle me-2"></i>
+            @TempData["Error"]
+        </div>
+    }
+
+
+    <div class="row g-4">
+
+
+        <!-- FEEDBACK -->
+
+        <div class="col-lg-7">
+
+            <div class="admin-card feedback-detail-card">
+
+                <div class="admin-card-header">
+
+                    <div>
+
+                        <h3>
+                            Customer Feedback
+                        </h3>
+
+                        <span>
+                            Submitted @Model.CreatedAt.ToString("dd MMM yyyy")
+                        </span>
+
+                    </div>
+
+                    <div class="admin-card-icon">
+                        <i class="bi bi-chat-heart"></i>
+                    </div>
+
+                </div>
+
+
+                <div class="feedback-detail-content">
+
+
+                    <!-- CUSTOMER -->
+
+                    <div class="feedback-detail-customer">
+
+                        <div class="feedback-detail-avatar">
+
+                            @customerInitial
+
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                @customerName
+                            </strong>
+
+                            <span>
+                                @customerEmail
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- RATING -->
+
+                    <div class="feedback-detail-rating">
+
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            if (i <= Model.Rating)
+                            {
+                                <i class="bi bi-star-fill"></i>
+                            }
+                            else
+                            {
+                                <i class="bi bi-star"></i>
+                            }
+                        }
+
+                    </div>
+
+
+                    <!-- SUBJECT -->
+
+                    <div class="feedback-detail-subject">
+
+                        <span>
+                            Subject
+                        </span>
+
+                        <strong>
+                            @Model.Subject
+                        </strong>
+
+                    </div>
+
+
+                    <!-- MESSAGE -->
+
+                    <div class="feedback-detail-message">
+
+                        <span>
+                            Customer Message
+                        </span>
+
+                        <p>
+                            @Model.Message
+                        </p>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- MODERATION -->
+
+        <div class="col-lg-5">
+
+            <div class="admin-card">
+
+                <div class="admin-card-header">
+
+                    <div>
+
+                        <h3>
+                            Moderation
+                        </h3>
+
+                        <span>
+                            Manage this feedback
+                        </span>
+
+                    </div>
+
+                    <div class="admin-card-icon">
+                        <i class="bi bi-shield-check"></i>
+                    </div>
+
+                </div>
+
+
+                <div class="feedback-moderation-body">
+
+
+                    <!-- CURRENT STATUS -->
+
+                    <div class="feedback-current-status">
+
+                        <span>
+                            Current Status
+                        </span>
+
+
+                        @if (Model.Status == "Approved")
+                        {
+                            <strong class="status-approved">
+                                <i class="bi bi-check-circle-fill"></i>
+                                Approved
+                            </strong>
+                        }
+                        else if (Model.Status == "Rejected")
+                        {
+                            <strong class="status-rejected">
+                                <i class="bi bi-x-circle-fill"></i>
+                                Rejected
+                            </strong>
+                        }
+                        else
+                        {
+                            <strong class="status-pending">
+                                <i class="bi bi-clock-fill"></i>
+                                Submitted
+                            </strong>
+                        }
+
+                    </div>
+
+
+                    <!-- MODERATION BUTTONS -->
+
+                    <div class="feedback-moderation-buttons">
+
+
+                        <!-- APPROVE -->
+
+                        <form asp-action="Approve"
+                              asp-route-id="@Model.FeedbackId"
+                              method="post">
+
+                            @Html.AntiForgeryToken()
+
+                            <button type="submit"
+                                    class="feedback-approve-btn">
+
+                                <i class="bi bi-check-lg"></i>
+
+                                Approve Feedback
+
+                            </button>
+
+                        </form>
+
+
+                        <!-- REJECT -->
+
+                        <form asp-action="Reject"
+                              asp-route-id="@Model.FeedbackId"
+                              method="post">
+
+                            @Html.AntiForgeryToken()
+
+                            <button type="submit"
+                                    class="feedback-reject-btn">
+
+                                <i class="bi bi-x-lg"></i>
+
+                                Reject Feedback
+
+                            </button>
+
+                        </form>
+
+
+                    </div>
+
+
+                    <hr />
+
+
+                    <!-- ADMIN RESPONSE -->
+
+                    <form asp-action="Respond"
+                          method="post">
+
+                        @Html.AntiForgeryToken()
+
+                        <input type="hidden"
+                               name="id"
+                               value="@Model.FeedbackId" />
+
+
+                        <label for="adminResponse">
+                            Admin Response
+                        </label>
+
+
+                        <textarea id="adminResponse"
+                                  name="adminResponse"
+                                  class="form-control feedback-response-input"
+                                  rows="5"
+                                  placeholder="Write a response to the customer...">@Model.AdminResponse</textarea>
+
+
+                        <button type="submit"
+                                class="feedback-response-btn">
+
+                            <i class="bi bi-send"></i>
+
+                            Save Response
+
+                        </button>
+
+                    </form>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>

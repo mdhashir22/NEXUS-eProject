@@ -1,0 +1,599 @@
+﻿@model IEnumerable<NEXUS_eProject.Models.Feedback>
+
+@{
+    ViewData["Title"] = "FAQ & Customer Reviews";
+    Layout = "_PublicLayout";
+}
+
+
+<!-- =========================================================
+     FAQ HERO
+========================================================= -->
+
+<section class="faq-hero">
+
+    <div class="faq-hero-bg"></div>
+    <div class="faq-hero-overlay"></div>
+    <div class="faq-hero-grid"></div>
+
+    <div class="container">
+
+        <div class="faq-hero-content">
+
+            <span class="contact-eyebrow">
+                <i class="bi bi-patch-question"></i>
+                HELP CENTER
+            </span>
+
+            <h1>
+                Frequently Asked
+                <span>Questions.</span>
+            </h1>
+
+            <p>
+                Find answers to common questions about NEXUS
+                services, plans, applications and payments.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     FAQ SECTION
+========================================================= -->
+
+<section class="faq-section nexus-section">
+
+    <div class="container">
+
+        <div class="section-heading text-center">
+
+            <span class="section-eyebrow">
+                <i class="bi bi-question-circle"></i>
+                FAQ
+            </span>
+
+            <h2>
+                How can we
+                <span>help you?</span>
+            </h2>
+
+            <p>
+                Everything you need to know about using
+                NEXUS services.
+            </p>
+
+        </div>
+
+
+        <div class="accordion nexus-faq mt-5"
+             id="nexusFaq">
+
+
+            <!-- FAQ 01 -->
+
+            <div class="accordion-item">
+
+                <h2 class="accordion-header"
+                    id="faqHeadingOne">
+
+                    <button class="accordion-button"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#faqOne"
+                            aria-expanded="true"
+                            aria-controls="faqOne">
+
+                        <span class="faq-number">
+                            01
+                        </span>
+
+                        How can I apply for a NEXUS connection?
+
+                    </button>
+
+                </h2>
+
+                <div id="faqOne"
+                     class="accordion-collapse collapse show"
+                     aria-labelledby="faqHeadingOne"
+                     data-bs-parent="#nexusFaq">
+
+                    <div class="accordion-body">
+
+                        You can create a customer account on
+                        the NEXUS website and submit a new
+                        connection application from your
+                        Customer Portal.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- FAQ 02 -->
+
+            <div class="accordion-item">
+
+                <h2 class="accordion-header"
+                    id="faqHeadingTwo">
+
+                    <button class="accordion-button collapsed"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#faqTwo"
+                            aria-expanded="false"
+                            aria-controls="faqTwo">
+
+                        <span class="faq-number">
+                            02
+                        </span>
+
+                        What services does NEXUS provide?
+
+                    </button>
+
+                </h2>
+
+                <div id="faqTwo"
+                     class="accordion-collapse collapse"
+                     aria-labelledby="faqHeadingTwo"
+                     data-bs-parent="#nexusFaq">
+
+                    <div class="accordion-body">
+
+                        NEXUS provides Dial-Up Internet,
+                        Broadband Internet and
+                        Telephone/Landline services.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- FAQ 03 -->
+
+            <div class="accordion-item">
+
+                <h2 class="accordion-header"
+                    id="faqHeadingThree">
+
+                    <button class="accordion-button collapsed"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#faqThree"
+                            aria-expanded="false"
+                            aria-controls="faqThree">
+
+                        <span class="faq-number">
+                            03
+                        </span>
+
+                        How does the technical feasibility check work?
+
+                    </button>
+
+                </h2>
+
+                <div id="faqThree"
+                     class="accordion-collapse collapse"
+                     aria-labelledby="faqHeadingThree"
+                     data-bs-parent="#nexusFaq">
+
+                    <div class="accordion-body">
+
+                        After an application is submitted,
+                        the technical team checks the service
+                        area, available server capacity,
+                        infrastructure and distance requirements
+                        before approving the connection.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- FAQ 04 -->
+
+            <div class="accordion-item">
+
+                <h2 class="accordion-header"
+                    id="faqHeadingFour">
+
+                    <button class="accordion-button collapsed"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#faqFour"
+                            aria-expanded="false"
+                            aria-controls="faqFour">
+
+                        <span class="faq-number">
+                            04
+                        </span>
+
+                        How can I check my application status?
+
+                    </button>
+
+                </h2>
+
+                <div id="faqFour"
+                     class="accordion-collapse collapse"
+                     aria-labelledby="faqHeadingFour"
+                     data-bs-parent="#nexusFaq">
+
+                    <div class="accordion-body">
+
+                        Login to your NEXUS Customer Portal
+                        and open the
+                        <strong>My Applications</strong>
+                        section to view your current
+                        application status and details.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- FAQ 05 -->
+
+            <div class="accordion-item">
+
+                <h2 class="accordion-header"
+                    id="faqHeadingFive">
+
+                    <button class="accordion-button collapsed"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#faqFive"
+                            aria-expanded="false"
+                            aria-controls="faqFive">
+
+                        <span class="faq-number">
+                            05
+                        </span>
+
+                        Where can I view my bills?
+
+                    </button>
+
+                </h2>
+
+                <div id="faqFive"
+                     class="accordion-collapse collapse"
+                     aria-labelledby="faqHeadingFive"
+                     data-bs-parent="#nexusFaq">
+
+                    <div class="accordion-body">
+
+                        Customers can view their generated
+                        bills from the
+                        <strong>My Bills</strong>
+                        section inside the Customer Portal.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- FAQ 06 -->
+
+            <div class="accordion-item">
+
+                <h2 class="accordion-header"
+                    id="faqHeadingSix">
+
+                    <button class="accordion-button collapsed"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#faqSix"
+                            aria-expanded="false"
+                            aria-controls="faqSix">
+
+                        <span class="faq-number">
+                            06
+                        </span>
+
+                        How can I pay my NEXUS bill?
+
+                    </button>
+
+                </h2>
+
+                <div id="faqSix"
+                     class="accordion-collapse collapse"
+                     aria-labelledby="faqHeadingSix"
+                     data-bs-parent="#nexusFaq">
+
+                    <div class="accordion-body">
+
+                        You can make payments through the
+                        Customer Portal using the available
+                        payment methods provided by NEXUS.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- FAQ 07 -->
+
+            <div class="accordion-item">
+
+                <h2 class="accordion-header"
+                    id="faqHeadingSeven">
+
+                    <button class="accordion-button collapsed"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#faqSeven"
+                            aria-expanded="false"
+                            aria-controls="faqSeven">
+
+                        <span class="faq-number">
+                            07
+                        </span>
+
+                        What happens after my application is approved?
+
+                    </button>
+
+                </h2>
+
+                <div id="faqSeven"
+                     class="accordion-collapse collapse"
+                     aria-labelledby="faqHeadingSeven"
+                     data-bs-parent="#nexusFaq">
+
+                    <div class="accordion-body">
+
+                        Once technical feasibility is approved,
+                        the NEXUS team can proceed with connection
+                        creation, account assignment, equipment
+                        allocation and activation.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- FAQ 08 -->
+
+            <div class="accordion-item">
+
+                <h2 class="accordion-header"
+                    id="faqHeadingEight">
+
+                    <button class="accordion-button collapsed"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#faqEight"
+                            aria-expanded="false"
+                            aria-controls="faqEight">
+
+                        <span class="faq-number">
+                            08
+                        </span>
+
+                        How can I contact NEXUS?
+
+                    </button>
+
+                </h2>
+
+                <div id="faqEight"
+                     class="accordion-collapse collapse"
+                     aria-labelledby="faqHeadingEight"
+                     data-bs-parent="#nexusFaq">
+
+                    <div class="accordion-body">
+
+                        Visit the Contact section of the NEXUS
+                        website to find our available contact
+                        information and support options.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     CUSTOMER REVIEWS
+========================================================= -->
+
+<section class="public-reviews-section">
+
+    <div class="container">
+
+        <div class="section-heading text-center">
+
+            <span class="section-eyebrow">
+                <i class="bi bi-stars"></i>
+                CUSTOMER REVIEWS
+            </span>
+
+            <h2>
+                What Our
+                <span>Customers Say.</span>
+            </h2>
+
+            <p>
+                Real feedback from customers who have
+                experienced NEXUS services.
+            </p>
+
+        </div>
+
+
+        @if (Model != null && Model.Any())
+        {
+            <div class="public-reviews-grid">
+
+                @foreach (var feedback in Model)
+                {
+                    <div class="public-review-card">
+
+                        <div class="public-review-top">
+
+                            <div class="public-review-avatar">
+
+                                @{
+                                    var customerName =
+                                        feedback.Customer?.FullName?.Trim();
+                                }
+
+                                @if (!string.IsNullOrEmpty(customerName))
+                                {
+                                    @customerName.Substring(0, 1).ToUpper()
+                                }
+                                else
+                                {
+                                    <i class="bi bi-person-fill"></i>
+                                }
+
+                            </div>
+
+                            <div>
+
+                                <h3>
+                                    @(feedback.Customer?.FullName
+                                        ?? "NEXUS Customer")
+                                </h3>
+
+                                <span>
+                                    @feedback.Subject
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="public-review-stars">
+
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                if (i <= feedback.Rating)
+                                {
+                                    <i class="bi bi-star-fill"></i>
+                                }
+                                else
+                                {
+                                    <i class="bi bi-star"></i>
+                                }
+                            }
+
+                        </div>
+
+
+                        <p class="public-review-message">
+                            "@feedback.Message"
+                        </p>
+
+
+                        <div class="public-review-date">
+
+                            <i class="bi bi-check-circle-fill"></i>
+
+                            Verified Customer
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+        }
+        else
+        {
+            <div class="public-reviews-empty">
+
+                <div class="public-reviews-empty-icon">
+
+                    <i class="bi bi-chat-heart"></i>
+
+                </div>
+
+                <h3>
+                    Customer Reviews Coming Soon
+                </h3>
+
+                <p>
+                    Customer reviews will appear here once
+                    they have been approved by our team.
+                </p>
+
+            </div>
+        }
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     FINAL CTA
+========================================================= -->
+
+<section class="faq-final-cta">
+
+    <div class="faq-final-glow"></div>
+
+    <div class="container">
+
+        <div class="faq-final-content">
+
+            <span class="section-eyebrow">
+                NEXUS SUPPORT
+            </span>
+
+            <h2>
+                Still have a
+                <span>question?</span>
+            </h2>
+
+            <p>
+                Our team is ready to help you with your
+                NEXUS service and connection.
+            </p>
+
+            <a asp-controller="Home"
+               asp-action="Contact"
+               class="btn-nexus-primary">
+
+                Contact NEXUS
+                <i class="bi bi-arrow-right"></i>
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>

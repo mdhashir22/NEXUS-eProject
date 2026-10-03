@@ -1,0 +1,990 @@
+﻿@model NEXUS_eProject.Models.CustomerDashboardViewModel
+
+@{
+    ViewData["Title"] = "My Account";
+    Layout = "_PublicLayout";
+
+    var customer = Model.Customer;
+    var connection = Model.Connection;
+    var latestBill = Model.LatestBill;
+    var latestPayment = Model.LatestPayment;
+
+    var connectionStatus =
+        string.IsNullOrWhiteSpace(Model.ConnectionStatus)
+            ? "No Connection"
+            : Model.ConnectionStatus;
+
+    var accountStatus =
+        string.IsNullOrWhiteSpace(Model.AccountStatus)
+            ? "Inactive"
+            : Model.AccountStatus;
+}
+
+<section class="customer-portal">
+
+    <!-- Background -->
+    <div class="customer-portal-bg"></div>
+    <div class="customer-portal-overlay"></div>
+    <div class="customer-portal-grid"></div>
+
+    <!-- Ambient Glows -->
+    <div class="customer-portal-glow customer-glow-one"></div>
+    <div class="customer-portal-glow customer-glow-two"></div>
+
+
+    <div class="container">
+
+        <!-- =========================
+             WELCOME HEADER
+        ========================== -->
+
+        <div class="customer-welcome">
+
+            <div class="customer-welcome-content">
+
+                <span class="portal-label">
+                    CUSTOMER PORTAL
+                </span>
+
+                <h1>
+                    Welcome back,
+                    <b>@customer.FullName</b>
+                </h1>
+
+                <p>
+                    Manage your NEXUS connection, applications,
+                    bills and payments from one place.
+                </p>
+
+            </div>
+
+            <div class="customer-welcome-icon">
+
+                <i class="bi bi-person-circle"></i>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             QUICK STATS
+        ========================== -->
+
+        <div class="row g-3 mb-4">
+
+            <!-- Applications -->
+
+            <div class="col-lg-3 col-md-6">
+
+                <div class="portal-stat-card">
+
+                    <div class="portal-stat-icon">
+                        <i class="bi bi-file-earmark-text"></i>
+                    </div>
+
+                    <div>
+
+                        <span>
+                            APPLICATIONS
+                        </span>
+
+                        <strong>
+                            @Model.TotalApplications
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Connection -->
+
+            <div class="col-lg-3 col-md-6">
+
+                <div class="portal-stat-card">
+
+                    <div class="portal-stat-icon">
+                        <i class="bi bi-router"></i>
+                    </div>
+
+                    <div>
+
+                        <span>
+                            CONNECTION
+                        </span>
+
+                        <strong>
+                            @connectionStatus
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Outstanding -->
+
+            <div class="col-lg-3 col-md-6">
+
+                <div class="portal-stat-card">
+
+                    <div class="portal-stat-icon">
+                        <i class="bi bi-receipt"></i>
+                    </div>
+
+                    <div>
+
+                        <span>
+                            OUTSTANDING
+                        </span>
+
+                        <strong>
+                            Rs. @Model.OutstandingAmount.ToString("N2")
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Account -->
+
+            <div class="col-lg-3 col-md-6">
+
+                <div class="portal-stat-card">
+
+                    <div class="portal-stat-icon">
+                        <i class="bi bi-check-circle"></i>
+                    </div>
+
+                    <div>
+
+                        <span>
+                            ACCOUNT
+                        </span>
+
+                        <strong>
+                            @accountStatus
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             CURRENT SERVICE
+        ========================== -->
+
+        @if (connection != null)
+        {
+            <div class="portal-info-section">
+
+                <div class="portal-section-heading">
+
+                    <div>
+
+                        <span>
+                            CURRENT SERVICE
+                        </span>
+
+                        <h2>
+                            Your <b>NEXUS Connection.</b>
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div class="portal-info-card">
+
+                    <div class="row g-4">
+
+                        <!-- Account ID -->
+
+                        <div class="col-lg-4 col-md-6">
+
+                            <div class="portal-info-item">
+
+                                <span>
+                                    ACCOUNT ID
+                                </span>
+
+                                <strong>
+                                    @(string.IsNullOrWhiteSpace(connection.AccountId)
+                                        ? "Not Assigned"
+                                        : connection.AccountId)
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Connection Type -->
+
+                        <div class="col-lg-4 col-md-6">
+
+                            <div class="portal-info-item">
+
+                                <span>
+                                    CONNECTION TYPE
+                                </span>
+
+                                <strong>
+                                    @(string.IsNullOrWhiteSpace(connection.ConnectionType)
+                                        ? "N/A"
+                                        : connection.ConnectionType)
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Connection Status -->
+
+                        <div class="col-lg-4 col-md-6">
+
+                            <div class="portal-info-item">
+
+                                <span>
+                                    CONNECTION STATUS
+                                </span>
+
+                                <strong class="portal-status">
+
+                                    <i class="bi bi-circle-fill"></i>
+
+                                    @connectionStatus
+
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Plan -->
+
+                        <div class="col-lg-4 col-md-6">
+
+                            <div class="portal-info-item">
+
+                                <span>
+                                    PLAN
+                                </span>
+
+                                <strong>
+                                    @(connection.Plan != null
+                                        ? connection.Plan.PlanName
+                                        : "N/A")
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Speed -->
+
+                        <div class="col-lg-4 col-md-6">
+
+                            <div class="portal-info-item">
+
+                                <span>
+                                    SPEED
+                                </span>
+
+                                <strong>
+                                    @(connection.Plan != null &&
+                                      !string.IsNullOrWhiteSpace(connection.Plan.Speed)
+                                        ? connection.Plan.Speed
+                                        : "N/A")
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Installation Date -->
+
+                        <div class="col-lg-4 col-md-6">
+
+                            <div class="portal-info-item">
+
+                                <span>
+                                    INSTALLATION DATE
+                                </span>
+
+                                <strong>
+                                    @(connection.InstallationDate.HasValue
+                                        ? connection.InstallationDate.Value.ToString("dd MMM yyyy")
+                                        : "Pending")
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Equipment -->
+
+                        <div class="col-lg-4 col-md-6">
+
+                            <div class="portal-info-item">
+
+                                <span>
+                                    EQUIPMENT
+                                </span>
+
+                                <strong>
+                                    @(string.IsNullOrWhiteSpace(connection.Equipment)
+                                        ? "N/A"
+                                        : connection.Equipment)
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Router Serial -->
+
+                        <div class="col-lg-4 col-md-6">
+
+                            <div class="portal-info-item">
+
+                                <span>
+                                    ROUTER SERIAL
+                                </span>
+
+                                <strong>
+                                    @(string.IsNullOrWhiteSpace(connection.RouterSerial)
+                                        ? "N/A"
+                                        : connection.RouterSerial)
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Activated Date -->
+
+                        <div class="col-lg-4 col-md-6">
+
+                            <div class="portal-info-item">
+
+                                <span>
+                                    ACTIVATED
+                                </span>
+
+                                <strong>
+                                    @(connection.ActivatedAt.HasValue
+                                        ? connection.ActivatedAt.Value.ToString("dd MMM yyyy")
+                                        : "Not Activated")
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Latest Bill -->
+
+                        <div class="col-lg-4 col-md-6">
+
+                            <div class="portal-info-item">
+
+                                <span>
+                                    LATEST BILL
+                                </span>
+
+                                <strong>
+                                    @(latestBill != null
+                                        ? latestBill.BillNumber
+                                        : "No Bill")
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Bill Status -->
+
+                        <div class="col-lg-4 col-md-6">
+
+                            <div class="portal-info-item">
+
+                                <span>
+                                    BILL STATUS
+                                </span>
+
+                                <strong>
+                                    @(latestBill != null
+                                        ? latestBill.Status
+                                        : "N/A")
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Latest Payment -->
+
+                        <div class="col-lg-4 col-md-6">
+
+                            <div class="portal-info-item">
+
+                                <span>
+                                    LATEST PAYMENT
+                                </span>
+
+                                <strong>
+                                    @(latestPayment != null
+                                        ? latestPayment.Status
+                                        : "No Payment")
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        }
+
+
+        <!-- =========================
+             QUICK ACCESS
+        ========================== -->
+
+        <div class="portal-section-heading">
+
+            <div>
+
+                <span>
+                    QUICK ACCESS
+                </span>
+
+                <h2>
+                    Manage Your <b>NEXUS.</b>
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="row g-4">
+
+
+            <!-- =========================
+                 APPLY CONNECTION
+            ========================== -->
+
+            <div class="col-lg-4 col-md-6">
+
+                <a asp-controller="CustomerPortal"
+                   asp-action="Apply"
+                   class="portal-action-card">
+
+                    <div class="portal-action-icon">
+
+                        <i class="bi bi-wifi"></i>
+
+                    </div>
+
+                    <div class="portal-action-content">
+
+                        <span>
+                            GET CONNECTED
+                        </span>
+
+                        <h3>
+                            Apply New Connection
+                        </h3>
+
+                        <p>
+                            Apply for a NEXUS internet or
+                            telephone connection.
+                        </p>
+
+                    </div>
+
+                    <i class="bi bi-arrow-up-right portal-arrow"></i>
+
+                </a>
+
+            </div>
+
+
+            <!-- =========================
+                 APPLICATIONS
+            ========================== -->
+
+            <div class="col-lg-4 col-md-6">
+
+                <a asp-controller="CustomerPortal"
+                   asp-action="Applications"
+                   class="portal-action-card">
+
+                    <div class="portal-action-icon">
+
+                        <i class="bi bi-file-earmark-check"></i>
+
+                    </div>
+
+                    <div class="portal-action-content">
+
+                        <span>
+                            TRACK
+                        </span>
+
+                        <h3>
+                            My Applications
+                        </h3>
+
+                        <p>
+                            Check the status of your connection
+                            applications.
+                        </p>
+
+                    </div>
+
+                    <i class="bi bi-arrow-up-right portal-arrow"></i>
+
+                </a>
+
+            </div>
+
+
+            <!-- =========================
+                 CONNECTION
+            ========================== -->
+
+            <div class="col-lg-4 col-md-6">
+
+                <a asp-controller="CustomerPortal"
+                   asp-action="Connection"
+                   class="portal-action-card">
+
+                    <div class="portal-action-icon">
+
+                        <i class="bi bi-router-fill"></i>
+
+                    </div>
+
+                    <div class="portal-action-content">
+
+                        <span>
+                            MY SERVICE
+                        </span>
+
+                        <h3>
+                            My Connection
+                        </h3>
+
+                        <p>
+                            View your active NEXUS connection
+                            and service information.
+                        </p>
+
+                    </div>
+
+                    <i class="bi bi-arrow-up-right portal-arrow"></i>
+
+                </a>
+
+            </div>
+
+
+            <!-- =========================
+                 BILLS
+            ========================== -->
+
+            <div class="col-lg-4 col-md-6">
+
+                <a asp-controller="CustomerPortal"
+                   asp-action="Bills"
+                   class="portal-action-card">
+
+                    <div class="portal-action-icon">
+
+                        <i class="bi bi-receipt-cutoff"></i>
+
+                    </div>
+
+                    <div class="portal-action-content">
+
+                        <span>
+                            BILLING
+                        </span>
+
+                        <h3>
+                            My Bills
+                        </h3>
+
+                        <p>
+                            View your current and previous
+                            NEXUS bills.
+                        </p>
+
+                    </div>
+
+                    <i class="bi bi-arrow-up-right portal-arrow"></i>
+
+                </a>
+
+            </div>
+
+
+            <!-- =========================
+                 PAYMENT
+            ========================== -->
+
+            <div class="col-lg-4 col-md-6">
+
+                <a asp-controller="CustomerPortal"
+                   asp-action="Payment"
+                   class="portal-action-card">
+
+                    <div class="portal-action-icon">
+
+                        <i class="bi bi-credit-card"></i>
+
+                    </div>
+
+                    <div class="portal-action-content">
+
+                        <span>
+                            PAYMENT
+                        </span>
+
+                        <h3>
+                            Make Payment
+                        </h3>
+
+                        <p>
+                            Pay your outstanding NEXUS
+                            bill securely.
+                        </p>
+
+                    </div>
+
+                    <i class="bi bi-arrow-up-right portal-arrow"></i>
+
+                </a>
+
+            </div>
+
+
+            <!-- =========================
+                 FEEDBACK
+            ========================== -->
+
+            <div class="col-lg-4 col-md-6">
+
+                <a asp-controller="CustomerPortal"
+                   asp-action="Feedback"
+                   class="portal-action-card">
+
+                    <div class="portal-action-icon">
+
+                        <i class="bi bi-chat-square-heart"></i>
+
+                    </div>
+
+                    <div class="portal-action-content">
+
+                        <span>
+                            SUPPORT
+                        </span>
+
+                        <h3>
+                            Feedback
+                        </h3>
+
+                        <p>
+                            Share your experience and
+                            feedback with NEXUS.
+                        </p>
+
+                    </div>
+
+                    <i class="bi bi-arrow-up-right portal-arrow"></i>
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             RECENT APPLICATIONS
+        ========================== -->
+
+        @if (Model.RecentApplications != null &&
+             Model.RecentApplications.Any())
+        {
+            <div class="portal-info-section">
+
+                <div class="portal-section-heading">
+
+                    <div>
+
+                        <span>
+                            RECENT APPLICATIONS
+                        </span>
+
+                        <h2>
+                            Your Recent <b>Requests.</b>
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div class="portal-info-card">
+
+                    <div class="row g-4">
+
+                        @foreach (var application in Model.RecentApplications)
+                        {
+                            <div class="col-lg-4 col-md-6">
+
+                                <div class="portal-info-item">
+
+                                    <span>
+                                        @application.OrderNumber
+                                    </span>
+
+                                    <strong>
+                                        @application.Status
+                                    </strong>
+
+                                    <div class="mt-2">
+
+                                        <small>
+                                            @application.ConnectionType
+                                        </small>
+
+                                    </div>
+
+                                    @if (application.Plan != null)
+                                    {
+                                        <div class="mt-1">
+
+                                            <small>
+                                                @application.Plan.PlanName
+                                            </small>
+
+                                        </div>
+                                    }
+
+                                    <div class="mt-3">
+
+                                        <a asp-controller="CustomerPortal"
+                                           asp-action="ApplicationDetails"
+                                           asp-route-id="@application.OrderId">
+                                            View Details
+                                        </a>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+        }
+
+
+        <!-- =========================
+             ACCOUNT INFORMATION
+        ========================== -->
+
+        <div class="portal-info-section">
+
+            <div class="portal-section-heading">
+
+                <div>
+
+                    <span>
+                        ACCOUNT INFORMATION
+                    </span>
+
+                    <h2>
+                        Your <b>Details.</b>
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="portal-info-card">
+
+                <div class="row g-4">
+
+
+                    <!-- Full Name -->
+
+                    <div class="col-md-4">
+
+                        <div class="portal-info-item">
+
+                            <span>
+                                FULL NAME
+                            </span>
+
+                            <strong>
+                                @customer.FullName
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Father Name -->
+
+                    <div class="col-md-4">
+
+                        <div class="portal-info-item">
+
+                            <span>
+                                FATHER NAME
+                            </span>
+
+                            <strong>
+                                @(string.IsNullOrWhiteSpace(customer.FatherName)
+                                    ? "N/A"
+                                    : customer.FatherName)
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Phone -->
+
+                    <div class="col-md-4">
+
+                        <div class="portal-info-item">
+
+                            <span>
+                                PHONE
+                            </span>
+
+                            <strong>
+                                @(string.IsNullOrWhiteSpace(customer.Phone)
+                                    ? "N/A"
+                                    : customer.Phone)
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Email -->
+
+                    <div class="col-md-4">
+
+                        <div class="portal-info-item">
+
+                            <span>
+                                EMAIL
+                            </span>
+
+                            <strong>
+                                @(string.IsNullOrWhiteSpace(customer.Email)
+                                    ? "N/A"
+                                    : customer.Email)
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- City -->
+
+                    <div class="col-md-4">
+
+                        <div class="portal-info-item">
+
+                            <span>
+                                CITY
+                            </span>
+
+                            <strong>
+                                @(string.IsNullOrWhiteSpace(customer.City)
+                                    ? "N/A"
+                                    : customer.City)
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Account Status -->
+
+                    <div class="col-md-4">
+
+                        <div class="portal-info-item">
+
+                            <span>
+                                ACCOUNT STATUS
+                            </span>
+
+                            <strong class="portal-status">
+
+                                <i class="bi bi-circle-fill"></i>
+
+                                @accountStatus
+
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>

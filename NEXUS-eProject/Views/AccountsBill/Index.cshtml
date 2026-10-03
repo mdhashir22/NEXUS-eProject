@@ -1,0 +1,205 @@
+﻿@model IEnumerable<NEXUS_eProject.Models.Bill>
+
+@{
+    ViewData["Title"] = "Bills";
+    ViewData["PageTitle"] = "Bills";
+    Layout = "~/Views/Shared/_AccountsLayout.cshtml";
+}
+
+<div class="ab-page">
+
+    <div class="ab-header">
+
+        <div>
+            <span class="ab-eyebrow">
+                <i class="bi bi-receipt"></i>
+                BILLING RECORDS
+            </span>
+
+            <h2>Customer Bills</h2>
+
+            <p>
+                View and track all generated NEXUS bills.
+            </p>
+        </div>
+
+        <div class="ab-count">
+            <i class="bi bi-receipt"></i>
+
+            <div>
+                <span>TOTAL BILLS</span>
+                <strong>@Model.Count()</strong>
+            </div>
+        </div>
+
+    </div>
+
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="ab-alert success">
+            <i class="bi bi-check-circle-fill"></i>
+            @TempData["Success"]
+        </div>
+    }
+
+
+    <div class="ab-card">
+
+        <div class="ab-toolbar">
+
+            <form method="get"
+                  asp-action="Index"
+                  class="ab-filter-form">
+
+                <div class="ab-search">
+
+                    <i class="bi bi-search"></i>
+
+                    <input type="text"
+                           name="search"
+                           value="@ViewBag.Search"
+                           placeholder="Search bill, account or customer..." />
+
+                </div>
+
+
+                <select name="status"
+                        class="ab-select">
+
+                    <option value="All"
+                            selected="@(ViewBag.Status == null || ViewBag.Status == "All")">
+                        All Status
+                    </option>
+
+                    <option value="Unpaid"
+                            selected="@(ViewBag.Status == "Unpaid")">
+                        Unpaid
+                    </option>
+
+                    <option value="Paid"
+                            selected="@(ViewBag.Status == "Paid")">
+                        Paid
+                    </option>
+
+                    <option value="Partially Paid"
+                            selected="@(ViewBag.Status == "Partially Paid")">
+                        Partially Paid
+                    </option>
+
+                </select>
+
+
+                <button type="submit"
+                        class="ab-btn primary">
+                    Filter
+                </button>
+
+                <a asp-action="Index"
+                   class="ab-btn secondary">
+                    Reset
+                </a>
+
+            </form>
+
+        </div>
+
+
+        @if (Model.Any())
+        {
+            <div class="ab-table-wrap">
+
+                <table class="ab-table">
+
+                    <thead>
+                        <tr>
+                            <th>BILL</th>
+                            <th>ACCOUNT</th>
+                            <th>CUSTOMER</th>
+                            <th>BILLING DATE</th>
+                            <th>DUE DATE</th>
+                            <th>AMOUNT</th>
+                            <th>STATUS</th>
+                            <th>ACTION</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                    @foreach (var bill in Model)
+                    {
+                        <tr>
+
+                            <td>
+                                <strong class="ab-purple">
+                                    @bill.BillNumber
+                                </strong>
+                            </td>
+
+                            <td>
+                                @bill.AccountId
+                            </td>
+
+                            <td>
+                                @(bill.Customer?.FullName ?? "-")
+                            </td>
+
+                            <td>
+                                @bill.BillingDate.ToString("dd MMM yyyy")
+                            </td>
+
+                            <td>
+                                @bill.DueDate.ToString("dd MMM yyyy")
+                            </td>
+
+                            <td>
+                                <strong>
+                                    Rs. @bill.TotalAmount.ToString("N2")
+                                </strong>
+                            </td>
+
+                            <td>
+                                <span class="ab-badge @(bill.Status == "Paid" ? "paid" : "pending")">
+                                    <i class="bi bi-circle-fill"></i>
+                                    @bill.Status
+                                </span>
+                            </td>
+
+                            <td>
+                                <a asp-action="Details"
+                                   asp-route-id="@bill.BillId"
+                                   class="ab-icon-btn"
+                                   title="View Bill">
+
+                                    <i class="bi bi-eye"></i>
+
+                                </a>
+                            </td>
+
+                        </tr>
+                    }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+        else
+        {
+            <div class="ab-empty">
+
+                <i class="bi bi-receipt"></i>
+
+                <h4>No Bills Found</h4>
+
+                <p>
+                    No billing records match the current filter.
+                </p>
+
+            </div>
+        }
+
+    </div>
+
+</div>

@@ -1,0 +1,612 @@
+﻿@model IEnumerable<NEXUS_eProject.Models.Payment>
+
+@{
+    Layout = "~/Views/Shared/_RetailLayout.cshtml";
+    ViewData["Title"] = "Payments";
+
+    var search = ViewBag.Search as string;
+    var selectedStatus = ViewBag.Status as string;
+    var selectedMethod = ViewBag.PaymentMethod as string;
+
+    int totalPayments = ViewBag.TotalPayments ?? 0;
+    int paidPayments = ViewBag.PaidPayments ?? 0;
+    int pendingPayments = ViewBag.PendingPayments ?? 0;
+    int rejectedPayments = ViewBag.RejectedPayments ?? 0;
+
+    decimal totalReceived =
+        ViewBag.TotalReceived ?? 0m;
+
+    decimal pendingAmount =
+        ViewBag.PendingAmount ?? 0m;
+}
+
+<div class="rp-page">
+
+    <!-- HEADER -->
+
+    <div class="rp-page-header">
+
+        <div>
+
+            <span class="rp-eyebrow">
+                <i class="bi bi-credit-card"></i>
+                PAYMENT OPERATIONS
+            </span>
+
+            <h1>Payments</h1>
+
+            <p>
+                Track customer payments, verification status and received amounts.
+            </p>
+
+        </div>
+
+        <div class="rp-header-actions">
+
+            <a asp-controller="RetailBill"
+               asp-action="Index"
+               class="retail-secondary-btn">
+
+                <i class="bi bi-receipt"></i>
+                Bills
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- STATS -->
+
+    <div class="rp-stats-grid">
+
+        <div class="rp-stat-card">
+
+            <div class="rp-stat-icon purple">
+                <i class="bi bi-credit-card-2-front"></i>
+            </div>
+
+            <div class="rp-stat-content">
+
+                <span>Total Payments</span>
+
+                <strong>@totalPayments</strong>
+
+                <small>All recorded payments</small>
+
+            </div>
+
+        </div>
+
+
+        <div class="rp-stat-card">
+
+            <div class="rp-stat-icon green">
+                <i class="bi bi-check2-circle"></i>
+            </div>
+
+            <div class="rp-stat-content">
+
+                <span>Paid</span>
+
+                <strong>@paidPayments</strong>
+
+                <small>Verified payments</small>
+
+            </div>
+
+        </div>
+
+
+        <div class="rp-stat-card">
+
+            <div class="rp-stat-icon orange">
+                <i class="bi bi-hourglass-split"></i>
+            </div>
+
+            <div class="rp-stat-content">
+
+                <span>Pending</span>
+
+                <strong>@pendingPayments</strong>
+
+                <small>Awaiting verification</small>
+
+            </div>
+
+        </div>
+
+
+        <div class="rp-stat-card">
+
+            <div class="rp-stat-icon red">
+                <i class="bi bi-x-circle"></i>
+            </div>
+
+            <div class="rp-stat-content">
+
+                <span>Rejected</span>
+
+                <strong>@rejectedPayments</strong>
+
+                <small>Rejected payments</small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- AMOUNT SUMMARY -->
+
+    <div class="rp-amount-grid">
+
+        <div class="rp-amount-card">
+
+            <div class="rp-amount-icon green">
+                <i class="bi bi-wallet2"></i>
+            </div>
+
+            <div>
+
+                <span>TOTAL RECEIVED</span>
+
+                <strong>
+                    PKR @totalReceived.ToString("N2")
+                </strong>
+
+                <small>
+                    Successfully verified payments
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <div class="rp-amount-card">
+
+            <div class="rp-amount-icon orange">
+                <i class="bi bi-clock-history"></i>
+            </div>
+
+            <div>
+
+                <span>PENDING AMOUNT</span>
+
+                <strong>
+                    PKR @pendingAmount.ToString("N2")
+                </strong>
+
+                <small>
+                    Awaiting payment verification
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- FILTER -->
+
+    <div class="retail-card rp-filter-card">
+
+        <div class="retail-card-body">
+
+            <form asp-action="Index"
+                  method="get"
+                  class="rp-filter-form">
+
+                <div>
+
+                    <label class="rp-form-label">
+                        SEARCH
+                    </label>
+
+                    <div class="rp-input-wrapper">
+
+                        <i class="bi bi-search"></i>
+
+                        <input type="text"
+                               name="search"
+                               value="@search"
+                               class="form-control"
+                               placeholder="Payment number, account, customer or phone..." />
+
+                    </div>
+
+                </div>
+
+
+                <div>
+
+                    <label class="rp-form-label">
+                        STATUS
+                    </label>
+
+                    <select name="status"
+                            class="form-select">
+
+                        <option value="">
+                            All Statuses
+                        </option>
+
+                        <option value="Paid"
+                                selected="@(selectedStatus == "Paid")">
+                            Paid
+                        </option>
+
+                        <option value="Pending"
+                                selected="@(selectedStatus == "Pending")">
+                            Pending
+                        </option>
+
+                        <option value="Pending Verification"
+                                selected="@(selectedStatus == "Pending Verification")">
+                            Pending Verification
+                        </option>
+
+                        <option value="Rejected"
+                                selected="@(selectedStatus == "Rejected")">
+                            Rejected
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div>
+
+                    <label class="rp-form-label">
+                        PAYMENT METHOD
+                    </label>
+
+                    <select name="paymentMethod"
+                            class="form-select">
+
+                        <option value="">
+                            All Methods
+                        </option>
+
+                        <option value="Cash"
+                                selected="@(selectedMethod == "Cash")">
+                            Cash
+                        </option>
+
+                        <option value="Bank Transfer"
+                                selected="@(selectedMethod == "Bank Transfer")">
+                            Bank Transfer
+                        </option>
+
+                        <option value="EasyPaisa"
+                                selected="@(selectedMethod == "EasyPaisa")">
+                            EasyPaisa
+                        </option>
+
+                        <option value="JazzCash"
+                                selected="@(selectedMethod == "JazzCash")">
+                            JazzCash
+                        </option>
+
+                        <option value="Card"
+                                selected="@(selectedMethod == "Card")">
+                            Card
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="rp-filter-action">
+
+                    <label class="rp-form-label">
+                        ACTION
+                    </label>
+
+                    <button type="submit"
+                            class="retail-primary-btn rp-search-btn">
+
+                        <i class="bi bi-search"></i>
+                        Search
+
+                    </button>
+
+                </div>
+
+
+                @if (!string.IsNullOrWhiteSpace(search) ||
+                     !string.IsNullOrWhiteSpace(selectedStatus) ||
+                     !string.IsNullOrWhiteSpace(selectedMethod))
+                {
+                    <div class="rp-reset-wrapper">
+
+                        <label class="rp-form-label">
+                            RESET
+                        </label>
+
+                        <a asp-action="Index"
+                           class="retail-secondary-btn rp-reset-btn">
+
+                            <i class="bi bi-arrow-clockwise"></i>
+                            Reset
+
+                        </a>
+
+                    </div>
+                }
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- PAYMENTS TABLE -->
+
+    <div class="retail-card rp-payments-card">
+
+        <div class="retail-card-header">
+
+            <div class="retail-card-title">
+
+                <div class="retail-card-icon">
+                    <i class="bi bi-credit-card"></i>
+                </div>
+
+                <div>
+
+                    <h3>
+                        Customer Payments
+                    </h3>
+
+                    <span>
+                        @Model.Count() payment(s) found
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="retail-card-body p-0">
+
+            @if (Model.Any())
+            {
+                <div class="rp-table-scroll">
+
+                    <table class="rp-payments-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>PAYMENT</th>
+                                <th>CUSTOMER</th>
+                                <th>ACCOUNT</th>
+                                <th>BILL</th>
+                                <th>AMOUNT</th>
+                                <th>METHOD</th>
+                                <th>DATE</th>
+                                <th>STATUS</th>
+                                <th>ACTION</th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            @foreach (var payment in Model)
+                            {
+                                var paymentStatus =
+                                    payment.Status ?? "Pending";
+
+                                var statusClass =
+                                    paymentStatus == "Paid"
+                                        ? "rp-status-paid"
+                                        : paymentStatus == "Rejected"
+                                            ? "rp-status-rejected"
+                                            : "rp-status-pending";
+
+                                <tr>
+
+                                    <td>
+
+                                        <div class="rp-payment-content">
+
+                                            <strong>
+                                                @payment.PaymentNumber
+                                            </strong>
+
+                                            <small>
+                                                Payment #@payment.PaymentId
+                                            </small>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <div class="rp-customer-content">
+
+                                            <div class="rp-avatar">
+
+                                                @(payment.Customer?.FullName?
+                                                    .Substring(0, 1)
+                                                    .ToUpper() ?? "?")
+
+                                            </div>
+
+                                            <div class="rp-customer-text">
+
+                                                <strong>
+                                                    @(payment.Customer?.FullName ?? "N/A")
+                                                </strong>
+
+                                                <small>
+                                                    @(payment.Customer?.Phone ?? "N/A")
+                                                </small>
+
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <strong class="rp-account">
+                                            @(string.IsNullOrWhiteSpace(payment.AccountId)
+                                                ? "N/A"
+                                                : payment.AccountId)
+                                        </strong>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <div class="rp-bill-content">
+
+                                            <strong>
+                                                @(payment.Bill?.BillNumber ?? "N/A")
+                                            </strong>
+
+                                            @if (payment.Bill != null)
+                                            {
+                                                <small>
+                                                    PKR @payment.Bill.TotalAmount.ToString("N2")
+                                                </small>
+                                            }
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <strong class="rp-amount">
+                                            PKR @payment.Amount.ToString("N2")
+                                        </strong>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <span class="rp-method">
+                                            @(payment.PaymentMethod ?? "N/A")
+                                        </span>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <div class="rp-date-content">
+
+                                            <strong>
+                                                @payment.PaymentDate.ToString("dd MMM yyyy")
+                                            </strong>
+
+                                            <small>
+                                                @payment.PaymentDate.ToString("hh:mm tt")
+                                            </small>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <span class="rp-status @statusClass">
+
+                                            @if (paymentStatus == "Paid")
+                                            {
+                                                <i class="bi bi-check-circle"></i>
+                                            }
+                                            else if (paymentStatus == "Rejected")
+                                            {
+                                                <i class="bi bi-x-circle"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="bi bi-clock"></i>
+                                            }
+
+                                            @paymentStatus
+
+                                        </span>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <a asp-action="Details"
+                                           asp-route-id="@payment.PaymentId"
+                                           class="rp-view-btn"
+                                           title="View Payment Details">
+
+                                            <i class="bi bi-eye"></i>
+
+                                        </a>
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+            else
+            {
+                <div class="retail-empty-state rp-empty-state">
+
+                    <div class="retail-empty-icon">
+                        <i class="bi bi-credit-card"></i>
+                    </div>
+
+                    <h3>
+                        No Payments Found
+                    </h3>
+
+                    <p>
+                        No customer payments match your current filters.
+                    </p>
+
+                    <a asp-action="Index"
+                       class="retail-secondary-btn">
+
+                        <i class="bi bi-arrow-clockwise"></i>
+                        Reset Filters
+
+                    </a>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>

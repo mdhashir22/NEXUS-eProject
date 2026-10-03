@@ -1,0 +1,781 @@
+﻿@model NEXUS_eProject.Models.TechnicalDashboardViewModel
+
+@{
+    ViewData["Title"] = "Technical Dashboard";
+    ViewData["PageTitle"] = "Dashboard";
+    ViewData["PageSubtitle"] = "Technical Operations";
+    Layout = "~/Views/Shared/_TechnicalLayout.cshtml";
+
+    var recentOrders = Model.RecentTechnicalOrders
+        ?? new List<NEXUS_eProject.Models.Order>();
+
+    var pendingOrders = Model.PendingTechnicalOrders
+        ?? new List<NEXUS_eProject.Models.Order>();
+
+    var recentConnections = Model.RecentConnections
+        ?? new List<NEXUS_eProject.Models.Connection>();
+}
+
+<div class="technical-dashboard">
+
+    <!-- =====================================================
+         PAGE HEADER
+    ====================================================== -->
+    <div class="td-page-header">
+        <div>
+            <h2>Technical Dashboard</h2>
+            <p>
+                Monitor technical applications, feasibility checks,
+                installations and active connections.
+            </p>
+        </div>
+
+        <div class="td-header-actions">
+            <a asp-controller="TechnicalOrder"
+               asp-action="Index"
+               class="td-header-btn">
+                <i class="bi bi-list-check"></i>
+                Technical Orders
+            </a>
+        </div>
+    </div>
+
+
+    <!-- =====================================================
+         STAT CARDS
+    ====================================================== -->
+    <div class="td-stats-grid">
+
+        <!-- Pending Orders -->
+        <div class="td-stat-card">
+            <div class="td-stat-top">
+                <div class="td-stat-icon purple">
+                    <i class="bi bi-hourglass-split"></i>
+                </div>
+
+                <span class="td-stat-label">
+                    Pending Orders
+                </span>
+            </div>
+
+            <div class="td-stat-number">
+                @Model.PendingOrders
+            </div>
+
+            <div class="td-stat-footer">
+                <span class="td-stat-neutral">
+                    <i class="bi bi-clock"></i>
+                    Awaiting technical review
+                </span>
+            </div>
+        </div>
+
+
+        <!-- Feasibility Pending -->
+        <div class="td-stat-card">
+            <div class="td-stat-top">
+                <div class="td-stat-icon orange">
+                    <i class="bi bi-clipboard-check"></i>
+                </div>
+
+                <span class="td-stat-label">
+                    Feasibility Pending
+                </span>
+            </div>
+
+            <div class="td-stat-number">
+                @Model.FeasibilityPending
+            </div>
+
+            <div class="td-stat-footer">
+                <span class="td-stat-warning">
+                    <i class="bi bi-exclamation-circle"></i>
+                    Check required
+                </span>
+            </div>
+        </div>
+
+
+        <!-- Feasible -->
+        <div class="td-stat-card">
+            <div class="td-stat-top">
+                <div class="td-stat-icon green">
+                    <i class="bi bi-check2-circle"></i>
+                </div>
+
+                <span class="td-stat-label">
+                    Feasible
+                </span>
+            </div>
+
+            <div class="td-stat-number">
+                @Model.FeasibleOrders
+            </div>
+
+            <div class="td-stat-footer">
+                <span class="td-stat-positive">
+                    <i class="bi bi-check-circle"></i>
+                    Technical approved
+                </span>
+            </div>
+        </div>
+
+
+        <!-- Payment Verified -->
+        <div class="td-stat-card">
+            <div class="td-stat-top">
+                <div class="td-stat-icon green">
+                    <i class="bi bi-credit-card-2-front"></i>
+                </div>
+
+                <span class="td-stat-label">
+                    Payment Verified
+                </span>
+            </div>
+
+            <div class="td-stat-number">
+                @Model.PaymentVerified
+            </div>
+
+            <div class="td-stat-footer">
+                <span class="td-stat-positive">
+                    <i class="bi bi-check-circle-fill"></i>
+                    Ready for installation
+                </span>
+            </div>
+        </div>
+
+
+        <!-- Installation Pending -->
+        <div class="td-stat-card">
+            <div class="td-stat-top">
+                <div class="td-stat-icon cyan">
+                    <i class="bi bi-tools"></i>
+                </div>
+
+                <span class="td-stat-label">
+                    Installation Pending
+                </span>
+            </div>
+
+            <div class="td-stat-number">
+                @Model.InstallationPending
+            </div>
+
+            <div class="td-stat-footer">
+                <span class="td-stat-warning">
+                    <i class="bi bi-wrench-adjustable"></i>
+                    Installation required
+                </span>
+            </div>
+        </div>
+
+
+        <!-- Active Connections -->
+        <div class="td-stat-card">
+            <div class="td-stat-top">
+                <div class="td-stat-icon blue">
+                    <i class="bi bi-wifi"></i>
+                </div>
+
+                <span class="td-stat-label">
+                    Active Connections
+                </span>
+            </div>
+
+            <div class="td-stat-number">
+                @Model.ActiveConnections
+            </div>
+
+            <div class="td-stat-footer">
+                <span class="td-stat-positive">
+                    <i class="bi bi-broadcast"></i>
+                    Currently active
+                </span>
+            </div>
+        </div>
+
+
+        <!-- Rejected -->
+        <div class="td-stat-card">
+            <div class="td-stat-top">
+                <div class="td-stat-icon red">
+                    <i class="bi bi-x-circle"></i>
+                </div>
+
+                <span class="td-stat-label">
+                    Rejected
+                </span>
+            </div>
+
+            <div class="td-stat-number">
+                @Model.RejectedOrders
+            </div>
+
+            <div class="td-stat-footer">
+                <span class="td-stat-danger">
+                    <i class="bi bi-slash-circle"></i>
+                    Not feasible
+                </span>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         QUICK ACTIONS
+    ====================================================== -->
+    <div class="td-card td-quick-card td-full-width-card">
+
+        <div class="td-card-header">
+            <div>
+                <h5>Quick Actions</h5>
+                <span>Technical operations</span>
+            </div>
+        </div>
+
+        <div class="td-quick-actions">
+
+            <a asp-controller="TechnicalOrder"
+               asp-action="Pending"
+               class="td-quick-action">
+
+                <div class="td-quick-icon purple">
+                    <i class="bi bi-clipboard-check"></i>
+                </div>
+
+                <div class="td-quick-content">
+                    <strong>Feasibility Checks</strong>
+                    <span>
+                        Review pending applications
+                    </span>
+                </div>
+
+                <i class="bi bi-chevron-right"></i>
+            </a>
+
+
+            <a asp-controller="TechnicalInstallation"
+               asp-action="Index"
+               class="td-quick-action">
+
+                <div class="td-quick-icon green">
+                    <i class="bi bi-credit-card-2-front"></i>
+                </div>
+
+                <div class="td-quick-content">
+                    <strong>Payment Verified</strong>
+                    <span>
+                        @Model.PaymentVerified ready for installation
+                    </span>
+                </div>
+
+                <i class="bi bi-chevron-right"></i>
+            </a>
+
+
+            <a asp-controller="TechnicalInstallation"
+               asp-action="Index"
+               class="td-quick-action">
+
+                <div class="td-quick-icon orange">
+                    <i class="bi bi-tools"></i>
+                </div>
+
+                <div class="td-quick-content">
+                    <strong>Installations</strong>
+                    <span>
+                        View installation queue
+                    </span>
+                </div>
+
+                <i class="bi bi-chevron-right"></i>
+            </a>
+
+
+            <a asp-controller="TechnicalConnection"
+               asp-action="Index"
+               class="td-quick-action">
+
+                <div class="td-quick-icon blue">
+                    <i class="bi bi-diagram-3"></i>
+                </div>
+
+                <div class="td-quick-content">
+                    <strong>Connections</strong>
+                    <span>
+                        Manage customer connections
+                    </span>
+                </div>
+
+                <i class="bi bi-chevron-right"></i>
+            </a>
+
+
+            <a asp-controller="TechnicalEquipment"
+               asp-action="Index"
+               class="td-quick-action">
+
+                <div class="td-quick-icon green">
+                    <i class="bi bi-box-seam"></i>
+                </div>
+
+                <div class="td-quick-content">
+                    <strong>Equipment</strong>
+                    <span>
+                        Manage technical equipment
+                    </span>
+                </div>
+
+                <i class="bi bi-chevron-right"></i>
+            </a>
+
+        </div>
+    </div>
+
+
+    <!-- =====================================================
+         PENDING TECHNICAL ORDERS
+    ====================================================== -->
+    <div class="td-card td-orders-card td-full-width-card">
+
+        <div class="td-card-header">
+            <div>
+                <h5>Pending Technical Orders</h5>
+                <span>
+                    Applications accepted by Retail and waiting
+                    for technical feasibility.
+                </span>
+            </div>
+
+            <a asp-controller="TechnicalOrder"
+               asp-action="Pending"
+               class="td-view-all">
+                View all
+                <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+
+
+        @if (pendingOrders.Any())
+        {
+            <div class="td-table-wrapper">
+
+                <table class="td-table">
+
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Connection</th>
+                            <th>Plan</th>
+                            <th>Submitted</th>
+                            <th>Status</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var order in pendingOrders)
+                        {
+                            <tr>
+
+                                <td>
+                                    <span class="td-order-id">
+                                        @(order.OrderNumber ?? "-")
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <div class="td-customer">
+
+                                        <div class="td-avatar">
+                                            @(string.IsNullOrWhiteSpace(order.Customer?.FullName)
+                                                ? "?"
+                                                : order.Customer.FullName.Substring(0, 1).ToUpper())
+                                        </div>
+
+                                        <div>
+                                            <strong>
+                                                @(order.Customer?.FullName ?? "Unknown")
+                                            </strong>
+
+                                            <span>
+                                                @(order.Customer?.Phone ?? "No phone")
+                                            </span>
+                                        </div>
+
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <span class="td-connection">
+                                        <i class="bi bi-wifi"></i>
+                                        @(order.ConnectionType ?? "-")
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <div class="td-plan">
+
+                                        <strong>
+                                            @(order.Plan?.PlanName ?? "-")
+                                        </strong>
+
+                                        @if (!string.IsNullOrWhiteSpace(order.Plan?.Speed))
+                                        {
+                                            <span>
+                                                @order.Plan.Speed
+                                            </span>
+                                        }
+
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <span class="td-date">
+                                        @order.CreatedAt.ToString("dd MMM yyyy")
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="td-status pending">
+                                        <i class="bi bi-circle-fill"></i>
+                                        Pending
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <a asp-controller="TechnicalOrder"
+                                       asp-action="Details"
+                                       asp-route-id="@order.OrderId"
+                                       class="td-action-btn"
+                                       title="View Order">
+
+                                        <i class="bi bi-chevron-right"></i>
+                                    </a>
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+        else
+        {
+            <div class="td-empty-state">
+
+                <div class="td-empty-icon">
+                    <i class="bi bi-clipboard-check"></i>
+                </div>
+
+                <strong>No pending orders</strong>
+
+                <span>
+                    There are currently no applications waiting
+                    for technical feasibility.
+                </span>
+
+            </div>
+        }
+
+    </div>
+
+
+    <!-- =====================================================
+         RECENT TECHNICAL ORDERS
+    ====================================================== -->
+    <div class="td-card td-recent-card td-full-width-card">
+
+        <div class="td-card-header">
+            <div>
+                <h5>Recent Technical Orders</h5>
+                <span>
+                    Latest applications moving through the technical workflow.
+                </span>
+            </div>
+
+            <a asp-controller="TechnicalOrder"
+               asp-action="Index"
+               class="td-view-all">
+                View all
+                <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+
+
+        @if (recentOrders.Any())
+        {
+            <div class="td-table-wrapper">
+
+                <table class="td-table">
+
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Type</th>
+                            <th>Plan</th>
+                            <th>Status</th>
+                            <th>Updated</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var order in recentOrders)
+                        {
+                            var statusClass = "pending";
+
+                            if (order.Status == "Feasible" ||
+                                order.Status == "Connection Created" ||
+                                order.Status == "Payment Verified" ||
+                                order.Status == "Active")
+                            {
+                                statusClass = "success";
+                            }
+                            else if (order.Status == "Technical Rejected" ||
+                                     order.Status == "Rejected")
+                            {
+                                statusClass = "danger";
+                            }
+                            else if (order.Status == "Installation Pending" ||
+                                     order.Status == "Payment Pending" ||
+                                     order.Status == "Billing Pending")
+                            {
+                                statusClass = "warning";
+                            }
+
+                            <tr>
+
+                                <td>
+                                    <span class="td-order-id">
+                                        @(order.OrderNumber ?? "-")
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <div class="td-customer">
+
+                                        <div class="td-avatar">
+                                            @(string.IsNullOrWhiteSpace(order.Customer?.FullName)
+                                                ? "?"
+                                                : order.Customer.FullName.Substring(0, 1).ToUpper())
+                                        </div>
+
+                                        <div>
+                                            <strong>
+                                                @(order.Customer?.FullName ?? "Unknown")
+                                            </strong>
+
+                                            <span>
+                                                @(order.Customer?.Phone ?? "-")
+                                            </span>
+                                        </div>
+
+                                    </div>
+                                </td>
+
+                                <td>
+                                    @(order.ConnectionType ?? "-")
+                                </td>
+
+                                <td>
+                                    @(order.Plan?.PlanName ?? "-")
+                                </td>
+
+                                <td>
+                                    <span class="td-status @statusClass">
+                                        <i class="bi bi-circle-fill"></i>
+                                        @(order.Status ?? "Pending")
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="td-date">
+                                        @(order.UpdatedAt?.ToString("dd MMM yyyy")
+                                            ?? order.CreatedAt.ToString("dd MMM yyyy"))
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <a asp-controller="TechnicalOrder"
+                                       asp-action="Details"
+                                       asp-route-id="@order.OrderId"
+                                       class="td-action-btn"
+                                       title="View">
+
+                                        <i class="bi bi-chevron-right"></i>
+                                    </a>
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+        else
+        {
+            <div class="td-empty-state">
+
+                <div class="td-empty-icon">
+                    <i class="bi bi-inbox"></i>
+                </div>
+
+                <strong>No recent technical orders</strong>
+
+                <span>
+                    Technical order activity will appear here.
+                </span>
+
+            </div>
+        }
+
+    </div>
+
+
+    <!-- =====================================================
+         RECENT CONNECTIONS
+    ====================================================== -->
+    <div class="td-card td-connections-card td-full-width-card">
+
+        <div class="td-card-header">
+            <div>
+                <h5>Recent Connections</h5>
+                <span>
+                    Latest customer connection records.
+                </span>
+            </div>
+
+            <a asp-controller="TechnicalConnection"
+               asp-action="Index"
+               class="td-view-all">
+                View all
+                <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+
+
+        @if (recentConnections.Any())
+        {
+            <div class="td-connections-grid">
+
+                @foreach (var connection in recentConnections)
+                {
+                    var connectionStatusClass = "pending";
+
+                    if (connection.Status == "Active")
+                    {
+                        connectionStatusClass = "active";
+                    }
+                    else if (connection.Status == "Rejected")
+                    {
+                        connectionStatusClass = "danger";
+                    }
+                    else if (connection.Status == "Installation Pending" ||
+                             connection.Status == "Payment Verified")
+                    {
+                        connectionStatusClass = "warning";
+                    }
+
+                    <div class="td-connection-card">
+
+                        <div class="td-connection-card-top">
+
+                            <div class="td-connection-main-icon">
+                                <i class="bi bi-router"></i>
+                            </div>
+
+                            <span class="td-status @connectionStatusClass">
+                                <i class="bi bi-circle-fill"></i>
+                                @(connection.Status ?? "Pending")
+                            </span>
+
+                        </div>
+
+
+                        <div class="td-connection-account">
+                            @(connection.AccountId ?? "Account ID Pending")
+                        </div>
+
+
+                        <div class="td-connection-customer">
+
+                            <strong>
+                                @(connection.Customer?.FullName ?? "Unknown Customer")
+                            </strong>
+
+                            <span>
+                                @(connection.ConnectionType ?? "-")
+                            </span>
+
+                        </div>
+
+
+                        <div class="td-connection-details">
+
+                            <div>
+                                <span>Plan</span>
+                                <strong>
+                                    @(connection.Plan?.PlanName ?? "-")
+                                </strong>
+                            </div>
+
+                            <div>
+                                <span>Router</span>
+                                <strong>
+                                    @(string.IsNullOrWhiteSpace(connection.RouterSerial)
+                                        ? "Not assigned"
+                                        : connection.RouterSerial)
+                                </strong>
+                            </div>
+
+                        </div>
+
+
+                        <a asp-controller="TechnicalConnection"
+                           asp-action="Details"
+                           asp-route-id="@connection.ConnectionId"
+                           class="td-connection-link">
+
+                            View connection
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+
+                    </div>
+                }
+
+            </div>
+        }
+        else
+        {
+            <div class="td-empty-state">
+
+                <div class="td-empty-icon">
+                    <i class="bi bi-diagram-3"></i>
+                </div>
+
+                <strong>No connections yet</strong>
+
+                <span>
+                    Connection records will appear here after
+                    technical processing.
+                </span>
+
+            </div>
+        }
+
+    </div>
+
+</div>

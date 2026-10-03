@@ -1,0 +1,1541 @@
+﻿@model NEXUS_eProject.Models.AdminDashboardViewModel
+
+@using System.Text.Json
+
+@{
+    ViewData["Title"] = "Admin Dashboard";
+    ViewData["PageTitle"] = "Dashboard";
+    ViewData["PageSubtitle"] = "NEXUS system analytics and operations";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    var applicationLabelsJson =
+        JsonSerializer.Serialize(Model.ApplicationChartLabels);
+
+    var applicationDataJson =
+        JsonSerializer.Serialize(Model.ApplicationChartData);
+
+    var revenueLabelsJson =
+        JsonSerializer.Serialize(Model.RevenueChartLabels);
+
+    var revenueDataJson =
+        JsonSerializer.Serialize(Model.RevenueChartData);
+
+    var connectionStatusLabelsJson =
+        JsonSerializer.Serialize(Model.ConnectionStatusLabels);
+
+    var connectionStatusDataJson =
+        JsonSerializer.Serialize(Model.ConnectionStatusData);
+
+    var connectionTypeLabelsJson =
+        JsonSerializer.Serialize(Model.ConnectionTypeLabels);
+
+    var connectionTypeDataJson =
+        JsonSerializer.Serialize(Model.ConnectionTypeData);
+}
+
+
+<!-- =========================================================
+     DASHBOARD HEADER
+     ========================================================= -->
+
+<div class="dashboard-header admin-dashboard-header">
+
+    <div>
+        <span class="dashboard-eyebrow">
+            <i class="bi bi-grid-1x2-fill"></i>
+            NEXUS CONTROL CENTER
+        </span>
+
+        <h2>Welcome back, Admin</h2>
+
+        <p>
+            Monitor customers, applications, connections,
+            billing and system performance from one place.
+        </p>
+    </div>
+
+    <div class="dashboard-header-actions">
+
+        <span class="dashboard-live-badge">
+            <span class="dashboard-live-dot"></span>
+            Live System
+        </span>
+
+        <a asp-controller="Employees"
+           asp-action="Index"
+           class="dashboard-action">
+
+            <i class="bi bi-people"></i>
+            Manage System
+
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     PRIMARY KPI CARDS
+     ========================================================= -->
+
+<div class="admin-kpi-grid">
+
+    <!-- Customers -->
+
+    <div class="admin-kpi-card kpi-purple">
+
+        <div class="admin-kpi-top">
+
+            <div class="admin-kpi-icon">
+                <i class="bi bi-people-fill"></i>
+            </div>
+
+            <span class="admin-kpi-badge">
+                @Model.ActiveCustomers active
+            </span>
+
+        </div>
+
+        <div class="admin-kpi-content">
+
+            <span class="admin-kpi-label">
+                Total Customers
+            </span>
+
+            <strong class="admin-kpi-value">
+                @Model.TotalCustomers
+            </strong>
+
+            <span class="admin-kpi-description">
+                Registered NEXUS customers
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- Applications -->
+
+    <div class="admin-kpi-card kpi-blue">
+
+        <div class="admin-kpi-top">
+
+            <div class="admin-kpi-icon">
+                <i class="bi bi-file-earmark-text-fill"></i>
+            </div>
+
+            <span class="admin-kpi-badge">
+                @Model.PendingOrders pending
+            </span>
+
+        </div>
+
+        <div class="admin-kpi-content">
+
+            <span class="admin-kpi-label">
+                Applications
+            </span>
+
+            <strong class="admin-kpi-value">
+                @Model.TotalOrders
+            </strong>
+
+            <span class="admin-kpi-description">
+                Total connection applications
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- Active Connections -->
+
+    <div class="admin-kpi-card kpi-green">
+
+        <div class="admin-kpi-top">
+
+            <div class="admin-kpi-icon">
+                <i class="bi bi-router-fill"></i>
+            </div>
+
+            <span class="admin-kpi-badge">
+                @Model.ConnectionsActivatedThisMonth this month
+            </span>
+
+        </div>
+
+        <div class="admin-kpi-content">
+
+            <span class="admin-kpi-label">
+                Active Connections
+            </span>
+
+            <strong class="admin-kpi-value">
+                @Model.ActiveConnections
+            </strong>
+
+            <span class="admin-kpi-description">
+                @Model.TotalConnections total connections
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- Revenue -->
+
+    <div class="admin-kpi-card kpi-orange">
+
+        <div class="admin-kpi-top">
+
+            <div class="admin-kpi-icon">
+                <i class="bi bi-cash-stack"></i>
+            </div>
+
+            <span class="admin-kpi-badge">
+                Verified
+            </span>
+
+        </div>
+
+        <div class="admin-kpi-content">
+
+            <span class="admin-kpi-label">
+                Total Revenue
+            </span>
+
+            <strong class="admin-kpi-value admin-kpi-money">
+                Rs. @Model.TotalRevenue.ToString("N0")
+            </strong>
+
+            <span class="admin-kpi-description">
+                Rs. @Model.CurrentMonthRevenue.ToString("N0") this month
+            </span>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     OPERATIONAL TRACKING
+     ========================================================= -->
+
+<div class="admin-operations-grid">
+
+    <div class="admin-operation-card">
+
+        <div class="admin-operation-icon purple">
+            <i class="bi bi-person-badge"></i>
+        </div>
+
+        <div class="admin-operation-info">
+            <span>Employees</span>
+            <strong>@Model.TotalEmployees</strong>
+            <small>@Model.ActiveEmployees active</small>
+        </div>
+
+    </div>
+
+
+    <div class="admin-operation-card">
+
+        <div class="admin-operation-icon blue">
+            <i class="bi bi-hourglass-split"></i>
+        </div>
+
+        <div class="admin-operation-info">
+            <span>Payment Pending</span>
+            <strong>@Model.PendingPayments</strong>
+            <small>Awaiting verification</small>
+        </div>
+
+    </div>
+
+
+    <div class="admin-operation-card">
+
+        <div class="admin-operation-icon orange">
+            <i class="bi bi-tools"></i>
+        </div>
+
+        <div class="admin-operation-info">
+            <span>Installation Queue</span>
+            <strong>@Model.ConnectionsAwaitingInstallation</strong>
+            <small>Ready / in progress</small>
+        </div>
+
+    </div>
+
+
+    <div class="admin-operation-card">
+
+        <div class="admin-operation-icon green">
+            <i class="bi bi-receipt"></i>
+        </div>
+
+        <div class="admin-operation-info">
+            <span>Outstanding</span>
+            <strong>Rs. @Model.OutstandingAmount.ToString("N0")</strong>
+            <small>Remaining bill balance</small>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     MAIN ANALYTICS
+     ========================================================= -->
+
+<div class="admin-analytics-grid">
+
+    <!-- Applications Chart -->
+
+    <div class="dashboard-card admin-chart-card">
+
+        <div class="admin-chart-header">
+
+            <div>
+                <span class="admin-chart-eyebrow">
+                    APPLICATION ANALYTICS
+                </span>
+
+                <h5>Application Trend</h5>
+
+                <p>
+                    Connection applications received during
+                    the last six months.
+                </p>
+            </div>
+
+            <div class="admin-chart-icon purple">
+                <i class="bi bi-graph-up-arrow"></i>
+            </div>
+
+        </div>
+
+        <div class="admin-chart-container admin-chart-large">
+            <canvas id="applicationsChart"></canvas>
+        </div>
+
+    </div>
+
+
+    <!-- Revenue Chart -->
+
+    <div class="dashboard-card admin-chart-card">
+
+        <div class="admin-chart-header">
+
+            <div>
+                <span class="admin-chart-eyebrow">
+                    FINANCIAL ANALYTICS
+                </span>
+
+                <h5>Revenue Performance</h5>
+
+                <p>
+                    Verified customer payments during
+                    the last six months.
+                </p>
+            </div>
+
+            <div class="admin-chart-icon green">
+                <i class="bi bi-bar-chart-line-fill"></i>
+            </div>
+
+        </div>
+
+        <div class="admin-chart-container admin-chart-large">
+            <canvas id="revenueChart"></canvas>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     DISTRIBUTION CHARTS
+     ========================================================= -->
+
+<div class="admin-distribution-grid">
+
+    <!-- Connection Status -->
+
+    <div class="dashboard-card admin-chart-card">
+
+        <div class="admin-chart-header">
+
+            <div>
+                <span class="admin-chart-eyebrow">
+                    NETWORK
+                </span>
+
+                <h5>Connection Status</h5>
+
+                <p>
+                    Current connection workflow distribution.
+                </p>
+            </div>
+
+            <div class="admin-chart-icon blue">
+                <i class="bi bi-router"></i>
+            </div>
+
+        </div>
+
+        <div class="admin-chart-container admin-chart-doughnut">
+            <canvas id="connectionStatusChart"></canvas>
+        </div>
+
+    </div>
+
+
+    <!-- Connection Types -->
+
+    <div class="dashboard-card admin-chart-card">
+
+        <div class="admin-chart-header">
+
+            <div>
+                <span class="admin-chart-eyebrow">
+                    SERVICES
+                </span>
+
+                <h5>Connection Types</h5>
+
+                <p>
+                    Distribution of customer connection services.
+                </p>
+            </div>
+
+            <div class="admin-chart-icon purple">
+                <i class="bi bi-wifi"></i>
+            </div>
+
+        </div>
+
+        <div class="admin-chart-container admin-chart-doughnut">
+            <canvas id="connectionTypeChart"></canvas>
+        </div>
+
+    </div>
+
+
+    <!-- Billing Health -->
+
+    <div class="dashboard-card admin-billing-card">
+
+        <div class="admin-chart-header">
+
+            <div>
+                <span class="admin-chart-eyebrow">
+                    BILLING
+                </span>
+
+                <h5>Billing Health</h5>
+
+                <p>
+                    Current invoice and payment overview.
+                </p>
+            </div>
+
+            <div class="admin-chart-icon orange">
+                <i class="bi bi-receipt-cutoff"></i>
+            </div>
+
+        </div>
+
+
+        <div class="admin-billing-list">
+
+            <div class="admin-billing-row">
+
+                <div>
+                    <span class="billing-dot paid"></span>
+                    <span>Paid Bills</span>
+                </div>
+
+                <strong>@Model.PaidBills</strong>
+
+            </div>
+
+
+            <div class="admin-billing-row">
+
+                <div>
+                    <span class="billing-dot unpaid"></span>
+                    <span>Unpaid Bills</span>
+                </div>
+
+                <strong>@Model.UnpaidBills</strong>
+
+            </div>
+
+
+            <div class="admin-billing-row">
+
+                <div>
+                    <span class="billing-dot partial"></span>
+                    <span>Partially Paid</span>
+                </div>
+
+                <strong>@Model.PartiallyPaidBills</strong>
+
+            </div>
+
+
+            <div class="admin-billing-row">
+
+                <div>
+                    <span class="billing-dot pending"></span>
+                    <span>Pending Verification</span>
+                </div>
+
+                <strong>@Model.PendingPayments</strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="admin-billing-total">
+
+            <span>Total Billed</span>
+
+            <strong>
+                Rs. @Model.TotalBilledAmount.ToString("N2")
+            </strong>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     WORKFLOW TRACKING
+     ========================================================= -->
+
+<div class="dashboard-card admin-workflow-card">
+
+    <div class="admin-section-header">
+
+        <div>
+            <span class="admin-chart-eyebrow">
+                OPERATIONS
+            </span>
+
+            <h5>Connection Workflow</h5>
+
+            <p>
+                Live operational stages across the NEXUS connection process.
+            </p>
+        </div>
+
+        <i class="bi bi-diagram-3 admin-section-header-icon"></i>
+
+    </div>
+
+
+    <div class="admin-workflow">
+
+        <div class="admin-workflow-item">
+
+            <div class="workflow-icon">
+                <i class="bi bi-file-earmark-plus"></i>
+            </div>
+
+            <span>Pending</span>
+
+            <strong>@Model.PendingOrders</strong>
+
+        </div>
+
+
+        <div class="workflow-line"></div>
+
+
+        <div class="admin-workflow-item">
+
+            <div class="workflow-icon">
+                <i class="bi bi-shop-window"></i>
+            </div>
+
+            <span>Retail Accepted</span>
+
+            <strong>@Model.RetailAcceptedOrders</strong>
+
+        </div>
+
+
+        <div class="workflow-line"></div>
+
+
+        <div class="admin-workflow-item">
+
+            <div class="workflow-icon">
+                <i class="bi bi-check2-circle"></i>
+            </div>
+
+            <span>Feasible</span>
+
+            <strong>@Model.FeasibleOrders</strong>
+
+        </div>
+
+
+        <div class="workflow-line"></div>
+
+
+        <div class="admin-workflow-item">
+
+            <div class="workflow-icon">
+                <i class="bi bi-credit-card"></i>
+            </div>
+
+            <span>Payment</span>
+
+            <strong>@Model.PaymentPendingConnections</strong>
+
+        </div>
+
+
+        <div class="workflow-line"></div>
+
+
+        <div class="admin-workflow-item">
+
+            <div class="workflow-icon">
+                <i class="bi bi-tools"></i>
+            </div>
+
+            <span>Installation</span>
+
+            <strong>@Model.InstallationPendingConnections</strong>
+
+        </div>
+
+
+        <div class="workflow-line"></div>
+
+
+        <div class="admin-workflow-item workflow-active">
+
+            <div class="workflow-icon">
+                <i class="bi bi-broadcast-pin"></i>
+            </div>
+
+            <span>Active</span>
+
+            <strong>@Model.ActiveConnections</strong>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     RECENT ACTIVITY
+     ========================================================= -->
+
+<div class="admin-recent-grid">
+
+    <!-- Recent Applications -->
+
+    <div class="dashboard-card admin-recent-card">
+
+        <div class="admin-section-header">
+
+            <div>
+                <span class="admin-chart-eyebrow">
+                    RECENT ACTIVITY
+                </span>
+
+                <h5>Latest Applications</h5>
+
+                <p>Recently submitted connection requests.</p>
+            </div>
+
+            <i class="bi bi-file-earmark-text admin-section-header-icon"></i>
+
+        </div>
+
+
+        @if (Model.RecentOrders != null &&
+             Model.RecentOrders.Any())
+        {
+            <div class="admin-recent-list">
+
+                @foreach (var order in Model.RecentOrders)
+                {
+                    <div class="admin-recent-item">
+
+                        <div class="admin-recent-icon purple">
+                            <i class="bi bi-wifi"></i>
+                        </div>
+
+                        <div class="admin-recent-info">
+
+                            <div>
+                                <strong>
+                                    @order.OrderNumber
+                                </strong>
+
+                                <span class="admin-status-pill">
+                                    @(order.Status ?? "Pending")
+                                </span>
+                            </div>
+
+                            <span>
+                                @(order.Customer?.FullName ?? "Customer")
+                                •
+                                @(order.ConnectionType ?? "Connection")
+                            </span>
+
+                        </div>
+
+                        <small>
+                            @order.CreatedAt.ToString("dd MMM")
+                        </small>
+
+                    </div>
+                }
+
+            </div>
+        }
+        else
+        {
+            <div class="admin-dashboard-empty">
+
+                <i class="bi bi-inbox"></i>
+
+                <span>No applications available.</span>
+
+            </div>
+        }
+
+    </div>
+
+
+    <!-- Recent Payments -->
+
+    <div class="dashboard-card admin-recent-card">
+
+        <div class="admin-section-header">
+
+            <div>
+                <span class="admin-chart-eyebrow">
+                    FINANCE ACTIVITY
+                </span>
+
+                <h5>Latest Payments</h5>
+
+                <p>Recent customer payment activity.</p>
+            </div>
+
+            <i class="bi bi-wallet2 admin-section-header-icon"></i>
+
+        </div>
+
+
+        @if (Model.RecentPayments != null &&
+             Model.RecentPayments.Any())
+        {
+            <div class="admin-recent-list">
+
+                @foreach (var payment in Model.RecentPayments)
+                {
+                    var paymentStatus =
+                        payment.Status ?? "Pending";
+
+                    var paymentClass =
+                        paymentStatus.Equals(
+                            "Paid",
+                            StringComparison.OrdinalIgnoreCase)
+                            ? "success"
+                            : paymentStatus.Equals(
+                                "Rejected",
+                                StringComparison.OrdinalIgnoreCase)
+                                ? "danger"
+                                : "warning";
+
+                    <div class="admin-recent-item">
+
+                        <div class="admin-recent-icon green">
+                            <i class="bi bi-cash"></i>
+                        </div>
+
+                        <div class="admin-recent-info">
+
+                            <div>
+                                <strong>
+                                    @(payment.PaymentNumber ?? $"Payment #{payment.PaymentId}")
+                                </strong>
+
+                                <span class="admin-status-pill @paymentClass">
+                                    @paymentStatus
+                                </span>
+                            </div>
+
+                            <span>
+                                @(payment.Customer?.FullName ?? "Customer")
+                                •
+                                @payment.PaymentMethod
+                            </span>
+
+                        </div>
+
+                        <div class="admin-payment-amount">
+
+                            <strong>
+                                Rs. @payment.Amount.ToString("N0")
+                            </strong>
+
+                            <small>
+                                @payment.PaymentDate.ToString("dd MMM")
+                            </small>
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+        }
+        else
+        {
+            <div class="admin-dashboard-empty">
+
+                <i class="bi bi-wallet2"></i>
+
+                <span>No payments available.</span>
+
+            </div>
+        }
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     SYSTEM MANAGEMENT
+     ========================================================= -->
+
+<div class="dashboard-card admin-system-card">
+
+    <div class="admin-section-header">
+
+        <div>
+            <span class="admin-chart-eyebrow">
+                SYSTEM MANAGEMENT
+            </span>
+
+            <h5>NEXUS Resources</h5>
+
+            <p>
+                Quick access to core administrative modules.
+            </p>
+        </div>
+
+        <i class="bi bi-gear admin-section-header-icon"></i>
+
+    </div>
+
+
+    <div class="admin-resource-grid">
+
+        <a asp-controller="Employees"
+           asp-action="Index"
+           class="admin-resource-item">
+
+            <div class="admin-resource-icon purple">
+                <i class="bi bi-people"></i>
+            </div>
+
+            <div>
+                <strong>@Model.TotalEmployees</strong>
+                <span>Employees</span>
+            </div>
+
+            <i class="bi bi-arrow-up-right"></i>
+
+        </a>
+
+
+        <a asp-controller="Shops"
+           asp-action="Index"
+           class="admin-resource-item">
+
+            <div class="admin-resource-icon blue">
+                <i class="bi bi-shop"></i>
+            </div>
+
+            <div>
+                <strong>@Model.TotalShops</strong>
+                <span>Shops</span>
+            </div>
+
+            <i class="bi bi-arrow-up-right"></i>
+
+        </a>
+
+
+        <a asp-controller="Vendors"
+           asp-action="Index"
+           class="admin-resource-item">
+
+            <div class="admin-resource-icon orange">
+                <i class="bi bi-truck"></i>
+            </div>
+
+            <div>
+                <strong>@Model.TotalVendors</strong>
+                <span>Vendors</span>
+            </div>
+
+            <i class="bi bi-arrow-up-right"></i>
+
+        </a>
+
+
+        <a asp-controller="Products"
+           asp-action="Index"
+           class="admin-resource-item">
+
+            <div class="admin-resource-icon green">
+                <i class="bi bi-box-seam"></i>
+            </div>
+
+            <div>
+                <strong>@Model.TotalProducts</strong>
+                <span>Products</span>
+            </div>
+
+            <i class="bi bi-arrow-up-right"></i>
+
+        </a>
+
+
+        <a asp-controller="Plans"
+           asp-action="Index"
+           class="admin-resource-item">
+
+            <div class="admin-resource-icon purple">
+                <i class="bi bi-wifi"></i>
+            </div>
+
+            <div>
+                <strong>@Model.TotalPlans</strong>
+                <span>Internet Plans</span>
+            </div>
+
+            <i class="bi bi-arrow-up-right"></i>
+
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     CHART.JS
+     ========================================================= -->
+
+@section Scripts {
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+            // =================================================
+            // DATA FROM ASP.NET CORE
+            // =================================================
+
+            const applicationLabels =
+                @Html.Raw(applicationLabelsJson);
+
+            const applicationData =
+                @Html.Raw(applicationDataJson);
+
+            const revenueLabels =
+                @Html.Raw(revenueLabelsJson);
+
+            const revenueData =
+                @Html.Raw(revenueDataJson);
+
+            const connectionStatusLabels =
+                @Html.Raw(connectionStatusLabelsJson);
+
+            const connectionStatusData =
+                @Html.Raw(connectionStatusDataJson);
+
+            const connectionTypeLabels =
+                @Html.Raw(connectionTypeLabelsJson);
+
+            const connectionTypeData =
+                @Html.Raw(connectionTypeDataJson);
+
+
+            // =================================================
+            // GLOBAL CHART SETTINGS
+            // =================================================
+
+            Chart.defaults.color = "#8f8a99";
+            Chart.defaults.font.family = "'Segoe UI', sans-serif";
+
+            const gridColor = "rgba(255,255,255,0.055)";
+            const purple = "#9b7cff";
+            const purpleSoft = "rgba(155,124,255,0.16)";
+            const blue = "#68aaff";
+            const green = "#72d6a0";
+            const orange = "#f5a65b";
+            const pink = "#f276b1";
+            const yellow = "#f5c451";
+            const red = "#ff7f8f";
+
+
+            // =================================================
+            // APPLICATION TREND
+            // =================================================
+
+            const applicationCanvas =
+                document.getElementById("applicationsChart");
+
+            if (applicationCanvas) {
+
+                const context =
+                    applicationCanvas.getContext("2d");
+
+                const gradient =
+                    context.createLinearGradient(
+                        0,
+                        0,
+                        0,
+                        280
+                    );
+
+                gradient.addColorStop(
+                    0,
+                    "rgba(155,124,255,0.30)"
+                );
+
+                gradient.addColorStop(
+                    1,
+                    "rgba(155,124,255,0.00)"
+                );
+
+
+                new Chart(applicationCanvas, {
+
+                    type: "line",
+
+                    data: {
+
+                        labels: applicationLabels,
+
+                        datasets: [
+                            {
+                                label: "Applications",
+
+                                data: applicationData,
+
+                                borderColor: purple,
+
+                                backgroundColor: gradient,
+
+                                borderWidth: 2.5,
+
+                                fill: true,
+
+                                tension: 0.42,
+
+                                pointRadius: 4,
+
+                                pointHoverRadius: 6,
+
+                                pointBackgroundColor: purple,
+
+                                pointBorderColor: "#1c1922",
+
+                                pointBorderWidth: 3
+                            }
+                        ]
+                    },
+
+                    options: {
+
+                        responsive: true,
+
+                        maintainAspectRatio: false,
+
+                        interaction: {
+                            intersect: false,
+                            mode: "index"
+                        },
+
+                        plugins: {
+
+                            legend: {
+                                display: false
+                            },
+
+                            tooltip: {
+
+                                backgroundColor: "#24202c",
+
+                                titleColor: "#ffffff",
+
+                                bodyColor: "#c8c4d0",
+
+                                borderColor:
+                                    "rgba(155,124,255,0.25)",
+
+                                borderWidth: 1,
+
+                                padding: 12,
+
+                                displayColors: false
+                            }
+                        },
+
+                        scales: {
+
+                            x: {
+
+                                grid: {
+                                    display: false
+                                },
+
+                                border: {
+                                    display: false
+                                },
+
+                                ticks: {
+                                    color: "#777382",
+                                    font: {
+                                        size: 10
+                                    }
+                                }
+                            },
+
+                            y: {
+
+                                beginAtZero: true,
+
+                                ticks: {
+
+                                    precision: 0,
+
+                                    color: "#777382",
+
+                                    font: {
+                                        size: 10
+                                    }
+                                },
+
+                                grid: {
+                                    color: gridColor
+                                },
+
+                                border: {
+                                    display: false
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+
+            // =================================================
+            // REVENUE CHART
+            // =================================================
+
+            const revenueCanvas =
+                document.getElementById("revenueChart");
+
+            if (revenueCanvas) {
+
+                new Chart(revenueCanvas, {
+
+                    type: "bar",
+
+                    data: {
+
+                        labels: revenueLabels,
+
+                        datasets: [
+                            {
+                                label: "Revenue",
+
+                                data: revenueData,
+
+                                backgroundColor:
+                                    "rgba(114,214,160,0.72)",
+
+                                hoverBackgroundColor:
+                                    green,
+
+                                borderColor:
+                                    "rgba(114,214,160,0.9)",
+
+                                borderWidth: 1,
+
+                                borderRadius: 7,
+
+                                borderSkipped: false,
+
+                                maxBarThickness: 38
+                            }
+                        ]
+                    },
+
+                    options: {
+
+                        responsive: true,
+
+                        maintainAspectRatio: false,
+
+                        interaction: {
+                            intersect: false,
+                            mode: "index"
+                        },
+
+                        plugins: {
+
+                            legend: {
+                                display: false
+                            },
+
+                            tooltip: {
+
+                                backgroundColor: "#24202c",
+
+                                titleColor: "#ffffff",
+
+                                bodyColor: "#c8c4d0",
+
+                                borderColor:
+                                    "rgba(114,214,160,0.25)",
+
+                                borderWidth: 1,
+
+                                padding: 12,
+
+                                displayColors: false,
+
+                                callbacks: {
+
+                                    label: function (context) {
+
+                                        return "Rs. " +
+                                            Number(
+                                                context.raw
+                                            ).toLocaleString();
+                                    }
+                                }
+                            }
+                        },
+
+                        scales: {
+
+                            x: {
+
+                                grid: {
+                                    display: false
+                                },
+
+                                border: {
+                                    display: false
+                                },
+
+                                ticks: {
+                                    color: "#777382",
+                                    font: {
+                                        size: 10
+                                    }
+                                }
+                            },
+
+                            y: {
+
+                                beginAtZero: true,
+
+                                ticks: {
+
+                                    color: "#777382",
+
+                                    font: {
+                                        size: 10
+                                    },
+
+                                    callback: function (value) {
+
+                                        if (value >= 1000000) {
+
+                                            return "Rs. " +
+                                                (
+                                                    value /
+                                                    1000000
+                                                ).toFixed(1) +
+                                                "M";
+                                        }
+
+                                        if (value >= 1000) {
+
+                                            return "Rs. " +
+                                                (
+                                                    value /
+                                                    1000
+                                                ).toFixed(0) +
+                                                "K";
+                                        }
+
+                                        return "Rs. " + value;
+                                    }
+                                },
+
+                                grid: {
+                                    color: gridColor
+                                },
+
+                                border: {
+                                    display: false
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+
+            // =================================================
+            // CONNECTION STATUS DOUGHNUT
+            // =================================================
+
+            const connectionStatusCanvas =
+                document.getElementById(
+                    "connectionStatusChart"
+                );
+
+            if (connectionStatusCanvas) {
+
+                new Chart(
+                    connectionStatusCanvas,
+                    {
+
+                        type: "doughnut",
+
+                        data: {
+
+                            labels:
+                                connectionStatusLabels,
+
+                            datasets: [
+                                {
+                                    data:
+                                        connectionStatusData,
+
+                                    backgroundColor: [
+                                        purple,
+                                        green,
+                                        blue,
+                                        orange,
+                                        pink,
+                                        yellow,
+                                        red,
+                                        "#7dd3fc"
+                                    ],
+
+                                    borderColor: "#1c1922",
+
+                                    borderWidth: 4,
+
+                                    hoverOffset: 5
+                                }
+                            ]
+                        },
+
+                        options: {
+
+                            responsive: true,
+
+                            maintainAspectRatio: false,
+
+                            cutout: "72%",
+
+                            plugins: {
+
+                                legend: {
+
+                                    position: "bottom",
+
+                                    labels: {
+
+                                        color: "#9b97a7",
+
+                                        padding: 15,
+
+                                        usePointStyle: true,
+
+                                        pointStyle: "circle",
+
+                                        boxWidth: 7,
+
+                                        boxHeight: 7,
+
+                                        font: {
+                                            size: 10
+                                        }
+                                    }
+                                },
+
+                                tooltip: {
+
+                                    backgroundColor:
+                                        "#24202c",
+
+                                    titleColor:
+                                        "#ffffff",
+
+                                    bodyColor:
+                                        "#c8c4d0",
+
+                                    borderColor:
+                                        "rgba(155,124,255,0.25)",
+
+                                    borderWidth: 1,
+
+                                    padding: 11
+                                }
+                            }
+                        }
+                    }
+                );
+            }
+
+
+            // =================================================
+            // CONNECTION TYPES DOUGHNUT
+            // =================================================
+
+            const connectionTypeCanvas =
+                document.getElementById(
+                    "connectionTypeChart"
+                );
+
+            if (connectionTypeCanvas) {
+
+                new Chart(
+                    connectionTypeCanvas,
+                    {
+
+                        type: "doughnut",
+
+                        data: {
+
+                            labels:
+                                connectionTypeLabels,
+
+                            datasets: [
+                                {
+                                    data:
+                                        connectionTypeData,
+
+                                    backgroundColor: [
+                                        blue,
+                                        purple,
+                                        green,
+                                        orange,
+                                        pink,
+                                        yellow
+                                    ],
+
+                                    borderColor: "#1c1922",
+
+                                    borderWidth: 4,
+
+                                    hoverOffset: 5
+                                }
+                            ]
+                        },
+
+                        options: {
+
+                            responsive: true,
+
+                            maintainAspectRatio: false,
+
+                            cutout: "72%",
+
+                            plugins: {
+
+                                legend: {
+
+                                    position: "bottom",
+
+                                    labels: {
+
+                                        color: "#9b97a7",
+
+                                        padding: 15,
+
+                                        usePointStyle: true,
+
+                                        pointStyle: "circle",
+
+                                        boxWidth: 7,
+
+                                        boxHeight: 7,
+
+                                        font: {
+                                            size: 10
+                                        }
+                                    }
+                                },
+
+                                tooltip: {
+
+                                    backgroundColor:
+                                        "#24202c",
+
+                                    titleColor:
+                                        "#ffffff",
+
+                                    bodyColor:
+                                        "#c8c4d0",
+
+                                    borderColor:
+                                        "rgba(104,170,255,0.25)",
+
+                                    borderWidth: 1,
+
+                                    padding: 11
+                                }
+                            }
+                        }
+                    }
+                );
+            }
+
+        });
+
+    </script>
+}

@@ -1,0 +1,456 @@
+﻿@model IEnumerable<NEXUS_eProject.Models.Payment>
+
+@{
+    ViewData["Title"] = "Pending Payments";
+    ViewData["PageTitle"] = "Pending Payments";
+
+    Layout = "~/Views/Shared/_AccountsLayout.cshtml";
+
+    var payments = Model?.ToList()
+        ?? new List<NEXUS_eProject.Models.Payment>();
+}
+
+
+<div class="ap-page">
+
+
+    <!-- =========================================================
+         PAGE HEADER
+    ========================================================== -->
+
+    <div class="ap-page-header">
+
+        <div>
+
+            <div class="ap-eyebrow">
+
+                <i class="bi bi-hourglass-split"></i>
+
+                PAYMENT VERIFICATION
+
+            </div>
+
+
+            <h2>
+                Pending Payments
+            </h2>
+
+
+            <p>
+                Review payments submitted by customers and verify
+                or reject them.
+            </p>
+
+        </div>
+
+
+        <div class="ap-header-count">
+
+            <div class="ap-header-count-icon">
+
+                <i class="bi bi-credit-card"></i>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    WAITING
+                </span>
+
+                <strong>
+                    @payments.Count
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================================================
+         SUCCESS MESSAGE
+    ========================================================== -->
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="ap-alert ap-alert-success">
+
+            <i class="bi bi-check-circle-fill"></i>
+
+            <span>
+                @TempData["Success"]
+            </span>
+
+        </div>
+    }
+
+
+
+    <!-- =========================================================
+         ERROR MESSAGE
+    ========================================================== -->
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="ap-alert ap-alert-error">
+
+            <i class="bi bi-exclamation-circle-fill"></i>
+
+            <span>
+                @TempData["Error"]
+            </span>
+
+        </div>
+    }
+
+
+
+    <!-- =========================================================
+         MAIN PANEL
+    ========================================================== -->
+
+    <div class="ap-panel">
+
+
+        <!-- =====================================================
+             SEARCH TOOLBAR
+        ====================================================== -->
+
+        <div class="ap-toolbar">
+
+            <form asp-controller="AccountsPayment"
+                  asp-action="Pending"
+                  method="get"
+                  class="ap-search-form">
+
+
+                <div class="ap-search-box">
+
+                    <i class="bi bi-search"></i>
+
+
+                    <input type="text"
+                           name="search"
+                           value="@ViewBag.Search"
+                           placeholder="Search payment, bill, account or customer..." />
+
+                </div>
+
+
+                <button type="submit"
+                        class="ap-btn ap-btn-primary">
+
+                    <i class="bi bi-search"></i>
+
+                    Search
+
+                </button>
+
+
+                @if (!string.IsNullOrWhiteSpace(
+                    Convert.ToString(ViewBag.Search)))
+                {
+                    <a asp-controller="AccountsPayment"
+                       asp-action="Pending"
+                       class="ap-btn ap-btn-secondary">
+
+                        <i class="bi bi-x-lg"></i>
+
+                        Clear
+
+                    </a>
+                }
+
+            </form>
+
+        </div>
+
+
+
+        <!-- =====================================================
+             PENDING PAYMENTS TABLE
+        ====================================================== -->
+
+        @if (payments.Any())
+        {
+            <div class="ap-table-wrap">
+
+
+                <table class="ap-table">
+
+
+                    <!-- =========================================
+                         TABLE HEADER
+                    ========================================== -->
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                PAYMENT ID
+                            </th>
+
+                            <th>
+                                BILL
+                            </th>
+
+                            <th>
+                                CUSTOMER
+                            </th>
+
+                            <th>
+                                ACCOUNT
+                            </th>
+
+                            <th>
+                                AMOUNT
+                            </th>
+
+                            <th>
+                                METHOD
+                            </th>
+
+                            <th>
+                                DATE
+                            </th>
+
+                            <th>
+                                STATUS
+                            </th>
+
+                            <th>
+                                ACTION
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+
+                    <!-- =========================================
+                         TABLE BODY
+                    ========================================== -->
+
+                    <tbody>
+
+                        @foreach (var payment in payments)
+                        {
+                            <tr>
+
+
+                                <!-- PAYMENT NUMBER -->
+
+                                <td>
+
+                                    <span class="ap-code">
+
+                                        @payment.PaymentNumber
+
+                                    </span>
+
+                                </td>
+
+
+
+                                <!-- BILL -->
+
+                                <td>
+
+                                    @if (payment.Bill != null)
+                                    {
+                                        <span class="ap-code-muted">
+
+                                            @payment.Bill.BillNumber
+
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="ap-na">
+
+                                            -
+
+                                        </span>
+                                    }
+
+                                </td>
+
+
+
+                                <!-- CUSTOMER -->
+
+                                <td>
+
+                                    <div class="ap-customer">
+
+                                        <strong>
+
+                                            @(payment.Customer?.FullName ?? "-")
+
+                                        </strong>
+
+
+                                        <span>
+
+                                            @(payment.Customer?.Phone ?? "-")
+
+                                        </span>
+
+                                    </div>
+
+                                </td>
+
+
+
+                                <!-- ACCOUNT -->
+
+                                <td>
+
+                                    <span class="ap-account">
+
+                                        @payment.AccountId
+
+                                    </span>
+
+                                </td>
+
+
+
+                                <!-- AMOUNT -->
+
+                                <td>
+
+                                    <strong class="ap-money">
+
+                                        Rs. @payment.Amount.ToString("N2")
+
+                                    </strong>
+
+                                </td>
+
+
+
+                                <!-- PAYMENT METHOD -->
+
+                                <td>
+
+                                    <span class="ap-method">
+
+                                        <i class="bi bi-wallet2"></i>
+
+                                        @payment.PaymentMethod
+
+                                    </span>
+
+                                </td>
+
+
+
+                                <!-- DATE -->
+
+                                <td>
+
+                                    <div class="ap-date">
+
+                                        <strong>
+
+                                            @payment.PaymentDate.ToString("dd MMM yyyy")
+
+                                        </strong>
+
+
+                                        <span>
+
+                                            @payment.PaymentDate.ToString("hh:mm tt")
+
+                                        </span>
+
+                                    </div>
+
+                                </td>
+
+
+
+                                <!-- STATUS -->
+
+                                <td>
+
+                                    <span class="ap-status ap-status-pending">
+
+                                        <i class="bi bi-clock-fill"></i>
+
+                                        @payment.Status
+
+                                    </span>
+
+                                </td>
+
+
+
+                                <!-- REVIEW -->
+
+                                <td>
+
+                                    <a asp-controller="AccountsPayment"
+                                       asp-action="Details"
+                                       asp-route-id="@payment.PaymentId"
+                                       class="ap-action-btn">
+
+                                        <i class="bi bi-eye"></i>
+
+                                        Review
+
+                                    </a>
+
+                                </td>
+
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+        else
+        {
+
+            <!-- =================================================
+                 EMPTY STATE
+            ================================================== -->
+
+            <div class="ap-empty-state">
+
+
+                <div class="ap-empty-icon">
+
+                    <i class="bi bi-check2-circle"></i>
+
+                </div>
+
+
+                <h4>
+                    No Pending Payments
+                </h4>
+
+
+                <p>
+                    No customer payment is currently waiting
+                    for Accounts verification.
+                </p>
+
+
+            </div>
+        }
+
+    </div>
+
+</div>

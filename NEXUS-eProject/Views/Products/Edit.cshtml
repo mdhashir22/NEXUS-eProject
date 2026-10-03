@@ -1,0 +1,195 @@
+﻿@model NEXUS_eProject.Models.Product
+
+@{
+    ViewData["Title"] = "Edit Product";
+    ViewData["PageTitle"] = "Edit Product";
+    ViewData["PageSubtitle"] = "Update product information";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="page-heading">
+
+    <div>
+        <h2>Edit Product</h2>
+        <p>Update the selected product information.</p>
+    </div>
+
+</div>
+
+
+<div class="form-card">
+
+    <form asp-action="Edit" method="post">
+
+        @Html.AntiForgeryToken()
+
+        <input type="hidden"
+               asp-for="ProductId" />
+
+        <input type="hidden"
+               asp-for="CreatedAt" />
+
+
+        <div asp-validation-summary="ModelOnly"
+             class="validation-summary">
+        </div>
+
+
+        <div class="form-section-title">
+            Product Information
+        </div>
+
+
+        <div class="form-grid">
+
+            <div class="form-group">
+
+                <label asp-for="ProductName">
+                    Product Name
+                </label>
+
+                <input asp-for="ProductName"
+                       class="nexus-input" />
+
+                <span asp-validation-for="ProductName"
+                      class="field-error">
+                </span>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label asp-for="VendorId">
+                    Vendor
+                </label>
+
+                <select asp-for="VendorId"
+                        asp-items="ViewBag.Vendors"
+                        class="nexus-input">
+
+                    <option value="">
+                        Select Vendor
+                    </option>
+
+                </select>
+
+                <span asp-validation-for="VendorId"
+                      class="field-error">
+                </span>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label asp-for="Price">
+                    Price
+                </label>
+
+                <input asp-for="Price"
+                       type="number"
+                       step="0.01"
+                       min="0"
+                       class="nexus-input" />
+
+                <span asp-validation-for="Price"
+                      class="field-error">
+                </span>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label asp-for="Quantity">
+                    Quantity
+                </label>
+
+                <input asp-for="Quantity"
+                       type="number"
+                       min="0"
+                       class="nexus-input" />
+
+                <span asp-validation-for="Quantity"
+                      class="field-error">
+                </span>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label asp-for="IsActive">
+                    Status
+                </label>
+
+                <select asp-for="IsActive"
+                        class="nexus-input">
+
+                    <option value="true">
+                        Active
+                    </option>
+
+                    <option value="false">
+                        Inactive
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group full-width">
+
+                <label asp-for="Description">
+                    Description
+                </label>
+
+                <textarea asp-for="Description"
+                          class="nexus-input"
+                          rows="4">
+                </textarea>
+
+                <span asp-validation-for="Description"
+                      class="field-error">
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="form-footer">
+
+            <a asp-action="Index"
+               class="secondary-action">
+
+                <i class="bi bi-arrow-left"></i>
+                Cancel
+
+            </a>
+
+
+            <button type="submit"
+                    class="nexus-btn">
+
+                <i class="bi bi-check-lg"></i>
+                Update Product
+
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+}

@@ -1,0 +1,358 @@
+﻿@model IEnumerable<NEXUS_eProject.Models.Order>
+
+@{
+    ViewData["Title"] = "Accepted Applications";
+    ViewData["PageTitle"] = "Accepted Applications";
+    Layout = "~/Views/Shared/_RetailLayout.cshtml";
+}
+
+<div class="retail-page ra-page">
+
+    <!-- PAGE HEADER -->
+
+    <div class="retail-page-header ra-header">
+
+        <div>
+
+            <div class="retail-page-eyebrow">
+                <i class="bi bi-check-circle"></i>
+                RETAIL MANAGEMENT
+            </div>
+
+            <h1>
+                Accepted Applications
+            </h1>
+
+            <p>
+                Applications accepted by retail and moving through the workflow.
+            </p>
+
+        </div>
+
+
+        <a asp-action="Index"
+           class="retail-secondary-btn ra-all-btn">
+
+            <i class="bi bi-grid"></i>
+            All Applications
+
+        </a>
+
+    </div>
+
+
+    <!-- APPLICATIONS CARD -->
+
+    <div class="retail-card ra-card">
+
+        <div class="retail-card-header">
+
+            <div class="retail-card-title">
+
+                <div class="retail-card-icon">
+                    <i class="bi bi-check-circle"></i>
+                </div>
+
+                <div>
+
+                    <h3>
+                        Accepted Applications
+                    </h3>
+
+                    <span>
+                        @Model.Count() application(s) accepted by retail
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div class="ra-count">
+                @Model.Count()
+            </div>
+
+        </div>
+
+
+        <div class="retail-card-body p-0">
+
+            @if (Model.Any())
+            {
+                <div class="ra-table-wrapper">
+
+                    <table class="table ra-table align-middle mb-0">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    ORDER
+                                </th>
+
+                                <th>
+                                    CUSTOMER
+                                </th>
+
+                                <th>
+                                    CONNECTION
+                                </th>
+
+                                <th>
+                                    PLAN
+                                </th>
+
+                                <th>
+                                    STATUS
+                                </th>
+
+                                <th>
+                                    UPDATED
+                                </th>
+
+                                <th class="text-end">
+                                    ACTION
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            @foreach (var order in Model)
+                            {
+                                var connectionIcon =
+                                    order.ConnectionType == "Telephone"
+                                        ? "bi-telephone"
+                                        : order.ConnectionType == "Dial-Up"
+                                            ? "bi-globe"
+                                            : "bi-wifi";
+
+                                <tr>
+
+                                    <!-- ORDER -->
+
+                                    <td>
+
+                                        <div class="ra-order">
+
+                                            <strong>
+                                                #@order.OrderNumber
+                                            </strong>
+
+                                            <span>
+                                                ID: @order.OrderId
+                                            </span>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <!-- CUSTOMER -->
+
+                                    <td>
+
+                                        <div class="ra-customer">
+
+                                            <div class="ra-avatar">
+
+                                                @(string.IsNullOrWhiteSpace(order.Customer?.FullName)
+                                                    ? "?"
+                                                    : order.Customer.FullName.Substring(0, 1).ToUpper())
+
+                                            </div>
+
+                                            <div class="ra-customer-info">
+
+                                                <strong>
+                                                    @(order.Customer?.FullName ?? "Unknown Customer")
+                                                </strong>
+
+                                                <span>
+                                                    @(order.Customer?.Phone ?? "No phone")
+                                                </span>
+
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <!-- CONNECTION -->
+
+                                    <td>
+
+                                        <span class="ra-connection">
+
+                                            <i class="bi @connectionIcon"></i>
+
+                                            @order.ConnectionType
+
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- PLAN -->
+
+                                    <td>
+
+                                        <div class="ra-plan">
+
+                                            <strong>
+                                                @(order.Plan?.PlanName ?? "N/A")
+                                            </strong>
+
+                                            @if (order.Plan != null &&
+                                                 !string.IsNullOrWhiteSpace(order.Plan.Speed))
+                                            {
+                                                <span>
+                                                    @order.Plan.Speed
+                                                </span>
+                                            }
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <!-- STATUS -->
+
+                                    <td>
+
+                                        @{
+                                            var statusClass = order.Status switch
+                                            {
+                                                "Retail Accepted" => "ra-status-success",
+                                                "Feasible" => "ra-status-success",
+                                                "Payment Verified" => "ra-status-success",
+                                                "Active" => "ra-status-active",
+                                                "Retail Rejected" => "ra-status-danger",
+                                                "Not Feasible" => "ra-status-danger",
+                                                _ => "ra-status-pending"
+                                            };
+
+                                            var statusIcon = order.Status switch
+                                            {
+                                                "Active" => "bi-wifi",
+                                                "Retail Accepted" => "bi-check-circle",
+                                                "Feasible" => "bi-check-circle",
+                                                "Payment Verified" => "bi-check-circle",
+                                                "Retail Rejected" => "bi-x-circle",
+                                                "Not Feasible" => "bi-x-circle",
+                                                "Billing Pending" => "bi-receipt",
+                                                "Payment Pending" => "bi-credit-card",
+                                                "Installation Pending" => "bi-tools",
+                                                _ => "bi-arrow-repeat"
+                                            };
+                                        }
+
+                                        <span class="ra-status @statusClass">
+
+                                            <i class="bi @statusIcon"></i>
+
+                                            @order.Status
+
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- UPDATED -->
+
+                                    <td>
+
+                                        <div class="ra-date">
+
+                                            <strong>
+                                                @(order.UpdatedAt?.ToString("dd MMM yyyy")
+                                                    ?? order.CreatedAt.ToString("dd MMM yyyy"))
+                                            </strong>
+
+                                            <span>
+                                                @(order.UpdatedAt?.ToString("hh:mm tt")
+                                                    ?? order.CreatedAt.ToString("hh:mm tt"))
+                                            </span>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <!-- ACTION -->
+
+                                    <td class="text-end">
+
+                                        <div class="ra-actions">
+
+                                            <a asp-action="Details"
+                                               asp-route-id="@order.OrderId"
+                                               class="ra-icon-btn"
+                                               title="View Application">
+
+                                                <i class="bi bi-eye"></i>
+
+                                            </a>
+
+
+                                            <a asp-action="Status"
+                                               asp-route-id="@order.OrderId"
+                                               class="ra-icon-btn"
+                                               title="Track Status">
+
+                                                <i class="bi bi-activity"></i>
+
+                                            </a>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+            else
+            {
+                <div class="ra-empty">
+
+                    <div class="ra-empty-icon">
+
+                        <i class="bi bi-inbox"></i>
+
+                    </div>
+
+                    <h4>
+                        No Accepted Applications
+                    </h4>
+
+                    <p>
+                        No applications have been accepted by retail yet.
+                    </p>
+
+                    <a asp-action="Index"
+                       class="retail-secondary-btn">
+
+                        <i class="bi bi-arrow-left"></i>
+
+                        Back to Applications
+
+                    </a>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>

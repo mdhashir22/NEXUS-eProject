@@ -1,0 +1,146 @@
+﻿@model Microsoft.AspNetCore.Identity.IdentityUser
+
+@{
+    Layout = "~/Views/Shared/_RetailLayout.cshtml";
+    ViewData["Title"] = "Profile";
+
+    var email = Model.Email ?? "Retail Employee";
+    var initial = string.IsNullOrWhiteSpace(email)
+        ? "R"
+        : email.Substring(0, 1).ToUpper();
+}
+
+<div class="rpf-page">
+
+    <div class="rpf-header">
+
+        <div>
+
+            <span class="rpf-eyebrow">
+                <i class="bi bi-person-circle"></i>
+                ACCOUNT
+            </span>
+
+            <h1>Profile</h1>
+
+            <p>
+                View your NEXUS Retail account information.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="rpf-profile-card">
+
+        <div class="rpf-profile-top">
+
+            <div class="rpf-avatar">
+                @initial
+            </div>
+
+            <div class="rpf-profile-name">
+
+                <h2>
+                    Retail Employee
+                </h2>
+
+                <span>
+                    @email
+                </span>
+
+                <div class="rpf-role">
+                    <i class="bi bi-shield-check"></i>
+                    Retail Employee
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="rpf-divider"></div>
+
+
+        <div class="rpf-info-grid">
+
+            <div class="rpf-info-item">
+
+                <span>
+                    EMAIL ADDRESS
+                </span>
+
+                <strong>
+                    @email
+                </strong>
+
+            </div>
+
+
+            <div class="rpf-info-item">
+
+                <span>
+                    ACCOUNT TYPE
+                </span>
+
+                <strong>
+                    Retail Employee
+                </strong>
+
+            </div>
+
+
+            <div class="rpf-info-item">
+
+                <span>
+                    ACCOUNT STATUS
+                </span>
+
+                <strong class="rpf-active">
+                    <i class="bi bi-circle-fill"></i>
+                    Active
+                </strong>
+
+            </div>
+
+
+            <div class="rpf-info-item">
+
+                <span>
+                    USER ID
+                </span>
+
+                <strong>
+                    @Model.Id
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="rpf-security-card">
+
+        <div class="rpf-security-icon">
+            <i class="bi bi-shield-lock"></i>
+        </div>
+
+        <div>
+
+            <h3>
+                Account Security
+            </h3>
+
+            <p>
+                Your account is managed through the NEXUS identity system.
+                Contact an administrator if you need account changes.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>

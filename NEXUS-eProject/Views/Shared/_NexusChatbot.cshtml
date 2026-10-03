@@ -1,0 +1,217 @@
+﻿@* =========================================================
+   NEXUS AI ASSISTANT
+   Floating Messenger-Style Chat Widget
+========================================================= *@
+
+<div class="nexus-ai">
+
+    <!-- Floating Launcher -->
+    <button type="button"
+            class="nexus-ai-launcher"
+            id="nexusAiLauncher"
+            aria-label="Open NEXUS AI Assistant"
+            aria-expanded="false">
+
+        <span class="nexus-ai-launcher-glow"></span>
+
+        <span class="nexus-ai-launcher-icon">
+            <i class="bi bi-stars"></i>
+        </span>
+
+        <span class="nexus-ai-launcher-status"></span>
+
+    </button>
+
+
+    <!-- Chat Window -->
+    <section class="nexus-ai-window"
+             id="nexusAiWindow"
+             aria-hidden="true">
+
+        <!-- Header -->
+        <header class="nexus-ai-header">
+
+            <div class="nexus-ai-identity">
+
+                <div class="nexus-ai-avatar">
+                    <i class="bi bi-stars"></i>
+
+                    <span class="nexus-ai-online-dot"></span>
+                </div>
+
+                <div>
+                    <div class="nexus-ai-name">
+                        NEXUS AI
+                    </div>
+
+                    <div class="nexus-ai-status">
+                        <span></span>
+                        Online • AI Assistant
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="nexus-ai-header-actions">
+
+                <button type="button"
+                        class="nexus-ai-header-btn"
+                        id="nexusAiMinimize"
+                        aria-label="Minimize chat">
+
+                    <i class="bi bi-dash-lg"></i>
+
+                </button>
+
+                <button type="button"
+                        class="nexus-ai-header-btn"
+                        id="nexusAiClose"
+                        aria-label="Close chat">
+
+                    <i class="bi bi-x-lg"></i>
+
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <!-- Messages -->
+        <div class="nexus-ai-messages"
+             id="nexusAiMessages">
+
+            <div class="nexus-ai-date">
+                NEXUS AI ASSISTANT
+            </div>
+
+
+            <div class="nexus-ai-message nexus-ai-message-bot">
+
+                <div class="nexus-ai-message-avatar">
+                    <i class="bi bi-stars"></i>
+                </div>
+
+                <div class="nexus-ai-message-content">
+
+                    <div class="nexus-ai-bubble">
+
+                        Hey! 👋 I'm
+                        <strong>NEXUS AI</strong>.
+
+                        <br><br>
+
+                        I can help you with connections,
+                        plans, applications, billing,
+                        payments and using the NEXUS
+                        website.
+
+                    </div>
+
+                    <span class="nexus-ai-message-time">
+                        Now
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- Quick Suggestions -->
+            <div class="nexus-ai-suggestions"
+                 id="nexusAiSuggestions">
+
+                <button type="button"
+                        data-question="How do I get a new NEXUS connection?">
+
+                    <i class="bi bi-wifi"></i>
+                    Get a connection
+
+                </button>
+
+
+                <button type="button"
+                        data-question="How can I track my application?">
+
+                    <i class="bi bi-search"></i>
+                    Track application
+
+                </button>
+
+
+                <button type="button"
+                        data-question="How does NEXUS billing and payment work?">
+
+                    <i class="bi bi-receipt"></i>
+                    Billing help
+
+                </button>
+
+
+                <button type="button"
+                        data-question="What does feasibility check mean?">
+
+                    <i class="bi bi-router"></i>
+                    Feasibility
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- Typing Indicator -->
+        <div class="nexus-ai-typing"
+             id="nexusAiTyping">
+
+            <div class="nexus-ai-typing-avatar">
+                <i class="bi bi-stars"></i>
+            </div>
+
+            <div class="nexus-ai-typing-bubble">
+
+                <span></span>
+                <span></span>
+                <span></span>
+
+            </div>
+
+        </div>
+
+
+        <!-- Composer -->
+        <div class="nexus-ai-composer">
+
+            <div class="nexus-ai-input-wrapper">
+
+                <textarea id="nexusAiInput"
+                          rows="1"
+                          maxlength="1000"
+                          autocomplete="off"
+                          placeholder="Ask NEXUS anything..."></textarea>
+
+
+                <button type="button"
+                        id="nexusAiSend"
+                        class="nexus-ai-send"
+                        aria-label="Send message">
+
+                    <i class="bi bi-arrow-up"></i>
+
+                </button>
+
+            </div>
+
+
+            <div class="nexus-ai-disclaimer">
+                <i class="bi bi-stars"></i>
+                AI responses may make mistakes. Check important account details.
+            </div>
+
+        </div>
+
+    </section>
+
+</div>

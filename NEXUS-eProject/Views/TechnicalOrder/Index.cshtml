@@ -1,0 +1,396 @@
+﻿@model IEnumerable<NEXUS_eProject.Models.Order>
+
+@{
+    ViewData["Title"] = "Technical Orders";
+    ViewData["PageTitle"] = "Technical Orders";
+    ViewData["PageSubtitle"] = "Technical Operations";
+    Layout = "~/Views/Shared/_TechnicalLayout.cshtml";
+
+    var orders = Model ?? Enumerable.Empty<NEXUS_eProject.Models.Order>();
+
+    var search = ViewBag.Search as string;
+    var selectedStatus = ViewBag.Status as string;
+    var selectedConnectionType = ViewBag.ConnectionType as string;
+}
+
+<div class="technical-orders-page">
+
+    <!-- PAGE HEADER -->
+    <div class="to-page-header">
+
+        <div>
+            <h2>Technical Orders</h2>
+
+            <p>
+                Review applications received from Retail
+                and manage technical processing.
+            </p>
+        </div>
+
+        <div class="to-header-count">
+            <i class="bi bi-list-check"></i>
+            <span>@orders.Count() Orders</span>
+        </div>
+
+    </div>
+
+
+    <!-- FILTER CARD -->
+    <div class="to-filter-card">
+
+        <form asp-controller="TechnicalOrder"
+              asp-action="Index"
+              method="get"
+              class="to-filter-form">
+
+            <div class="to-search-box">
+
+                <i class="bi bi-search"></i>
+
+                <input type="text"
+                       name="search"
+                       value="@search"
+                       placeholder="Search order, customer or phone..." />
+
+            </div>
+
+
+            <select name="status"
+                    class="to-filter-select">
+
+                <option value="">All Status</option>
+
+                <option value="Retail Accepted"
+                        selected="@(selectedStatus == "Retail Accepted")">
+                    Pending Technical
+                </option>
+
+                <option value="Feasible"
+                        selected="@(selectedStatus == "Feasible")">
+                    Feasible
+                </option>
+
+                <option value="Technical Rejected"
+                        selected="@(selectedStatus == "Technical Rejected")">
+                    Technical Rejected
+                </option>
+
+                <option value="Connection Created"
+                        selected="@(selectedStatus == "Connection Created")">
+                    Connection Created
+                </option>
+
+                <option value="Billing Pending"
+                        selected="@(selectedStatus == "Billing Pending")">
+                    Billing Pending
+                </option>
+
+                <option value="Payment Pending"
+                        selected="@(selectedStatus == "Payment Pending")">
+                    Payment Pending
+                </option>
+
+                <option value="Payment Verified"
+                        selected="@(selectedStatus == "Payment Verified")">
+                    Payment Verified
+                </option>
+
+                <option value="Installation Pending"
+                        selected="@(selectedStatus == "Installation Pending")">
+                    Installation Pending
+                </option>
+
+                <option value="Active"
+                        selected="@(selectedStatus == "Active")">
+                    Active
+                </option>
+
+            </select>
+
+
+            <select name="connectionType"
+                    class="to-filter-select">
+
+                <option value="">All Connection Types</option>
+
+                <option value="Dial-Up"
+                        selected="@(selectedConnectionType == "Dial-Up")">
+                    Dial-Up
+                </option>
+
+                <option value="Broadband"
+                        selected="@(selectedConnectionType == "Broadband")">
+                    Broadband
+                </option>
+
+                <option value="Telephone"
+                        selected="@(selectedConnectionType == "Telephone")">
+                    Telephone
+                </option>
+
+                <option value="Landline"
+                        selected="@(selectedConnectionType == "Landline")">
+                    Landline
+                </option>
+
+            </select>
+
+
+            <button type="submit"
+                    class="to-filter-btn">
+
+                <i class="bi bi-funnel"></i>
+                Filter
+
+            </button>
+
+
+            @if (!string.IsNullOrWhiteSpace(search) ||
+                 !string.IsNullOrWhiteSpace(selectedStatus) ||
+                 !string.IsNullOrWhiteSpace(selectedConnectionType))
+            {
+                <a asp-controller="TechnicalOrder"
+                   asp-action="Index"
+                   class="to-clear-btn">
+
+                    <i class="bi bi-x-lg"></i>
+                    Clear
+
+                </a>
+            }
+
+        </form>
+
+    </div>
+
+
+    <!-- ORDERS CARD -->
+    <div class="to-card">
+
+        <div class="to-card-header">
+
+            <div>
+
+                <h5>Orders</h5>
+
+                <span>
+                    Applications currently moving through
+                    the technical workflow.
+                </span>
+
+            </div>
+
+        </div>
+
+
+        @if (orders.Any())
+        {
+            <div class="to-table-wrapper">
+
+                <table class="to-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Order ID</th>
+
+                            <th>Customer</th>
+
+                            <th>Connection</th>
+
+                            <th>Plan</th>
+
+                            <th>Submitted</th>
+
+                            <th>Status</th>
+
+                            <th></th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        @foreach (var order in orders)
+                        {
+                            var statusClass = "pending";
+
+                            if (order.Status == "Feasible" ||
+                                order.Status == "Connection Created" ||
+                                order.Status == "Payment Verified" ||
+                                order.Status == "Active")
+                            {
+                                statusClass = "success";
+                            }
+                            else if (order.Status == "Technical Rejected" ||
+                                     order.Status == "Rejected")
+                            {
+                                statusClass = "danger";
+                            }
+                            else if (order.Status == "Billing Pending" ||
+                                     order.Status == "Payment Pending" ||
+                                     order.Status == "Installation Pending")
+                            {
+                                statusClass = "warning";
+                            }
+
+                            <tr>
+
+                                <!-- ORDER -->
+                                <td>
+
+                                    <span class="to-order-id">
+                                        @(order.OrderNumber ?? "-")
+                                    </span>
+
+                                </td>
+
+
+                                <!-- CUSTOMER -->
+                                <td>
+
+                                    <div class="to-customer">
+
+                                        <div class="to-avatar">
+
+                                            @(string.IsNullOrWhiteSpace(order.Customer?.FullName)
+                                                ? "?"
+                                                : order.Customer.FullName
+                                                    .Substring(0, 1)
+                                                    .ToUpper())
+
+                                        </div>
+
+                                        <div class="to-customer-info">
+
+                                            <strong>
+                                                @(order.Customer?.FullName ?? "Unknown")
+                                            </strong>
+
+                                            <span>
+                                                @(order.Customer?.Phone ?? "No phone")
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- CONNECTION -->
+                                <td>
+
+                                    <div class="to-connection">
+
+                                        <i class="bi bi-wifi"></i>
+
+                                        <span>
+                                            @(order.ConnectionType ?? "-")
+                                        </span>
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- PLAN -->
+                                <td>
+
+                                    <div class="to-plan">
+
+                                        <strong>
+                                            @(order.Plan?.PlanName ?? "-")
+                                        </strong>
+
+                                        @if (!string.IsNullOrWhiteSpace(order.Plan?.Speed))
+                                        {
+                                            <span>
+                                                @order.Plan.Speed
+                                            </span>
+                                        }
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- DATE -->
+                                <td>
+
+                                    <span class="to-date">
+
+                                        @order.CreatedAt
+                                            .ToString("dd MMM yyyy")
+
+                                    </span>
+
+                                </td>
+
+
+                                <!-- STATUS -->
+                                <td>
+
+                                    <span class="to-status @statusClass">
+
+                                        <i class="bi bi-circle-fill"></i>
+
+                                        @(order.Status ?? "Pending")
+
+                                    </span>
+
+                                </td>
+
+
+                                <!-- ACTION -->
+                                <td>
+
+                                    <a asp-controller="TechnicalOrder"
+                                       asp-action="Details"
+                                       asp-route-id="@order.OrderId"
+                                       class="to-action-btn"
+                                       title="View Details">
+
+                                        <i class="bi bi-chevron-right"></i>
+
+                                    </a>
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+        else
+        {
+            <div class="to-empty-state">
+
+                <div class="to-empty-icon">
+
+                    <i class="bi bi-inbox"></i>
+
+                </div>
+
+                <strong>
+                    No technical orders found
+                </strong>
+
+                <span>
+                    There are currently no orders matching
+                    your selected filters.
+                </span>
+
+            </div>
+        }
+
+    </div>
+
+</div>
